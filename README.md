@@ -7,7 +7,7 @@ A simple XMLRPC client to work with Wordpress websites
 Add this requirement to your `composer.json` file
 
 ```json
-"hieu-le/active": "dev-master"
+"hieu-le/wordpress-xmlrpc-client": "dev-master"
 ```
 
 ## Features
