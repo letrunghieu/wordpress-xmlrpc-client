@@ -1,7 +1,7 @@
 {
     "name": "hieu-le/wordpress-xmlrpc-client",
     "description": "A simple XMLRPC client to work with Wordpress websites",
-	"keywords": ["wordpress", "xmlrpc", "client", 'remote'],
+	"keywords": ["wordpress", "xmlrpc", "client", "remote"],
     "license": "MIT",
     "authors": [
 		{
