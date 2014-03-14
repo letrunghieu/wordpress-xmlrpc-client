@@ -3,6 +3,13 @@ Wordpress XMLRPC client
 
 A simple XMLRPC client to work with Wordpress websites
 
+## Installation
+Add this requirement to your `composer.json` file
+
+```json
+"hieu-le/active": "dev-master"
+```
+
 ## Features
 * Support error logging to files with Monolog library
 * Support UTF-8 content
