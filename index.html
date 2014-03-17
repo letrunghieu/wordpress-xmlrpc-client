@@ -1,0 +1,151 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Wordpress-xmlrpc-client by letrunghieu</title>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="javascripts/main.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  </head>
+  <body>
+
+      <header>
+        <h1>Wordpress-xmlrpc-client</h1>
+        <p>A simple XMLRPC client to work with Wordpress websites</p>
+      </header>
+
+      <div id="banner">
+        <span id="logo"></span>
+
+        <a href="https://github.com/letrunghieu/wordpress-xmlrpc-client" class="button fork"><strong>View On GitHub</strong></a>
+        <div class="downloads">
+          <span>Downloads:</span>
+          <ul>
+            <li><a href="https://github.com/letrunghieu/wordpress-xmlrpc-client/zipball/master" class="button">ZIP</a></li>
+            <li><a href="https://github.com/letrunghieu/wordpress-xmlrpc-client/tarball/master" class="button">TAR</a></li>
+          </ul>
+        </div>
+      </div><!-- end banner -->
+
+    <div class="wrapper">
+      <nav>
+        <ul></ul>
+      </nav>
+      <section>
+        <h1>
+<a name="wordpress-xmlrpc-client" class="anchor" href="#wordpress-xmlrpc-client"><span class="octicon octicon-link"></span></a>Wordpress XMLRPC client</h1>
+
+<p>A simple XMLRPC client to work with Wordpress websites</p>
+
+<h2>
+<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h2>
+
+<p>Add this requirement to your <code>composer.json</code> file</p>
+
+<div class="highlight highlight-json"><pre><span class="s2">"hieu-le/wordpress-xmlrpc-client"</span><span class="err">:</span> <span class="s2">"dev-master"</span>
+</pre></div>
+
+<h2>
+<a name="features" class="anchor" href="#features"><span class="octicon octicon-link"></span></a>Features</h2>
+
+<ul>
+<li>Support error logging to files with Monolog library</li>
+<li>Support UTF-8 content</li>
+<li>Wordpress methods:
+
+<ul>
+<li>Create a post</li>
+<li>Create a category</li>
+<li>Edit a post</li>
+<li>Get authors</li>
+<li>Get categories</li>
+<li>Get tags</li>
+<li>Get posts</li>
+<li>Get a single post</li>
+</ul>
+</li>
+</ul><h2>
+<a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h2>
+
+<div class="highlight highlight-php"><pre><span class="c1"># Your wordpress website is at: http://wp-website.com</span>
+<span class="nv">$endpoint</span> <span class="o">=</span> <span class="s2">"http://wp-website.com/xmlrpc.php"</span><span class="p">;</span>
+
+<span class="c1"># The logger instance</span>
+<span class="nv">$wpLog</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">\Illuminate\Log\Writer</span><span class="p">(</span><span class="k">new</span> <span class="nx">Monolog\Logger</span><span class="p">(</span><span class="s1">'wp-xmlrpc'</span><span class="p">));</span>
+
+<span class="c1"># Save logs into file</span>
+<span class="nv">$wpLog</span><span class="o">-&gt;</span><span class="na">useFiles</span><span class="p">(</span><span class="s1">'path-to-your-log-file'</span><span class="p">);</span>
+
+<span class="c1"># Create client instance</span>
+<span class="c1"># The logger instance is optional</span>
+<span class="nv">$wpClient</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">\HieuLe\WordpressXmlrpcClient\WordpressClient</span><span class="p">(</span><span class="nv">$endpoint</span><span class="p">,</span> <span class="s1">'username'</span><span class="p">,</span> <span class="s1">'password'</span><span class="p">,</span> <span class="nv">$wpLog</span><span class="p">);</span>
+</pre></div>
+
+<p>Create a post and get the created post id (<a href="http://codex.wordpress.org/XML-RPC_MetaWeblog_API#metaWeblog.newPost">http://codex.wordpress.org/XML-RPC_MetaWeblog_API#metaWeblog.newPost</a>)</p>
+
+<div class="highlight highlight-php"><pre><span class="nv">$postId</span> <span class="o">=</span> <span class="nv">$wpClient</span><span class="o">-&gt;</span><span class="na">createPost</span><span class="p">(</span><span class="nv">$title</span><span class="p">,</span> <span class="nv">$body</span><span class="p">,</span> <span class="nv">$category</span><span class="p">,</span> <span class="nv">$keywords</span><span class="p">,</span> <span class="nv">$customFields</span><span class="p">);</span>
+</pre></div>
+
+<p>Create a category in this website (<a href="http://codex.wordpress.org/XML-RPC_WordPress_API/Categories_%26_Tags#wp.newCategory">http://codex.wordpress.org/XML-RPC_WordPress_API/Categories_%26_Tags#wp.newCategory</a>)</p>
+
+<div class="highlight highlight-php"><pre><span class="nv">$categoryId</span> <span class="o">=</span> <span class="nv">$wpClient</span><span class="o">-&gt;</span><span class="na">addCategory</span><span class="p">(</span><span class="nv">$name</span><span class="p">,</span> <span class="nv">$slug</span><span class="p">,</span> <span class="nv">$parent_id</span><span class="p">,</span> <span class="nv">$description</span><span class="p">);</span>
+</pre></div>
+
+<p>Edit a post with its post id (<a href="http://codex.wordpress.org/XML-RPC_MetaWeblog_API#metaWeblog.editPost">http://codex.wordpress.org/XML-RPC_MetaWeblog_API#metaWeblog.editPost</a>)</p>
+
+<div class="highlight highlight-php"><pre><span class="nv">$result</span> <span class="o">=</span> <span class="nv">$wpClient</span><span class="o">-&gt;</span><span class="na">editPost</span><span class="p">(</span><span class="nv">$idpost</span><span class="p">,</span> <span class="nv">$title</span><span class="p">,</span> <span class="nv">$body</span><span class="p">,</span> <span class="nv">$category</span><span class="p">,</span> <span class="nv">$keywords</span><span class="p">);</span>
+</pre></div>
+
+<p>Get all authors in this website (<a href="http://codex.wordpress.org/XML-RPC_WordPress_API/Users#wp.getAuthors">http://codex.wordpress.org/XML-RPC_WordPress_API/Users#wp.getAuthors</a>)</p>
+
+<div class="highlight highlight-php"><pre><span class="nv">$authors</span> <span class="o">=</span> <span class="nv">$wpClient</span><span class="o">-&gt;</span><span class="na">getAuthors</span><span class="p">();</span>
+</pre></div>
+
+<p>Get all categories in this website (<a href="http://codex.wordpress.org/XML-RPC_WordPress_API/Categories_%26_Tags#wp.getCategories">http://codex.wordpress.org/XML-RPC_WordPress_API/Categories_%26_Tags#wp.getCategories</a>)</p>
+
+<div class="highlight highlight-php"><pre><span class="nv">$categories</span> <span class="o">=</span> <span class="nv">$wpClient</span><span class="o">-&gt;</span><span class="na">getCategories</span><span class="p">();</span>
+</pre></div>
+
+<p>Get all tags in this website (<a href="http://codex.wordpress.org/XML-RPC_WordPress_API/Categories_%26_Tags#wp.getTags">http://codex.wordpress.org/XML-RPC_WordPress_API/Categories_%26_Tags#wp.getTags</a>)</p>
+
+<div class="highlight highlight-php"><pre><span class="nv">$tags</span> <span class="o">=</span> <span class="nv">$wpClient</span><span class="o">-&gt;</span><span class="na">getTags</span><span class="p">();</span>
+</pre></div>
+
+<p>Get a post via its id (<a href="http://codex.wordpress.org/XML-RPC_MetaWeblog_API#metaWeblog.getPost">http://codex.wordpress.org/XML-RPC_MetaWeblog_API#metaWeblog.getPost</a>)</p>
+
+<div class="highlight highlight-php"><pre><span class="nv">$post</span> <span class="o">=</span> <span class="nv">$wpClient</span><span class="o">-&gt;</span><span class="na">getPost</span><span class="p">(</span><span class="nv">$id</span><span class="p">);</span>
+</pre></div>
+
+<p>Get all post in this websites (<a href="http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.getPosts">http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.getPosts</a>)</p>
+
+<div class="highlight highlight-php"><pre><span class="nv">$posts</span> <span class="o">=</span> <span class="nv">$wpClient</span><span class="o">-&gt;</span><span class="na">getPosts</span><span class="p">();</span>
+</pre></div>
+
+<p>With all method, if there is an error, the result will be <code>FALSE</code>, use the <code>===</code> operator to check whether an error occurs and get the error message with <code>getErrorMessage()</code> method.</p>
+      </section>
+      <footer>
+        <p>Project maintained by <a href="https://github.com/letrunghieu">letrunghieu</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a></small></p>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+              <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-49054610-2");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
+  </body>
+</html>
