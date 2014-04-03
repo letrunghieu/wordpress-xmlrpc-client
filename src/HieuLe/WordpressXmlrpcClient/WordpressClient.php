@@ -162,6 +162,21 @@ class WordpressClient
 		else
 			return false;
 	}
+	
+	function uploadFile($name, $mime, $bits)
+	{
+		xmlrpc_set_type($bits, 'base64');
+		$struct = array(
+			'name' => $name,
+			'type' => $mime,
+			'bits' => $bits,
+		);
+		$params = array(1, $this->_username, $this->_password, $struct);
+		if ($this->_sendRequest('wp.uploadFile', $params))
+			return $this->getResponse();
+		else
+			return false;
+	}
 
 	private function _sendRequest($method, $params)
 	{
