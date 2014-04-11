@@ -48,19 +48,40 @@ class WordpressClient
 	{
 		return $this->_response;
 	}
-	
+
 	/**
 	 * Retrieve a post of any registered post type. 
 	 * 
 	 * @param integer	post id
 	 * @param array $fields	Optional. List of field or meta-field names to include in response.
 	 * @return struct
-	 * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.getPosts Wordpress documentation
+	 * @see http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.getPosts
 	 */
-	function getPost($id, array $fields)
+	function getPost($id, array $fields = array())
 	{
 		$params = array(1, $this->_username, $this->_password, $id, $fields);
 		if ($this->_sendRequest('wp.getPost', $params))
+		{
+			return $this->getResponse();
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	/**
+	 * Retrieve list of posts of any registered post type. 
+	 * 
+	 * @param array $filters	Optional
+	 * @param array $fields	Optional
+	 * @return array array of struct
+	 * @see http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.getPosts
+	 */
+	function getPosts(array $filters = array(), array $fields = array())
+	{
+		$params = array(1, $this->_username, $this->_password, array('number' => '9999'));
+		if ($this->_sendRequest('wp.getPosts', $params))
 		{
 			return $this->getResponse();
 		}
@@ -203,19 +224,6 @@ class WordpressClient
 		}
 	}
 
-	function getPosts()
-	{
-		$params = array(1, $this->_username, $this->_password, array('number' => '9999'));
-		if ($this->_sendRequest('wp.getPosts', $params))
-		{
-			return $this->getResponse();
-		}
-		else
-		{
-			return false;
-		}
-	}
-
 	function uploadFile($name, $mime, $bits)
 	{
 		xmlrpc_set_type($bits, 'base64');
@@ -291,5 +299,3 @@ class WordpressClient
 	}
 
 }
-
-
