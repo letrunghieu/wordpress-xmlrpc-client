@@ -52,12 +52,12 @@ class WordpressClient
 	/**
 	 * Retrieve a post of any registered post type. 
 	 * 
-	 * @param integer	post id
+	 * @param integer $postId	post id
 	 * @param array $fields	Optional. List of field or meta-field names to include in response.
 	 * @return struct
 	 * @see http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.getPosts
 	 */
-	function getPost($id, array $fields = array())
+	function getPost($postId, array $fields = array())
 	{
 		$params = array(1, $this->_username, $this->_password, $id, $fields);
 		if ($this->_sendRequest('wp.getPost', $params))
@@ -91,15 +91,29 @@ class WordpressClient
 		}
 	}
 
-	function createPost($title, $body, $categories = array(), $thumbnailId = NULL, $customFields = NULL)
+	/**
+	 * Create a new post of any registered post type. 
+	 * 
+	 * @param string $title	the post title
+	 * @param string $body	the post body
+	 * @param array $categorieIds	the list of category ids
+	 * @param integer $thumbnailId	the thumbnail id
+	 * @param array $content	the content array, see more at wordpress documentation
+	 * @return integer the new post id
+	 * 
+	 * @see http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.newPost
+	 */
+	function newPost($title, $body, array $categorieIds = array(), $thumbnailId = NULL, array $content = array())
 	{
-		$content = array(
-			'post_title'	 => $title,
-			'post_content'	 => $body,
+		$default				 = array(
 			'post_type'		 => 'post',
 			'post_status'	 => 'publish',
 			'terms'			 => array(),
 		);
+		$content				 = array_merge($default, $content);
+		$content['post_title']	 = $title;
+		$content['post_content'] = $body;
+
 		if ($customFields != NULL)
 		{
 			$content['custom_fields'] = $customFields;
@@ -108,9 +122,9 @@ class WordpressClient
 		{
 			$content['post_thumbnail'] = $thumbnailId;
 		}
-		if (!empty($categories))
+		if (!empty($categorieIds))
 		{
-			$content['terms']['category'] = $categories;
+			$content['terms']['category'] = $categorieIds;
 		}
 		$params = array(1, $this->_username, $this->_password, $content);
 		if ($this->_sendRequest('wp.newPost', $params))
@@ -123,14 +137,23 @@ class WordpressClient
 		}
 	}
 
-	function editPost($postId, $title, $body, $categories = array(), $thumbnailId = NULL, $customFields = NULL)
+	/**
+	 * Edit an existing post of any registered post type. 
+	 * 
+	 * @param type $postId	the id of selected post
+	 * @param type $title	the new title
+	 * @param type $body	the new body
+	 * @param array $categorieIds	the new list of category ids
+	 * @param type $thumbnailId	the new thumbnail id
+	 * @param array $content	the advanced array
+	 * @return boolean
+	 * 
+	 * @see http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.editPost
+	 */
+	function editPost($postId, $title, $body, array $categorieIds = array(), $thumbnailId = NULL, array $content = array())
 	{
-		$content = array(
-			'post_title'	 => $title,
-			'post_content'	 => $body,
-			'post_type'		 => 'post',
-			'terms'			 => array(),
-		);
+		$content['post_title']	 = $title;
+		$content['post_content'] = $body;
 		if ($customFields != NULL)
 		{
 			$content['custom_fields'] = $customFields;
@@ -139,9 +162,9 @@ class WordpressClient
 		{
 			$content['post_thumbnail'] = $thumbnailId;
 		}
-		if (!empty($categories))
+		if (!empty($categorieIds))
 		{
-			$content['terms']['category'] = $categories;
+			$content['terms']['category'] = $categorieIds;
 		}
 		$params = array(1, $this->_username, $this->_password, $postId, $content);
 		if ($this->_sendRequest('wp.editPost', $params))
@@ -151,6 +174,111 @@ class WordpressClient
 		else
 		{
 			return false;
+		}
+	}
+
+	/**
+	 * Delete an existing post of any registered post type. 
+	 * 
+	 * @param integer $postId	the id of selected post
+	 * @return boolean
+	 * 
+	 * @see http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.deletePost
+	 */
+	function deletePost($postId)
+	{
+		$params = array(1, $this->_username, $this->_password, $postId);
+		if ($this->_sendRequest('wp.deletePost', $params))
+		{
+			return $this->getResponse();
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
+
+	/**
+	 * Retrieve a registered post type. 
+	 * 
+	 * @param type $postTypeName the post type name
+	 * @param array $fields	Optional. List of field or meta-field names to include in response. 
+	 * @return struct
+	 * 
+	 * @see http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.getPostType
+	 */
+	function getPostType($postTypeName, array $fields = array())
+	{
+		$params = array(1, $this->_username, $this->_password, $postTypeName, $fields);
+		if ($this->_sendRequest('wp.getPostType', $params))
+		{
+			return $this->getResponse();
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
+	
+	/**
+	 * Retrieve list of registered post types. 
+	 * 
+	 * @param array $filter
+	 * @param array $fields
+	 * @return array	list of struct
+	 * 
+	 * @see http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.getPostTypes
+	 */
+	function getPostTypes(array $filter = array(), array $fields = array())
+	{
+		$params = array(1, $this->_username, $this->_password, $filter, $fields);
+		if ($this->_sendRequest('wp.getPostTypes', $params))
+		{
+			return $this->getResponse();
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
+	
+	/**
+	 * Retrieve list of post formats. 
+	 * 
+	 * @return boolean
+	 * 
+	 * @see http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.getPostFormats
+	 */
+	function getPostFormats()
+	{
+		$params = array(1, $this->_username, $this->_password);
+		if ($this->_sendRequest('wp.getPostFormats', $params))
+		{
+			return $this->getResponse();
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
+	
+	/**
+	 * Retrieve list of supported values for post_status field on posts. 
+	 * 
+	 * @return array	list of supported post status
+	 * 
+	 * @see http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.getPostStatusList
+	 */
+	function getPostStatusList()
+	{
+		$params = array(1, $this->_username, $this->_password);
+		if ($this->_sendRequest('wp.getPostStatusList', $params))
+		{
+			return $this->getResponse();
+		}
+		else
+		{
+			return FALSE;
 		}
 	}
 
