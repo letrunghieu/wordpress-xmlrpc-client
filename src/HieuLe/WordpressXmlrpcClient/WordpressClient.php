@@ -55,6 +55,7 @@ class WordpressClient
 			'post_title'	 => $title,
 			'post_content'	 => $body,
 			'post_type'		 => 'post',
+			'post_status'	 => 'publish',
 			'terms'			 => array(),
 		);
 		if ($customFields != NULL)
@@ -183,8 +184,8 @@ class WordpressClient
 
 	function getPost($id)
 	{
-		$params = array($id, $this->_username, $this->_password);
-		if ($this->_sendRequest('metaWeblog.getPost', $params))
+		$params = array(1, $this->_username, $this->_password, $id);
+		if ($this->_sendRequest('wp.getPost', $params))
 		{
 			return $this->getResponse();
 		}
@@ -283,4 +284,4 @@ class WordpressClient
 
 }
 
-?>
+
