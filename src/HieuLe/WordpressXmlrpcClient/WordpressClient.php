@@ -48,6 +48,27 @@ class WordpressClient
 	{
 		return $this->_response;
 	}
+	
+	/**
+	 * Retrieve a post of any registered post type. 
+	 * 
+	 * @param integer	post id
+	 * @param array $fields	Optional. List of field or meta-field names to include in response.
+	 * @return struct
+	 * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.getPosts Wordpress documentation
+	 */
+	function getPost($id, array $fields)
+	{
+		$params = array(1, $this->_username, $this->_password, $id, $fields);
+		if ($this->_sendRequest('wp.getPost', $params))
+		{
+			return $this->getResponse();
+		}
+		else
+		{
+			return false;
+		}
+	}
 
 	function createPost($title, $body, $categories = array(), $thumbnailId = NULL, $customFields = NULL)
 	{
@@ -173,19 +194,6 @@ class WordpressClient
 			'description'	 => $description);
 		$params	 = array(0, $this->_username, $this->_password, $struct);
 		if ($this->_sendRequest('wp.newCategory', $params))
-		{
-			return $this->getResponse();
-		}
-		else
-		{
-			return false;
-		}
-	}
-
-	function getPost($id)
-	{
-		$params = array(1, $this->_username, $this->_password, $id);
-		if ($this->_sendRequest('wp.getPost', $params))
 		{
 			return $this->getResponse();
 		}
