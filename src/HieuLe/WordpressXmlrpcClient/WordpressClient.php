@@ -49,21 +49,28 @@ class WordpressClient
 		return $this->_response;
 	}
 
-	function createPost($title, $body, $category, $keywords, $customFields = NULL)
+	function createPost($title, $body, $categories = array(), $thumbnailId = NULL, $customFields = NULL)
 	{
-		$content					 = array(
-			'title'				 => $title,
-			'description'		 => $body,
-			'mt_allow_comments'	 => 0, // 1 to allow comments
-			'mt_allow_pings'	 => 0, //1 to allow trackbacks
-			'post_type'			 => 'post',
-			'mt_keywords'		 => $keywords,
-			'categories'		 => $category,
+		$content = array(
+			'post_title'	 => $title,
+			'post_content'	 => $body,
+			'post_type'		 => 'post',
+			'terms'			 => array(),
 		);
 		if ($customFields != NULL)
-			$content['custom_fields']	 = $customFields;
-		$params						 = array(0, $this->_username, $this->_password, $content, true);
-		if ($this->_sendRequest('metaWeblog.newPost', $params))
+		{
+			$content['custom_fields'] = $customFields;
+		}
+		if ($thumbnailId != NULL)
+		{
+			$content['post_thumbnail'] = $thumbnailId;
+		}
+		if (!empty($categories))
+		{
+			$content['terms']['category'] = $categories;
+		}
+		$params = array(1, $this->_username, $this->_password, $content);
+		if ($this->_sendRequest('wp.newPost', $params))
 		{
 			return $this->getResponse();
 		}
@@ -73,40 +80,61 @@ class WordpressClient
 		}
 	}
 
-	function editPost($idpost, $title, $body, $category, $keywords)
+	function editPost($postId, $title, $body, $categories = array(), $thumbnailId = NULL, $customFields = NULL)
 	{
 		$content = array(
-			'title'				 => $title,
-			'description'		 => $body,
-			'mt_allow_comments'	 => 0, // 1 to allow comments
-			'mt_allow_pings'	 => 0, //1 to allow trackbacks
-			'post_type'			 => 'post',
-			'mt_keywords'		 => $keywords,
-			'categories'		 => $category
+			'post_title'	 => $title,
+			'post_content'	 => $body,
+			'post_type'		 => 'post',
+			'terms'			 => array(),
 		);
-		$params	 = array($idpost, $this->_username, $this->_password, $content, true);
-		if ($this->_sendRequest('metaWeblog.editPost', $params))
+		if ($customFields != NULL)
+		{
+			$content['custom_fields'] = $customFields;
+		}
+		if ($thumbnailId != NULL)
+		{
+			$content['post_thumbnail'] = $thumbnailId;
+		}
+		if (!empty($categories))
+		{
+			$content['terms']['category'] = $categories;
+		}
+		$params = array(1, $this->_username, $this->_password, $postId, $content);
+		if ($this->_sendRequest('wp.editPost', $params))
+		{
 			return $this->getResponse();
+		}
 		else
+		{
 			return false;
+		}
 	}
 
 	function getAuthors()
 	{
 		$params = array(0, $this->_username, $this->_password);
 		if ($this->_sendRequest('wp.getAuthors', $params))
+		{
 			return $this->getResponse();
+		}
 		else
+		{
 			return false;
+		}
 	}
 
 	function getUsersblogs()
 	{
 		$params = array($this->_username, $this->_password);
 		if ($this->_sendRequest('wp.getUsersBlogs', $params))
+		{
 			return $this->getResponse();
+		}
 		else
+		{
 			return false;
+		}
 	}
 
 	function getCategories()
@@ -126,9 +154,13 @@ class WordpressClient
 	{
 		$params = array(0, $this->_username, $this->_password);
 		if ($this->_sendRequest('wp.getTags', $params))
+		{
 			return $this->getResponse();
+		}
 		else
+		{
 			return false;
+		}
 	}
 
 	function addCategory($name, $slug, $parent_id, $description)
@@ -140,42 +172,58 @@ class WordpressClient
 			'description'	 => $description);
 		$params	 = array(0, $this->_username, $this->_password, $struct);
 		if ($this->_sendRequest('wp.newCategory', $params))
+		{
 			return $this->getResponse();
+		}
 		else
+		{
 			return false;
+		}
 	}
 
 	function getPost($id)
 	{
 		$params = array($id, $this->_username, $this->_password);
 		if ($this->_sendRequest('metaWeblog.getPost', $params))
+		{
 			return $this->getResponse();
+		}
 		else
+		{
 			return false;
+		}
 	}
 
 	function getPosts()
 	{
 		$params = array(1, $this->_username, $this->_password, array('number' => '9999'));
 		if ($this->_sendRequest('wp.getPosts', $params))
+		{
 			return $this->getResponse();
+		}
 		else
+		{
 			return false;
+		}
 	}
-	
+
 	function uploadFile($name, $mime, $bits)
 	{
 		xmlrpc_set_type($bits, 'base64');
-		$struct = array(
-			'name' => $name,
-			'type' => $mime,
-			'bits' => $bits,
+		$struct	 = array(
+			'name'	 => $name,
+			'type'	 => $mime,
+			'bits'	 => $bits,
 		);
-		$params = array(1, $this->_username, $this->_password, $struct);
+		$params	 = array(1, $this->_username, $this->_password, $struct);
 		if ($this->_sendRequest('wp.uploadFile', $params))
+		{
 			return $this->getResponse();
+		}
 		else
+		{
 			return false;
+		}
 	}
 
 	private function _sendRequest($method, $params)
