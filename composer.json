@@ -17,11 +17,12 @@
 		"php-vcr/php-vcr": "1.*"
 	},
 	"require-dev": {
+		"phpunit/phpunit": "3.7.*",
 		"php-vcr/phpunit-testlistener-vcr": "*"
 	},
 	"autoload": {
 		"psr-4": {
-			"HieuLe\\WordpressXmlrpcClient": "src/"
+			"HieuLe\\WordpressXmlrpcClient\\": "src/"
 		}
 	},
 	"minimum-stability": "stable"

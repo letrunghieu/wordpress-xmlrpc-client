@@ -57,9 +57,9 @@ class WordpressClient
 	 * @return struct
 	 * @see http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.getPosts
 	 */
-	function getPost($postId, array $fields = array())
+	function getPost($postId, $fields = null)
 	{
-		$params = array(1, $this->_username, $this->_password, $id, $fields);
+		$params = array(1, $this->_username, $this->_password, $postId, $fields);
 		if ($this->_sendRequest('wp.getPost', $params))
 		{
 			return $this->getResponse();
