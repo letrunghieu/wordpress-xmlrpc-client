@@ -13,7 +13,7 @@
 	"repositories": [
         {
             "type": "vcs",
-            "url": "git@github.com:letrunghieu/php-vcr.git"
+            "url": "https://github.com/letrunghieu/php-vcr.git"
         }
     ],
 	"require": {
