@@ -57,9 +57,16 @@ class WordpressClient
 	 * @return struct
 	 * @see http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.getPosts
 	 */
-	function getPost($postId, $fields = null)
+	function getPost($postId, array $fields = array())
 	{
-		$params = array(1, $this->_username, $this->_password, $postId, $fields);
+		if (empty($fields))
+		{
+			$params = array(1, $this->_username, $this->_password, $postId);
+		}
+		else
+		{
+			$params = array(1, $this->_username, $this->_password, $postId, $fields);
+		}
 		if ($this->_sendRequest('wp.getPost', $params))
 		{
 			return $this->getResponse();
@@ -219,7 +226,7 @@ class WordpressClient
 			return FALSE;
 		}
 	}
-	
+
 	/**
 	 * Retrieve list of registered post types. 
 	 * 
@@ -241,7 +248,7 @@ class WordpressClient
 			return FALSE;
 		}
 	}
-	
+
 	/**
 	 * Retrieve list of post formats. 
 	 * 
@@ -261,7 +268,7 @@ class WordpressClient
 			return FALSE;
 		}
 	}
-	
+
 	/**
 	 * Retrieve list of supported values for post_status field on posts. 
 	 * 
