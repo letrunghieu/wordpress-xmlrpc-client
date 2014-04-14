@@ -1,24 +1,28 @@
 {
-    "name": "hieu-le/wordpress-xmlrpc-client",
-    "description": "A simple XMLRPC client to work with Wordpress websites",
+	"name": "hieu-le/wordpress-xmlrpc-client",
+	"description": "A simple XMLRPC client to work with Wordpress websites",
 	"keywords": ["wordpress", "xmlrpc", "client", "remote"],
-    "license": "MIT",
-    "authors": [
+	"license": "MIT",
+	"authors": [
 		{
 			"name": "Hieu Le",
 			"email": "letrunghieu.cse09@gmail.com",
 			"homepage": "http://www.hieule.info"
 		}
-    ],
-    "require": {
+	],
+	"require": {
 		"php": ">=5.3.0",
 		"illuminate/support": "4.1.*",
-		"illuminate/log": "4.1.*"
-    },
-    "autoload": {
-		"psr-0": {
+		"illuminate/log": "4.1.*",
+		"php-vcr/php-vcr": "1.*"
+	},
+	"require-dev": {
+		"php-vcr/phpunit-testlistener-vcr": "*"
+	},
+	"autoload": {
+		"psr-4": {
 			"HieuLe\\WordpressXmlrpcClient": "src/"
 		}
-    },
-    "minimum-stability": "stable"
+	},
+	"minimum-stability": "stable"
 }
