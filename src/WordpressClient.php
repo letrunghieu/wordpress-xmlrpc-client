@@ -285,8 +285,7 @@ class WordpressClient
 			return false;
 		}
 	}
-	
-	
+
 	/**
 	 * Retrieve information about a taxonomy. 
 	 * 
@@ -307,7 +306,7 @@ class WordpressClient
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Retrieve a list of taxonomies. 
 	 * 
@@ -319,6 +318,50 @@ class WordpressClient
 	{
 		$params = array(1, $this->_username, $this->_password);
 		if ($this->_sendRequest('wp.getTaxonomies', $params))
+		{
+			return $this->getResponse();
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	/**
+	 * Retrieve a taxonomy term. 
+	 * 
+	 * @param integer $termId 
+	 * @param string $taxonomy
+	 * @return struct
+	 * 
+	 * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Taxonomies#wp.getTerm
+	 */
+	function getTerm($termId, $taxonomy)
+	{
+		$params = array(1, $this->_username, $this->_password, $taxonomy, $termId);
+		if ($this->_sendRequest('wp.getTerm', $params))
+		{
+			return $this->getResponse();
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	/**
+	 * Retrieve list of terms in a taxonomy. 
+	 * 
+	 * @param string $taxonomy
+	 * @param array $filter
+	 * @return array
+	 * 
+	 * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Taxonomies#wp.getTerms
+	 */
+	function getTerms($taxonomy, array $filter = array())
+	{
+		$params = array(1, $this->_username, $this->_password, $taxonomy, $filter);
+		if ($this->_sendRequest('wp.getTerms', $params))
 		{
 			return $this->getResponse();
 		}

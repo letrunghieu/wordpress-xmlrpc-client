@@ -1,4 +1,5 @@
 <?php
+
 namespace HieuLe\WordpressXmlrpcClient;
 
 /**
@@ -8,6 +9,7 @@ namespace HieuLe\WordpressXmlrpcClient;
  */
 class WordpressClientTest extends \PHPUnit_Framework_TestCase
 {
+
 	/**
 	 *
 	 * @var WordpressClient
@@ -44,7 +46,7 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
 		$this->assertArrayHasKey('post_title', $post);
 		$this->assertArrayNotHasKey('post_date', $post);
 	}
-	
+
 	/**
 	 * @vcr get-posts-default-config-test-vcr.yml
 	 */
@@ -54,7 +56,7 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
 		$this->assertCount(10, $posts);
 		$this->assertArrayHasKey('post_title', $posts[0]);
 	}
-	
+
 	/**
 	 * @vcr get-posts-filtered-test-vcr.yml
 	 */
@@ -64,7 +66,7 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
 		$this->assertCount(5, $posts);
 		$this->assertArrayHasKey('post_title', $posts[0]);
 	}
-	
+
 	/**
 	 * @vcr get-posts-with-fields-test-vcr.yml
 	 */
@@ -74,8 +76,7 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
 		$this->assertCount(10, $posts);
 		$this->assertArrayNotHasKey('post_title', $posts[0]);
 	}
-	
-	
+
 	/**
 	 * @vcr new-post-minimal-info-test-vcr.yml
 	 */
@@ -100,7 +101,7 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
 		$this->assertSame('Lorem ipsum', $post['post_title']);
 		$this->assertEquals(229, $post['post_thumbnail']['attachment_id']);
 	}
-	
+
 	/**
 	 * @vcr new-post-with-advanced-fields-test-vcr.yaml
 	 */
@@ -115,7 +116,7 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
 		$this->assertSame('foo', $post['custom_fields'][0]['key']);
 		$this->assertSame('bar', $post['custom_fields'][0]['value']);
 	}
-	
+
 	/**
 	 * @vcr edit-post-title-and-content-test-vcr.yml
 	 */
@@ -124,12 +125,12 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
 		$result = $this->client->editPost(233, 'Lorem Ipsum (edited)', 'Muahahaha!');
 		$this->assertNotSame(false, $result);
 		$this->assertTrue($result);
-		
+
 		$post = $this->client->getPost(233);
 		$this->assertSame('Lorem Ipsum (edited)', $post['post_title']);
 		$this->assertSame('Muahahaha!', $post['post_content']);
 	}
-	
+
 	/**
 	 * @vcr edit-post-with-other-info-change-test-vcr.yml
 	 */
@@ -137,10 +138,10 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
 	{
 		$result = $this->client->editPost(233, 'Lorem Ipsum (edited)', 'Muahahaha!', array(20, 26), 229, array('custom_fields' => array(array('key' => 'foo', 'value' => 'bar'))));
 		$this->assertTrue($result);
-		
-		$post = $this->client->getPost(233);
-		$categories = array();
-		foreach($post['terms'] as $t)
+
+		$post		 = $this->client->getPost(233);
+		$categories	 = array();
+		foreach ($post['terms'] as $t)
 		{
 			if ($t['taxonomy'] == 'category')
 			{
@@ -153,7 +154,7 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
 		$this->assertTrue(in_array(20, $categories));
 		$this->assertTrue(in_array(26, $categories));
 	}
-	
+
 	/**
 	 * @vcr edit-post-with-invalid-id-test-vcr.yml
 	 */
@@ -163,7 +164,7 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
 		$this->assertFalse($result);
 		$this->assertSame('xmlrpc: Invalid post ID. (404)', $this->client->getErrorMessage());
 	}
-	
+
 	/**
 	 * @vcr delete-post-test-vcr.yml
 	 */
@@ -172,7 +173,7 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
 		$result = $this->client->deletePost(232);
 		$this->assertTrue($result);
 	}
-	
+
 	/**
 	 * @vcr delete-post-with-invalid-id-test-vcr.yml
 	 */
@@ -182,7 +183,7 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
 		$this->assertFalse($result);
 		$this->assertSame('xmlrpc: Invalid post ID. (404)', $this->client->getErrorMessage());
 	}
-		
+
 	/**
 	 * @vcr get-post-type-test-vcr.yml
 	 */
@@ -192,7 +193,7 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
 		$this->assertArrayHasKey('name', $postType);
 		$this->assertSame('Posts', $postType['label']);
 	}
-	
+
 	/**
 	 * @vcr get-post-types-test-vcr.yml
 	 */
@@ -204,7 +205,7 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
 		$this->assertArrayHasKey('page', $postTypes);
 		$this->assertArrayHasKey('wpcf7_contact_form', $postTypes);
 	}
-	
+
 	/**
 	 * @vcr get-post-formats-test-vcr.yml
 	 */
@@ -215,7 +216,7 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
 		$this->assertArrayHasKey('video', $postFormats);
 		$this->assertSame('Link', $postFormats['link']);
 	}
-	
+
 	/**
 	 * @vcr get-post-status-list-test-vcr.yml
 	 */
@@ -226,7 +227,7 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
 		$this->assertArrayHasKey('publish', $statuses);
 		$this->assertSame('Pending Review', $statuses['pending']);
 	}
-	
+
 	/**
 	 * @vcr get-taxonomy-test-vcr.yml
 	 */
@@ -235,7 +236,7 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
 		$taxonomy = $this->client->getTaxonomy('category');
 		$this->assertSame('Categories', $taxonomy['label']);
 	}
-	
+
 	/**
 	 * @vcr get-taxonomies-test-vcr.yml
 	 */
@@ -245,4 +246,28 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
 		$this->assertCount(3, $taxonomies);
 		$this->assertArrayHasKey('name', $taxonomies[0]);
 	}
+
+	/**
+	 * @vcr get-term-test-vcr.yml
+	 */
+	public function testGetTerm()
+	{
+		$term = $this->client->getTerm(23, 'category');
+		$this->assertSame('Location', $term['name']);
+		$this->assertSame('location', $term['slug']);
+
+		$term = $this->client->getTerm(1000, 'category');
+		$this->assertFalse($term);
+		$this->assertSame('xmlrpc: Invalid term ID (404)', $this->client->getErrorMessage());
+	}
+
+	/**
+	 * @vcr get-terms-test-vcr.yml
+	 */
+	public function testGetTerms()
+	{
+		$terms = $this->client->getTerms('post_tag');
+		$this->assertCount(4, $terms);
+	}
+
 }
