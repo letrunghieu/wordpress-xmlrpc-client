@@ -75,4 +75,45 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
 		$this->assertArrayNotHasKey('post_title', $posts[0]);
 	}
 	
+	
+	/**
+	 * @vcr new-post-minimal-info-test-vcr.yml
+	 */
+	public function testNewPostMinimalInfo()
+	{
+		$postId = (int) $this->client->newPost('Lorem ipsum', 'This is a demo post');
+		$this->assertGreaterThan(0, $postId);
+
+		$post = $this->client->getPost($postId);
+		$this->assertSame('Lorem ipsum', $post['post_title']);
+	}
+
+	/**
+	 * @vcr new-post-with-category-and-thumbnail.yml
+	 */
+	public function testNewPostWithCategoryAndThumbnail()
+	{
+		$postId = (int) $this->client->newPost('Lorem ipsum', 'This is a demo post', array(20, 26), 229);
+		$this->assertGreaterThan(0, $postId);
+
+		$post = $this->client->getPost($postId);
+		$this->assertSame('Lorem ipsum', $post['post_title']);
+		$this->assertEquals(229, $post['post_thumbnail']['attachment_id']);
+	}
+	
+	/**
+	 * @vcr new-post-with-advanced-fields-test-vcr.yaml
+	 */
+	public function testNewPostWithAdvancedFields()
+	{
+		$postId = (int) $this->client->newPost('Lorem ipsum advanced', 'This is a demo post', array(), null, array('custom_fields' => array(array('key' => 'foo', 'value' => 'bar'))));
+		$this->assertGreaterThan(0, $postId);
+
+		$post = $this->client->getPost($postId);
+		$this->assertSame('Lorem ipsum advanced', $post['post_title']);
+		$this->assertCount(1, $post['custom_fields']);
+		$this->assertSame('foo', $post['custom_fields'][0]['key']);
+		$this->assertSame('bar', $post['custom_fields'][0]['value']);
+	}
+	
 }
