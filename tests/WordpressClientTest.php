@@ -164,4 +164,23 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
 		$this->assertSame('xmlrpc: Invalid post ID. (404)', $this->client->getErrorMessage());
 	}
 	
+	/**
+	 * @vcr delete-post-test-vcr.yml
+	 */
+	public function testDeletePost()
+	{
+		$result = $this->client->deletePost(232);
+		$this->assertTrue($result);
+	}
+	
+	/**
+	 * @vcr delete-post-with-invalid-id-test-vcr.yml
+	 */
+	public function testDeletePostWithInvalidId()
+	{
+		$result = $this->client->deletePost(1000);
+		$this->assertFalse($result);
+		$this->assertSame('xmlrpc: Invalid post ID. (404)', $this->client->getErrorMessage());
+	}
+	
 }
