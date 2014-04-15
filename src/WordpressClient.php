@@ -87,7 +87,11 @@ class WordpressClient
 	 */
 	function getPosts(array $filters = array(), array $fields = array())
 	{
-		$params = array(1, $this->_username, $this->_password, array('number' => '9999'));
+		$params = array(1, $this->_username, $this->_password, $filters);
+		if (!empty($fields))
+		{
+			$params[] = $fields;
+		}
 		if ($this->_sendRequest('wp.getPosts', $params))
 		{
 			return $this->getResponse();

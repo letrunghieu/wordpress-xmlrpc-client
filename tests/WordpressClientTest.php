@@ -45,4 +45,34 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
 		$this->assertArrayNotHasKey('post_date', $post);
 	}
 	
+	/**
+	 * @vcr get-posts-default-config-test-vcr.yml
+	 */
+	public function testGetPostsWithDefaultConfig()
+	{
+		$posts = $this->client->getPosts();
+		$this->assertCount(10, $posts);
+		$this->assertArrayHasKey('post_title', $posts[0]);
+	}
+	
+	/**
+	 * @vcr get-posts-filtered-test-vcr.yml
+	 */
+	public function testGetPostsWithFilters()
+	{
+		$posts = $this->client->getPosts(array('number' => 5));
+		$this->assertCount(5, $posts);
+		$this->assertArrayHasKey('post_title', $posts[0]);
+	}
+	
+	/**
+	 * @vcr get-posts-with-fields-test-vcr.yml
+	 */
+	public function testGetPostsWithFields()
+	{
+		$posts = $this->client->getPosts(array(), array('post_id', 'post_data'));
+		$this->assertCount(10, $posts);
+		$this->assertArrayNotHasKey('post_title', $posts[0]);
+	}
+	
 }
