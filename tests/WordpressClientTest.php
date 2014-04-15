@@ -182,5 +182,48 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
 		$this->assertFalse($result);
 		$this->assertSame('xmlrpc: Invalid post ID. (404)', $this->client->getErrorMessage());
 	}
+		
+	/**
+	 * @vcr get-post-type-test-vcr.yml
+	 */
+	public function testGetPostType()
+	{
+		$postType = $this->client->getPostType('post');
+		$this->assertArrayHasKey('name', $postType);
+		$this->assertSame('Posts', $postType['label']);
+	}
 	
+	/**
+	 * @vcr get-post-types-test-vcr.yml
+	 */
+	public function testGetPostTypes()
+	{
+		$postTypes = $this->client->getPostTypes();
+		$this->assertNotEmpty($postTypes);
+		$this->assertArrayHasKey('post', $postTypes);
+		$this->assertArrayHasKey('page', $postTypes);
+		$this->assertArrayHasKey('wpcf7_contact_form', $postTypes);
+	}
+	
+	/**
+	 * @vcr get-post-formats-test-vcr.yml
+	 */
+	public function testGetPostFormats()
+	{
+		$postFormats = $this->client->getPostFormats();
+		$this->assertArrayHasKey('standard', $postFormats);
+		$this->assertArrayHasKey('video', $postFormats);
+		$this->assertSame('Link', $postFormats['link']);
+	}
+	
+	/**
+	 * @vcr get-post-status-list-test-vcr.yml
+	 */
+	public function testGetPostStatusList()
+	{
+		$statuses = $this->client->getPostStatusList();
+		$this->assertCount(4, $statuses);
+		$this->assertArrayHasKey('publish', $statuses);
+		$this->assertSame('Pending Review', $statuses['pending']);
+	}
 }
