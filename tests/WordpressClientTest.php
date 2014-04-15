@@ -226,4 +226,23 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
 		$this->assertArrayHasKey('publish', $statuses);
 		$this->assertSame('Pending Review', $statuses['pending']);
 	}
+	
+	/**
+	 * @vcr get-taxonomy-test-vcr.yml
+	 */
+	public function testGetTaxonomy()
+	{
+		$taxonomy = $this->client->getTaxonomy('category');
+		$this->assertSame('Categories', $taxonomy['label']);
+	}
+	
+	/**
+	 * @vcr get-taxonomies-test-vcr.yml
+	 */
+	public function testGetTaxonomies()
+	{
+		$taxonomies = $this->client->getTaxonomies();
+		$this->assertCount(3, $taxonomies);
+		$this->assertArrayHasKey('name', $taxonomies[0]);
+	}
 }

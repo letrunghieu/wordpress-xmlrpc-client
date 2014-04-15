@@ -55,7 +55,7 @@ class WordpressClient
 	 * @param integer $postId	post id
 	 * @param array $fields	Optional. List of field or meta-field names to include in response.
 	 * @return struct
-	 * @see http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.getPosts
+	 * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.getPosts
 	 */
 	function getPost($postId, array $fields = array())
 	{
@@ -83,7 +83,7 @@ class WordpressClient
 	 * @param array $filters	Optional
 	 * @param array $fields	Optional
 	 * @return array array of struct
-	 * @see http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.getPosts
+	 * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.getPosts
 	 */
 	function getPosts(array $filters = array(), array $fields = array())
 	{
@@ -112,7 +112,7 @@ class WordpressClient
 	 * @param array $content	the content array, see more at wordpress documentation
 	 * @return integer the new post id
 	 * 
-	 * @see http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.newPost
+	 * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.newPost
 	 */
 	function newPost($title, $body, array $categorieIds = array(), $thumbnailId = NULL, array $content = array())
 	{
@@ -140,7 +140,7 @@ class WordpressClient
 		}
 		else
 		{
-			return FALSE;
+			return false;
 		}
 	}
 
@@ -155,7 +155,7 @@ class WordpressClient
 	 * @param array $content	the advanced array
 	 * @return boolean
 	 * 
-	 * @see http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.editPost
+	 * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.editPost
 	 */
 	function editPost($postId, $title, $body, array $categorieIds = array(), $thumbnailId = NULL, array $content = array())
 	{
@@ -187,7 +187,7 @@ class WordpressClient
 	 * @param integer $postId	the id of selected post
 	 * @return boolean
 	 * 
-	 * @see http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.deletePost
+	 * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.deletePost
 	 */
 	function deletePost($postId)
 	{
@@ -198,7 +198,7 @@ class WordpressClient
 		}
 		else
 		{
-			return FALSE;
+			return false;
 		}
 	}
 
@@ -209,7 +209,7 @@ class WordpressClient
 	 * @param array $fields	Optional. List of field or meta-field names to include in response. 
 	 * @return struct
 	 * 
-	 * @see http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.getPostType
+	 * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.getPostType
 	 */
 	function getPostType($postTypeName, array $fields = array())
 	{
@@ -220,7 +220,7 @@ class WordpressClient
 		}
 		else
 		{
-			return FALSE;
+			return false;
 		}
 	}
 
@@ -231,7 +231,7 @@ class WordpressClient
 	 * @param array $fields
 	 * @return array	list of struct
 	 * 
-	 * @see http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.getPostTypes
+	 * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.getPostTypes
 	 */
 	function getPostTypes(array $filter = array(), array $fields = array())
 	{
@@ -242,7 +242,7 @@ class WordpressClient
 		}
 		else
 		{
-			return FALSE;
+			return false;
 		}
 	}
 
@@ -251,7 +251,7 @@ class WordpressClient
 	 * 
 	 * @return boolean
 	 * 
-	 * @see http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.getPostFormats
+	 * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.getPostFormats
 	 */
 	function getPostFormats()
 	{
@@ -262,7 +262,7 @@ class WordpressClient
 		}
 		else
 		{
-			return FALSE;
+			return false;
 		}
 	}
 
@@ -271,7 +271,7 @@ class WordpressClient
 	 * 
 	 * @return array	list of supported post status
 	 * 
-	 * @see http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.getPostStatusList
+	 * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.getPostStatusList
 	 */
 	function getPostStatusList()
 	{
@@ -282,7 +282,49 @@ class WordpressClient
 		}
 		else
 		{
-			return FALSE;
+			return false;
+		}
+	}
+	
+	
+	/**
+	 * Retrieve information about a taxonomy. 
+	 * 
+	 * @param string $taxonomy the name of the selected taxonomy
+	 * @return struct	taxonomy information
+	 * 
+	 * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Taxonomies#wp.getTaxonomy
+	 */
+	function getTaxonomy($taxonomy)
+	{
+		$params = array(1, $this->_username, $this->_password, $taxonomy);
+		if ($this->_sendRequest('wp.getTaxonomy', $params))
+		{
+			return $this->getResponse();
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	/**
+	 * Retrieve a list of taxonomies. 
+	 * 
+	 * @return array array of taxonomy struct
+	 * 
+	 * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Taxonomies#wp.getTaxonomies
+	 */
+	function getTaxonomies()
+	{
+		$params = array(1, $this->_username, $this->_password);
+		if ($this->_sendRequest('wp.getTaxonomies', $params))
+		{
+			return $this->getResponse();
+		}
+		else
+		{
+			return false;
 		}
 	}
 
@@ -388,7 +430,7 @@ class WordpressClient
 		try
 		{
 			$file = @file_get_contents($this->_endPoint, false, $context);
-			if ($file === FALSE)
+			if ($file === false)
 			{
 				$error					 = error_get_last();
 				$error					 = $error ? trim($error['message']) : "error";
