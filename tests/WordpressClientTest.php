@@ -116,4 +116,52 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
 		$this->assertSame('bar', $post['custom_fields'][0]['value']);
 	}
 	
+	/**
+	 * @vcr edit-post-title-and-content-test-vcr.yml
+	 */
+	public function testEditPostTitleAndContent()
+	{
+		$result = $this->client->editPost(233, 'Lorem Ipsum (edited)', 'Muahahaha!');
+		$this->assertNotSame(false, $result);
+		$this->assertTrue($result);
+		
+		$post = $this->client->getPost(233);
+		$this->assertSame('Lorem Ipsum (edited)', $post['post_title']);
+		$this->assertSame('Muahahaha!', $post['post_content']);
+	}
+	
+	/**
+	 * @vcr edit-post-with-other-info-change-test-vcr.yml
+	 */
+	public function testEditPostWithOtherInfoChange()
+	{
+		$result = $this->client->editPost(233, 'Lorem Ipsum (edited)', 'Muahahaha!', array(20, 26), 229, array('custom_fields' => array(array('key' => 'foo', 'value' => 'bar'))));
+		$this->assertTrue($result);
+		
+		$post = $this->client->getPost(233);
+		$categories = array();
+		foreach($post['terms'] as $t)
+		{
+			if ($t['taxonomy'] == 'category')
+			{
+				$categories[] = $t['term_id'];
+			}
+		}
+		$this->assertSame('foo', $post['custom_fields'][0]['key']);
+		$this->assertSame('bar', $post['custom_fields'][0]['value']);
+		$this->assertEquals(229, $post['post_thumbnail']['attachment_id']);
+		$this->assertTrue(in_array(20, $categories));
+		$this->assertTrue(in_array(26, $categories));
+	}
+	
+	/**
+	 * @vcr edit-post-with-invalid-id-test-vcr.yml
+	 */
+	public function testEditPostWithInvalidId()
+	{
+		$result = $this->client->editPost(1000, 'Foo', '');
+		$this->assertFalse($result);
+		$this->assertSame('xmlrpc: Invalid post ID. (404)', $this->client->getErrorMessage());
+	}
+	
 }

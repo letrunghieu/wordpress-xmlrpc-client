@@ -161,10 +161,7 @@ class WordpressClient
 	{
 		$content['post_title']	 = $title;
 		$content['post_content'] = $body;
-		if ($customFields != NULL)
-		{
-			$content['custom_fields'] = $customFields;
-		}
+
 		if ($thumbnailId != NULL)
 		{
 			$content['post_thumbnail'] = $thumbnailId;
