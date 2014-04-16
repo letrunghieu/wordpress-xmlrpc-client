@@ -333,6 +333,9 @@ class WordpressClientPostsComponentTest extends TestCase
 		$this->assertSame('Pending Review', $statuses['pending']);
 	}
 	
+	/**
+	 * @vcr posts/test-get-post-status-list-no-privilege-vcr.yml
+	 */
 	public function testGetPostStatusListNoPrivilege()
 	{
 		$statuses = $this->guestClient->getPostStatusList();
