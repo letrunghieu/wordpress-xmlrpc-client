@@ -206,4 +206,91 @@ class WordpressClientTaxonomiesComponentTest extends TestCase
 		$this->assertSame('xmlrpc: Parent term does not exist. (403)', $this->client->getErrorMessage());
 	}
 
+	/**
+	 * @vcr taxonomies/test-edit-term-vcr.yml
+	 */
+	public function testEditTerm()
+	{
+		$termId = $this->client->EditTerm(47, 'category', array('name' => 'Category Lorem',));
+		$this->assertTrue($termId);
+
+		$term = $this->client->getTerm(47, 'category');
+		$this->assertSame('Category Lorem', $term['name']);
+	}
+
+	/**
+	 * @vcr taxonomies/test-edit-term-with-more-info-vcr.yml
+	 */
+	public function testEditTermWithMoreInfo()
+	{
+		$termId = $this->client->EditTerm(47, 'category', array('name' => 'Category Lorem', 'slug' => 'cate-lorem-3', 'description' => 'Lorem Ipsum', 'parent' => 3));
+		$this->assertTrue($termId);
+
+		$term = $this->client->getTerm(47, 'category');
+		$this->assertSame('Category Lorem', $term['name']);
+		$this->assertSame('cate-lorem-3', $term['slug']);
+		$this->assertSame('Lorem Ipsum', $term['description']);
+		$this->assertSame('3', $term['parent']);
+	}
+
+	/**
+	 * @vcr taxonomies/test-edit-term-no-privilege-vcr.yml
+	 */
+	public function testEditTermNoPrivilege()
+	{
+		$termId = $this->guestClient->EditTerm(47, 'category');
+		$this->assertFalse($termId);
+		$this->assertSame('xmlrpc: You are not allowed to edit terms in this taxonomy. (401)', $this->guestClient->getErrorMessage());
+	}
+
+	/**
+	 * @vcr taxonomies/test-edit-term-invalid-taxonomy-name-vcr.yml
+	 */
+	public function testEditTermInvalidTaxonomyName()
+	{
+		$termId = $this->client->EditTerm(47, 'category-foo');
+		$this->assertFalse($termId);
+		$this->assertSame('xmlrpc: Invalid taxonomy (403)', $this->client->getErrorMessage());
+	}
+
+	/**
+	 * @vcr taxonomies/test-edit-term-empty-name-vcr.yml
+	 */
+	public function testEditTermEmptyName()
+	{
+		$termId = $this->client->EditTerm(47, 'category', array('name' => ''));
+		$this->assertFalse($termId);
+		$this->assertSame('xmlrpc: The term name cannot be empty. (403)', $this->client->getErrorMessage());
+	}
+
+	/**
+	 * @vcr taxonomies/test-edit-term-no-hierachical-vcr.yml
+	 */
+	public function testEditTermNoHierachical()
+	{
+		$termId = $this->client->EditTerm(18, 'post_tag', array('parent' => 16));
+		$this->assertFalse($termId);
+		$this->assertSame("xmlrpc: This taxonomy is not hierarchical so you can't set a parent. (403)", $this->client->getErrorMessage());
+	}
+
+	/**
+	 * @vcr taxonomies/test-edit-term-invalid-parent-vcr.yml
+	 */
+	public function testEditTermInvalidParent()
+	{
+		$termId = $this->client->EditTerm(47, 'category', array('parent' => 999));
+		$this->assertFalse($termId);
+		$this->assertSame('xmlrpc: Parent term does not exist. (403)', $this->client->getErrorMessage());
+	}
+
+	/**
+	 * @vcr taxonomies/test-edit-term-not-exist-vcr.yml
+	 */
+	public function testEditTermNotExist()
+	{
+		$termId = $this->client->EditTerm(444, 'category');
+		$this->assertFalse($termId);
+		$this->assertSame('xmlrpc: Invalid term ID (404)', $this->client->getErrorMessage());
+	}
+
 }
