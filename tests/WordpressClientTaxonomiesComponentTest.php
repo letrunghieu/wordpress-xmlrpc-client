@@ -293,4 +293,46 @@ class WordpressClientTaxonomiesComponentTest extends TestCase
 		$this->assertSame('xmlrpc: Invalid term ID (404)', $this->client->getErrorMessage());
 	}
 
+	/**
+	 * @vcr taxonomies/test-delete-term-vcr.yml
+	 */
+	public function testDeleteTerm()
+	{
+		$termId = $this->client->DeleteTerm(47, 'category');
+		$this->assertTrue($termId);
+
+		$term = $this->client->getTerm(47, 'category');
+		$this->assertFalse($term);
+	}
+
+	/**
+	 * @vcr taxonomies/test-delete-term-no-privilege-vcr.yml
+	 */
+	public function testDeleteTermNoPrivilege()
+	{
+		$termId = $this->guestClient->DeleteTerm(28, 'category');
+		$this->assertFalse($termId);
+		$this->assertSame('xmlrpc: You are not allowed to delete terms in this taxonomy. (401)', $this->guestClient->getErrorMessage());
+	}
+
+	/**
+	 * @vcr taxonomies/test-delete-term-invalid-taxonomy-name-vcr.yml
+	 */
+	public function testDeleteTermInvalidTaxonomyName()
+	{
+		$termId = $this->client->DeleteTerm(28, 'category-foo');
+		$this->assertFalse($termId);
+		$this->assertSame('xmlrpc: Invalid taxonomy (403)', $this->client->getErrorMessage());
+	}
+
+	/**
+	 * @vcr taxonomies/test-delete-term-not-exist-vcr.yml
+	 */
+	public function testDeleteTermNotExist()
+	{
+		$termId = $this->client->DeleteTerm(444, 'category');
+		$this->assertFalse($termId);
+		$this->assertSame('xmlrpc: Invalid term ID (404)', $this->client->getErrorMessage());
+	}
+
 }
