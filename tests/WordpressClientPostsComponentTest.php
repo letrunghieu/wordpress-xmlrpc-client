@@ -51,4 +51,41 @@ class WordpressClientPostsComponentTest extends TestCase
 		$this->assertFalse($post);
 		$this->assertEquals('xmlrpc: Invalid post ID. (404)', $this->client->getErrorMessage());
 	}
+	
+	/**
+	 * @vcr posts/test-get-posts-with-default-config-vcr.yml
+	 */
+	public function testGetPostsWithDefaultConfig()
+	{
+		$posts = $this->client->getPosts();
+		$this->assertCount(10, $posts);
+		$this->assertArrayHasKey('post_title', $posts[0]);
+	}
+
+	/**
+	 * @vcr posts/test-get-posts-with-filters-vcr.yml
+	 */
+	public function testGetPostsWithFilters()
+	{
+		$posts = $this->client->getPosts(array('number' => 5));
+		$this->assertCount(5, $posts);
+		$this->assertArrayHasKey('post_title', $posts[0]);
+	}
+
+	/**
+	 * @vcr posts/test-get-posts-with-fields-vcr.yml
+	 */
+	public function testGetPostsWithFields()
+	{
+		$posts = $this->client->getPosts(array(), array('post_id', 'post_data'));
+		$this->assertCount(10, $posts);
+		$this->assertArrayNotHasKey('post_title', $posts[0]);
+	}
+	
+	public function testGetPostReturnEmpty()
+	{
+		$posts = $this->guestClient->getPosts();
+		$this->assertFalse($posts);
+		$this->assertEquals('xmlrpc: Sorry, you are not allowed to edit posts in this post type (401)', $this->guestClient->getErrorMessage());
+	}
 }
