@@ -371,6 +371,93 @@ class WordpressClient
 		}
 	}
 
+	/**
+	 * Create a new taxonomy term. 
+	 * 
+	 * @param string $name
+	 * @param string $taxomony
+	 * @param string $slug
+	 * @param string $description
+	 * @param integer $parentId
+	 * @return integer new term id
+	 * 
+	 * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Taxonomies#wp.newTerm
+	 */
+	function newTerm($name, $taxomony, $slug = null, $description = null, $parentId = null)
+	{
+		$content = array(
+			'name'		 => $name,
+			'taxonomy'	 => $taxomony,
+		);
+		if ($slug)
+		{
+			$content['slug'] = $slug;
+		}
+		if ($description)
+		{
+			$content['description'] = $description;
+		}
+		if ($parentId)
+		{
+			$content['parent'] = $parentId;
+		}
+		$params = array(1, $this->_username, $this->_password, $content);
+		if ($this->_sendRequest('wp.newTerm', $params))
+		{
+			return $this->getResponse();
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	/**
+	 * Edit an existing taxonomy term. 
+	 * 
+	 * @param integer $termId
+	 * @param string $taxonomy
+	 * @param array $content
+	 * @return boolean
+	 * 
+	 * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Taxonomies#wp.editTerm
+	 */
+	function editTerm($termId, $taxonomy, array $content = array())
+	{
+		$content['taxonomy'] = $taxonomy;
+		$params				 = array(1, $this->_username, $this->_password, $termId, $content);
+		if ($this->_sendRequest('wp.editTerm', $params))
+		{
+			return $this->getResponse();
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	/**
+	 * Delete an existing taxonomy term. 
+	 * 
+	 * @param integer $termId
+	 * @param string $taxonomy
+	 * @return boolean
+	 * 
+	 * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Taxonomies#wp.deleteTerm
+	 */
+	function deleteTerm($termId, $taxonomy)
+	{
+		$params = array(1, $this->_username, $this->_password, $taxonomy, $termId);
+		if ($this->_sendRequest('wp.deleteTerm', $params))
+		{
+			return $this->getResponse();
+		}
+		else
+		{
+			return false;
+		}
+	}
+
 	function getAuthors()
 	{
 		$params = array(0, $this->_username, $this->_password);
