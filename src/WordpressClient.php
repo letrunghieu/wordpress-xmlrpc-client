@@ -457,6 +457,77 @@ class WordpressClient
 			return false;
 		}
 	}
+	
+	/**
+	 * Retrieve a media item (i.e, attachment). 
+	 * 
+	 * @param type $itemId
+	 * @return array
+	 * 
+	 * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Media#wp.getMediaItem
+	 */
+	function getMediaItem($itemId)
+	{
+		$params = array(1, $this->_username, $this->_password, $itemId);
+		if ($this->_sendRequest('wp.getMediaItem', $params))
+		{
+			return $this->getResponse();
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	/**
+	 * Retrieve list of media items. 
+	 * 
+	 * @param array $filter
+	 * @return array
+	 * 
+	 * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Media#wp.getMediaLibrary
+	 */
+	function getMediaLibrary(array $filter = array())
+	{
+		$params = array(1, $this->_username, $this->_password, $filter);
+		if ($this->_sendRequest('wp.getMediaLibrary', $params))
+		{
+			return $this->getResponse();
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	/**
+	 * Upload a media file. 
+	 * 
+	 * @param type $name
+	 * @param type $mime
+	 * @param type $bits Binary data (no encoded)
+	 * @return array
+	 * 
+	 * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Media#wp.uploadFile
+	 */
+	function uploadFile($name, $mime, $bits)
+	{
+		xmlrpc_set_type($bits, 'base64');
+		$struct	 = array(
+			'name'	 => $name,
+			'type'	 => $mime,
+			'bits'	 => $bits,
+		);
+		$params	 = array(1, $this->_username, $this->_password, $struct);
+		if ($this->_sendRequest('wp.uploadFile', $params))
+		{
+			return $this->getResponse();
+		}
+		else
+		{
+			return false;
+		}
+	}
 
 	function getAuthors()
 	{
@@ -519,25 +590,6 @@ class WordpressClient
 			'description'	 => $description);
 		$params	 = array(0, $this->_username, $this->_password, $struct);
 		if ($this->_sendRequest('wp.newCategory', $params))
-		{
-			return $this->getResponse();
-		}
-		else
-		{
-			return false;
-		}
-	}
-
-	function uploadFile($name, $mime, $bits)
-	{
-		xmlrpc_set_type($bits, 'base64');
-		$struct	 = array(
-			'name'	 => $name,
-			'type'	 => $mime,
-			'bits'	 => $bits,
-		);
-		$params	 = array(1, $this->_username, $this->_password, $struct);
-		if ($this->_sendRequest('wp.uploadFile', $params))
 		{
 			return $this->getResponse();
 		}
