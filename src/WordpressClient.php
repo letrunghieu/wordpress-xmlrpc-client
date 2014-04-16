@@ -549,6 +549,27 @@ class WordpressClient
 			return false;
 		}
 	}
+	
+	/**
+	 * Retrieve a comment. 
+	 * 
+	 * @param type $commentId
+	 * @return array
+	 * 
+	 * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Comments#wp.getComment
+	 */
+	function getComment($commentId)
+	{
+		$params = array(1, $this->_username, $this->_password, $commentId);
+		if ($this->_sendRequest('wp.getComment', $params))
+		{
+			return $this->getResponse();
+		}
+		else
+		{
+			return false;
+		}
+	}
 
 	private function _sendRequest($method, $params)
 	{
