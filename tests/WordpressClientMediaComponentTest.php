@@ -40,4 +40,34 @@ class WordpressClientMediaComponentTest extends TestCase
 		$this->assertFalse($media);
 		$this->assertSame('xmlrpc: Invalid attachment ID. (404)', $this->client->getErrorMessage());
 	}
+	
+	/**
+	 * @vcr media/test-get-media-library-vcr.yml
+	 */
+	public function testGetMediaLibrary()
+	{
+		$medias = $this->client->getMediaLibrary();
+		$this->assertCount(10, $medias);
+		$this->assertArrayHasKey('link', $medias[0]);
+	}
+	
+	/**
+	 * @vcr media/test-get-media-library-with-filter-vcr.yml
+	 */
+	public function testGetMediaLibraryWithFilter()
+	{
+		$medias = $this->client->getMediaLibrary(array('number' => 5));
+		$this->assertCount(5, $medias);
+		$this->assertArrayHasKey('link', $medias[0]);
+	}
+	
+	/**
+	 * @vcr media/test-get-media-library-no-privilege-vcr.yml
+	 */
+	public function testGetMediaLibraryNoPrivilege()
+	{
+		$medias = $this->guestClient->getMediaLibrary();
+		$this->assertFalse($medias);
+		$this->assertSame('xmlrpc: You do not have permission to upload files. (401)', $this->guestClient->getErrorMessage());
+	}
 }
