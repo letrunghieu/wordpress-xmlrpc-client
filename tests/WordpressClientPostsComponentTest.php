@@ -142,7 +142,7 @@ class WordpressClientPostsComponentTest extends TestCase
 		$this->assertFalse($postId);
 		$this->assertSame('xmlrpc: Sorry, you are not allowed to post on this site. (401)', $this->guestClient->getErrorMessage());
 	}
-	
+
 	/**
 	 * @vcr posts/test-new-post-invalid-term-vcr.yml
 	 */
@@ -152,7 +152,7 @@ class WordpressClientPostsComponentTest extends TestCase
 		$this->assertFalse($postId);
 		$this->assertSame('xmlrpc: Invalid term ID (403)', $this->client->getErrorMessage());
 	}
-	
+
 	/**
 	 * @vcr posts/test-new-post-invalid-thumbnail-vcr.yml
 	 */
@@ -162,7 +162,7 @@ class WordpressClientPostsComponentTest extends TestCase
 		$this->assertFalse($postId);
 		$this->assertSame('xmlrpc: Invalid attachment ID. (404)', $this->client->getErrorMessage());
 	}
-	
+
 	/**
 	 * @vcr posts/test-edit-post-title-and-content-vcr.yml
 	 */
@@ -210,7 +210,7 @@ class WordpressClientPostsComponentTest extends TestCase
 		$this->assertFalse($result);
 		$this->assertSame('xmlrpc: Invalid post ID. (404)', $this->client->getErrorMessage());
 	}
-	
+
 	/**
 	 * @vcr posts/test-edit-post-no-privilege-vcr.yml
 	 */
@@ -239,7 +239,7 @@ class WordpressClientPostsComponentTest extends TestCase
 		$this->assertFalse($result);
 		$this->assertSame('xmlrpc: Invalid post ID. (404)', $this->client->getErrorMessage());
 	}
-	
+
 	/**
 	 * @vcr posts/test-delete-post-no-privilege-vcr.yml
 	 */
@@ -250,4 +250,94 @@ class WordpressClientPostsComponentTest extends TestCase
 		$this->assertSame('xmlrpc: Sorry, you are not allowed to delete this post. (401)', $this->guestClient->getErrorMessage());
 	}
 
+	/**
+	 * @vcr posts/test-get-post-type-vcr.yml
+	 */
+	public function testGetPostType()
+	{
+		$postType = $this->client->getPostType('post');
+		$this->assertArrayHasKey('name', $postType);
+		$this->assertSame('Posts', $postType['label']);
+	}
+
+	/**
+	 * @vcr posts/test-get-post-type-no-privilege-vcr.yml
+	 */
+	public function testGetPostTypeNoPrivilege()
+	{
+		$postType = $this->guestClient->getPostType('post');
+		$this->assertFalse($postType);
+		$this->assertSame('xmlrpc: Sorry, you are not allowed to edit this post type. (401)', $this->guestClient->getErrorMessage());
+	}
+
+	/**
+	 * @vcr posts/test-get-post-type-invalid-name-vcr.yml
+	 */
+	public function testGetPostTypeInvalidName()
+	{
+		$postType = $this->client->getPostType('post_foo');
+		$this->assertFalse($postType);
+		$this->assertSame('xmlrpc: Invalid post type (403)', $this->client->getErrorMessage());
+	}
+
+	/**
+	 * @vcr posts/test-get-post-types-vcr.yml
+	 */
+	public function testGetPostTypes()
+	{
+		$postTypes = $this->client->getPostTypes();
+		$this->assertNotEmpty($postTypes);
+		$this->assertArrayHasKey('post', $postTypes);
+		$this->assertArrayHasKey('page', $postTypes);
+		$this->assertArrayHasKey('wpcf7_contact_form', $postTypes);
+	}
+	
+	/**
+	 * @vcr posts/test-get-post-types-no-privilege-vcr.yml
+	 */
+	public function testGetPostTypesNoPrivilege()
+	{
+		$postTypes = $this->guestClient->getPostTypes();
+		$this->assertEmpty($postTypes);
+	}
+
+	/**
+	 * @vcr posts/test-get-post-formats-vcr.yml
+	 */
+	public function testGetPostFormats()
+	{
+		$postFormats = $this->client->getPostFormats();
+		$this->assertArrayHasKey('standard', $postFormats);
+		$this->assertArrayHasKey('video', $postFormats);
+		$this->assertSame('Link', $postFormats['link']);
+	}
+	
+	/**
+	 * @vcr posts/test-get-post-formats-no-privilege-vcr.yml
+	 */
+	public function testGetPostFormatsNoPrivilege()
+	{
+		$postFormats = $this->guestClient->getPostFormats();
+		$this->assertFalse($postFormats);
+		$this->assertSame('xmlrpc: You are not allowed access to details about this site. (403)', $this->guestClient->getErrorMessage());
+	}
+
+	/**
+	 * @vcr posts/test-get-post-status-list-vcr.yml
+	 */
+	public function testGetPostStatusList()
+	{
+		$statuses = $this->client->getPostStatusList();
+		$this->assertCount(4, $statuses);
+		$this->assertArrayHasKey('publish', $statuses);
+		$this->assertSame('Pending Review', $statuses['pending']);
+	}
+	
+	public function testGetPostStatusListNoPrivilege()
+	{
+		$statuses = $this->guestClient->getPostStatusList();
+		$this->assertFalse($statuses);
+		$this->assertSame('xmlrpc: You are not allowed access to details about this site. (403)', $this->guestClient->getErrorMessage());
+	}
+	
 }
