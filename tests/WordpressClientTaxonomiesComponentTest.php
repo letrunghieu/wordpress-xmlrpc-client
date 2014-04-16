@@ -92,7 +92,7 @@ class WordpressClientTaxonomiesComponentTest extends TestCase
 	}
 	
 	/**
-	 * vcr taxonomies/test-get-term-invalid-term-id-vcr.yml
+	 * @vcr taxonomies/test-get-term-invalid-term-id-vcr.yml
 	 */
 	public function testGetTermInvalidTermId()
 	{
