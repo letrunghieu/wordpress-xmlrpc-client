@@ -29,7 +29,7 @@
 	"autoload": {
 		"psr-4": {
 			"HieuLe\\WordpressXmlrpcClient\\": "src/",
-			"HieuLe\\WordpressXmlrpcClientTest\\": "test/"
+			"HieuLe\\WordpressXmlrpcClientTest\\": "tests/"
 		}
 	},
 	"minimum-stability": "stable"

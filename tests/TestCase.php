@@ -1,6 +1,7 @@
 <?php
 
 namespace HieuLe\WordpressXmlrpcClientTest;
+use HieuLe\WordpressXmlrpcClient\WordpressClient;
 
 /**
  * Base testcase class
@@ -15,25 +16,25 @@ class TestCase extends \PHPUnit_Framework_TestCase
 	 *
 	 * @var \HieuLe\WordpressXmlrpcClient\WordpressClient
 	 */
-	protected static $client;
+	protected $client;
 
 	/**
 	 * The user without proper privilege
 	 * 
 	 * @var \HieuLe\WordpressXmlrpcClient\WordpressClient
 	 */
-	protected static $guestClient;
+	protected $guestClient;
 
-	public static function setUpBeforeClass()
+	public function setUp()
 	{
-		static::$client = new WordpressClient('http://WP_DOMAIN/xmlrpc.php', 'WP_USER', 'WP_PASSWORD');
-		static::$guestClient = new WordpressClient('http://WP_DOMAIN/xmlrpc.php', 'WP_GUEST', 'WP_PASSWORD');
+		$this->client		 = new WordpressClient('http://WP_DOMAIN/xmlrpc.php', 'WP_USER', 'WP_PASSWORD');
+		$this->guestClient	 = new WordpressClient('http://WP_DOMAIN/xmlrpc.php', 'WP_GUEST', 'WP_PASSWORD');
 	}
 
-	public static function tearDownAfterClass()
+	public function tearDown()
 	{
-		static::$client = null;
-		static::$guestClient = null;
+		$this->client		 = null;
+		$this->guestClient	 = null;
 	}
 
 }
