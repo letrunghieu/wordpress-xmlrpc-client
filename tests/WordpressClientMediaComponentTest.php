@@ -70,4 +70,38 @@ class WordpressClientMediaComponentTest extends TestCase
 		$this->assertFalse($medias);
 		$this->assertSame('xmlrpc: You do not have permission to upload files. (401)', $this->guestClient->getErrorMessage());
 	}
+	
+	/**
+	 * @vcr media/test-upload-file-vcr.yml
+	 */
+	public function testUploadFile()
+	{
+		$content = file_get_contents("tests/image.jpg");
+		$mime = mime_content_type("tests/image.jpg");
+		$file = $this->client->uploadFile('foo.jpg', $mime, $content);
+		$this->assertArrayHasKey('id', $file);
+		$this->assertArrayHasKey('file', $file);
+		$this->assertArrayHasKey('url', $file);
+		$this->assertArrayHasKey('type', $file);
+	}
+	
+	/**
+	 * @vcr media/test-upload-file-no-privilege-vcr.yml
+	 */
+	public function testUploadFileNoPrivilege()
+	{
+		$file = $this->guestClient->uploadFile('Foo', 'image/jpeg', 'file_content');
+		$this->assertFalse($file);
+		$this->assertSame('xmlrpc: You do not have permission to upload files. (401)', $this->guestClient->getErrorMessage());
+	}
+	
+	/**
+	 * @vcr media/test-upload-file-error-vcr.yml
+	 */
+	public function testUploadFileError()
+	{
+		$file = $this->client->uploadFile('Foo', 'bar', '');
+		$this->assertFalse($file);
+		$this->assertSame('xmlrpc: Could not write file Foo (Invalid file type) (500)', $this->client->getErrorMessage());
+	}
 }
