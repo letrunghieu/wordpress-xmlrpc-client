@@ -528,6 +528,27 @@ class WordpressClient
 			return false;
 		}
 	}
+	
+	/**
+	 * Retrieve comment count for a specific post. 
+	 * 
+	 * @param type $postId
+	 * @return integer
+	 * 
+	 * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Comments#wp.getCommentCount
+	 */
+	function getCommentCount($postId)
+	{
+		$params = array(1, $this->_username, $this->_password, $postId);
+		if($this->_sendRequest('wp.getCommentCount', $params))
+		{
+			return $this->getResponse();
+		}
+		else
+		{
+			return false;
+		}
+	}
 
 	private function _sendRequest($method, $params)
 	{
