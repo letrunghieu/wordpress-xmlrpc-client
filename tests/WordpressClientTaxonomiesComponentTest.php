@@ -69,8 +69,7 @@ class WordpressClientTaxonomiesComponentTest extends TestCase
 		$this->assertSame('Location', $term['name']);
 		$this->assertSame('location', $term['slug']);
 	}
-	
-	
+
 	/**
 	 * @vcr taxonomies/test-get-term-no-privilege-vcr.yml
 	 */
@@ -80,7 +79,7 @@ class WordpressClientTaxonomiesComponentTest extends TestCase
 		$this->assertFalse($term);
 		$this->assertSame('xmlrpc: You are not allowed to assign terms in this taxonomy. (401)', $this->guestClient->getErrorMessage());
 	}
-	
+
 	/**
 	 * @vcr taxonomies/test-get-term-invalid-taxonomy-name-vcr.yml
 	 */
@@ -90,7 +89,7 @@ class WordpressClientTaxonomiesComponentTest extends TestCase
 		$this->assertFalse($term);
 		$this->assertSame('xmlrpc: Invalid taxonomy (403)', $this->client->getErrorMessage());
 	}
-	
+
 	/**
 	 * @vcr taxonomies/test-get-term-invalid-term-id-vcr.yml
 	 */
@@ -109,7 +108,7 @@ class WordpressClientTaxonomiesComponentTest extends TestCase
 		$terms = $this->client->getTerms('post_tag');
 		$this->assertCount(4, $terms);
 	}
-	
+
 	/**
 	 * @vcr taxonomies/test-get-terms-no-privilege-vcr.yml
 	 */
@@ -119,7 +118,7 @@ class WordpressClientTaxonomiesComponentTest extends TestCase
 		$this->assertFalse($terms);
 		$this->assertSame('xmlrpc: You are not allowed to assign terms in this taxonomy. (401)', $this->guestClient->getErrorMessage());
 	}
-	
+
 	/**
 	 * @vcr taxonomies/test-get-terms-invalid-taxonomy-name-vcr.yml
 	 */
@@ -128,6 +127,83 @@ class WordpressClientTaxonomiesComponentTest extends TestCase
 		$terms = $this->client->getTerms('foo');
 		$this->assertFalse($terms);
 		$this->assertSame('xmlrpc: Invalid taxonomy (403)', $this->client->getErrorMessage());
+	}
+
+	/**
+	 * @vcr taxonomies/test-new-term-vcr.yml
+	 */
+	public function testNewTerm()
+	{
+		$termId = (int) $this->client->newTerm('Category Lorem', 'category');
+		$this->assertGreaterThan(0, $termId);
+
+		$term = $this->client->getTerm($termId, 'category');
+		$this->assertSame('Category Lorem', $term['name']);
+	}
+
+	/**
+	 * @vcr taxonomies/test-new-term-with-more-info-vcr.yml
+	 */
+	public function testNewTermWithMoreInfo()
+	{
+		$termId = (int) $this->client->newTerm('Category Lorem', 'category', 'cate-lorem-2', 'Lorem Ipsum', 3);
+		$this->assertGreaterThan(0, $termId);
+
+		$term = $this->client->getTerm($termId, 'category');
+		$this->assertSame('Category Lorem', $term['name']);
+		$this->assertSame('cate-lorem-2', $term['slug']);
+		$this->assertSame('Lorem Ipsum', $term['description']);
+		$this->assertSame('3', $term['parent']);
+	}
+
+	/**
+	 * @vcr taxonomies/test-new-term-no-privilege-vcr.yml
+	 */
+	public function testNewTermNoPrivilege()
+	{
+		$termId = $this->guestClient->newTerm('foo', 'category');
+		$this->assertFalse($termId);
+		$this->assertSame('xmlrpc: You are not allowed to create terms in this taxonomy. (401)', $this->guestClient->getErrorMessage());
+	}
+
+	/**
+	 * @vcr taxonomies/test-new-term-invalid-taxonomy-name-vcr.yml
+	 */
+	public function testNewTermInvalidTaxonomyName()
+	{
+		$termId = $this->client->newTerm('foo', 'category-foo');
+		$this->assertFalse($termId);
+		$this->assertSame('xmlrpc: Invalid taxonomy (403)', $this->client->getErrorMessage());
+	}
+
+	/**
+	 * @vcr taxonomies/test-new-term-empty-name-vcr.yml
+	 */
+	public function testNewTermEmptyName()
+	{
+		$termId = $this->client->newTerm('', 'category');
+		$this->assertFalse($termId);
+		$this->assertSame('xmlrpc: The term name cannot be empty. (403)', $this->client->getErrorMessage());
+	}
+
+	/**
+	 * @vcr taxonomies/test-new-term-no-hierachical-vcr.yml
+	 */
+	public function testNewTermNoHierachical()
+	{
+		$termId = $this->client->newTerm('Tag Foo', 'post_tag', null, null, 16);
+		$this->assertFalse($termId);
+		$this->assertSame('xmlrpc: This taxonomy is not hierarchical. (403)', $this->client->getErrorMessage());
+	}
+
+	/**
+	 * @vcr taxonomies/test-new-term-invalid-parent-vcr.yml
+	 */
+	public function testNewTermInvalidParent()
+	{
+		$termId = $this->client->newTerm('Tag Foo', 'category', null, null, 999);
+		$this->assertFalse($termId);
+		$this->assertSame('xmlrpc: Parent term does not exist. (403)', $this->client->getErrorMessage());
 	}
 
 }

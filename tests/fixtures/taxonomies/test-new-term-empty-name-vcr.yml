@@ -1,0 +1,20 @@
+
+-
+    request:
+        method: POST
+        url: 'http://WP_DOMAIN/xmlrpc.php'
+        headers:
+            host: WP_DOMAIN
+            content-length: 588
+        body: "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<methodCall>\n<methodName>wp.newTerm</methodName>\n<params>\n <param>\n  <value>\n   <int>1</int>\n  </value>\n </param>\n <param>\n  <value>\n   <string>WP_USER</string>\n  </value>\n </param>\n <param>\n  <value>\n   <string>WP_PASSWORD</string>\n  </value>\n </param>\n <param>\n  <value>\n   <struct>\n    <member>\n     <name>name</name>\n     <value>\n      <string/>\n     </value>\n    </member>\n    <member>\n     <name>taxonomy</name>\n     <value>\n      <string>category</string>\n     </value>\n    </member>\n   </struct>\n  </value>\n </param>\n</params>\n</methodCall>\n"
+    response:
+        status: 200
+        headers:
+            Date: 'Wed, 16 Apr 2014 05:42:46 GMT'
+            Server: 'Apache/2.4.2 (Win64) OpenSSL/1.0.1c PHP/5.4.3'
+            X-Powered-By: PHP/5.4.3
+            Set-Cookie: '_icl_current_language=en; expires=Thu, 17-Apr-2014 05:42:48 GMT; path=/'
+            Connection: close
+            Content-Length: '402'
+            Content-Type: 'text/xml; charset=UTF-8'
+        body: "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<methodResponse>\n  <fault>\n    <value>\n      <struct>\n        <member>\n          <name>faultCode</name>\n          <value><int>403</int></value>\n        </member>\n        <member>\n          <name>faultString</name>\n          <value><string>The term name cannot be empty.</string></value>\n        </member>\n      </struct>\n    </value>\n  </fault>\n</methodResponse>\n"
