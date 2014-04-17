@@ -168,7 +168,7 @@ class WordpressClientPostsComponentTest extends TestCase
 	 */
 	public function testEditPostTitleAndContent()
 	{
-		$result = $this->client->editPost(233, 'Lorem Ipsum (edited)', 'Muahahaha!');
+		$result = $this->client->editPost(233, array('post_title' => 'Lorem Ipsum (edited)', 'post_content' => 'Muahahaha!'));
 		$this->assertNotSame(false, $result);
 		$this->assertTrue($result);
 
@@ -182,7 +182,14 @@ class WordpressClientPostsComponentTest extends TestCase
 	 */
 	public function testEditPostWithOtherInfoChange()
 	{
-		$result = $this->client->editPost(233, 'Lorem Ipsum (edited)', 'Muahahaha!', array(20, 26), 229, array('custom_fields' => array(array('key' => 'foo', 'value' => 'bar'))));
+		$result = $this->client->editPost(233, array(
+			'post_title' => 'Lorem Ipsum (edited)', 
+			'post_content' => 'Muahahaha!', 
+			'terms' => array(
+				'category' => array(20, 26),
+			), 
+			'post_thumbnail' => 229, 
+			'custom_fields' => array(array('key' => 'foo', 'value' => 'bar'))));
 		$this->assertTrue($result);
 
 		$post		 = $this->client->getPost(233);
@@ -206,7 +213,7 @@ class WordpressClientPostsComponentTest extends TestCase
 	 */
 	public function testEditPostWithInvalidId()
 	{
-		$result = $this->client->editPost(1000, 'Foo', '');
+		$result = $this->client->editPost(1000, array('post_title' => 'Lorem Ipsum (edited)', 'post_content' => 'Muahahaha!'));
 		$this->assertFalse($result);
 		$this->assertSame('xmlrpc: Invalid post ID. (404)', $this->client->getErrorMessage());
 	}
@@ -216,7 +223,7 @@ class WordpressClientPostsComponentTest extends TestCase
 	 */
 	public function testEditPostNoPrivilege()
 	{
-		$result = $this->guestClient->editPost(233, '', '');
+		$result = $this->guestClient->editPost(233, array());
 		$this->assertFalse($result);
 		$this->assertSame('xmlrpc: Sorry, you are not allowed to edit this post. (401)', $this->guestClient->getErrorMessage());
 	}
@@ -291,7 +298,7 @@ class WordpressClientPostsComponentTest extends TestCase
 		$this->assertArrayHasKey('page', $postTypes);
 		$this->assertArrayHasKey('wpcf7_contact_form', $postTypes);
 	}
-	
+
 	/**
 	 * @vcr posts/test-get-post-types-no-privilege-vcr.yml
 	 */
@@ -311,7 +318,7 @@ class WordpressClientPostsComponentTest extends TestCase
 		$this->assertArrayHasKey('video', $postFormats);
 		$this->assertSame('Link', $postFormats['link']);
 	}
-	
+
 	/**
 	 * @vcr posts/test-get-post-formats-no-privilege-vcr.yml
 	 */
@@ -332,7 +339,7 @@ class WordpressClientPostsComponentTest extends TestCase
 		$this->assertArrayHasKey('publish', $statuses);
 		$this->assertSame('Pending Review', $statuses['pending']);
 	}
-	
+
 	/**
 	 * @vcr posts/test-get-post-status-list-no-privilege-vcr.yml
 	 */
@@ -342,5 +349,5 @@ class WordpressClientPostsComponentTest extends TestCase
 		$this->assertFalse($statuses);
 		$this->assertSame('xmlrpc: You are not allowed access to details about this site. (403)', $this->guestClient->getErrorMessage());
 	}
-	
+
 }

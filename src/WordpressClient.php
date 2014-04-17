@@ -164,7 +164,7 @@ class WordpressClient
 	 * 
 	 * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.editPost
 	 */
-	function editPost($postId, array $content = array())
+	function editPost($postId, array $content)
 	{
 		$params = array(1, $this->_username, $this->_password, $postId, $content);
 		if ($this->_sendRequest('wp.editPost', $params))
