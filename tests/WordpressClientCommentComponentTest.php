@@ -204,5 +204,14 @@ class WordpressClientCommentComponentTest extends TestCase
 		$this->assertFalse($result);
 		$this->assertSame('xmlrpc: You are not allowed to moderate comments on this site. (403)', $this->guestClient->getErrorMessage());
 	}
+	
+	/**
+	 * @vcr comments/test-get-comment-status-list-vcr.yml
+	 */
+	public function testGetCommentStatusList()
+	{
+		$statuses = $this->client->getCommentStatusList();
+		$this->assertGreaterThan(0, count($statuses));
+	}
 
 }

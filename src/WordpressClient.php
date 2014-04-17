@@ -457,7 +457,7 @@ class WordpressClient
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Retrieve a media item (i.e, attachment). 
 	 * 
@@ -478,7 +478,7 @@ class WordpressClient
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Retrieve list of media items. 
 	 * 
@@ -499,7 +499,7 @@ class WordpressClient
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Upload a media file. 
 	 * 
@@ -528,7 +528,7 @@ class WordpressClient
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Retrieve comment count for a specific post. 
 	 * 
@@ -540,7 +540,7 @@ class WordpressClient
 	function getCommentCount($postId)
 	{
 		$params = array(1, $this->_username, $this->_password, $postId);
-		if($this->_sendRequest('wp.getCommentCount', $params))
+		if ($this->_sendRequest('wp.getCommentCount', $params))
 		{
 			return $this->getResponse();
 		}
@@ -549,7 +549,7 @@ class WordpressClient
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Retrieve a comment. 
 	 * 
@@ -570,7 +570,7 @@ class WordpressClient
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Retrieve list of comments. 
 	 * 
@@ -591,7 +591,7 @@ class WordpressClient
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Create a new comment.
 	 * 
@@ -635,7 +635,7 @@ class WordpressClient
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Remove an existing comment. 
 	 * 
@@ -656,7 +656,26 @@ class WordpressClient
 			return false;
 		}
 	}
-	
+
+	/**
+	 * Retrieve list of comment statuses. 
+	 * @return array
+	 * 
+	 * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Comments#wp.getCommentStatusList
+	 */
+	function getCommentStatusList()
+	{
+		$params = array(1, $this->_username, $this->_password);
+		if ($this->_sendRequest('wp.getCommentStatusList', $params))
+		{
+			return $this->getResponse();
+		}
+		else
+		{
+			return false;
+		}
+	}
+
 	private function _sendRequest($method, $params)
 	{
 		$this->_responseHeader	 = array();
