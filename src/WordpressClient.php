@@ -791,6 +791,31 @@ class WordpressClient
 			return false;
 		}
 	}
+	
+	/**
+	 * Retrieve profile of the requesting user. 
+	 * 
+	 * @param array $fields
+	 * @return array
+	 * 
+	 * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Users#wp.getProfile
+	 */
+	function getProfile(array $fields = array())
+	{
+		$params = array(1, $this->_username, $this->_password);
+		if (!empty($fields))
+		{
+			$params[] = $fields;
+		}
+		if ($this->_sendRequest('wp.getProfile', $params))
+		{
+			return $this->_response;
+		}
+		else
+		{
+			return false;
+		}
+	}
 
 	private function _sendRequest($method, $params)
 	{

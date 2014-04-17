@@ -136,4 +136,38 @@ class WordpressClientUsersComponentTest extends TestCase
 		$this->assertSame('xmlrpc: The role specified is not valid (403)', $this->client->getErrorMessage());
 	}
 
+	/**
+	 * @vcr users/test-get-profile-vcr.yml
+	 */
+	public function testGetProfile()
+	{
+		$user = $this->client->getProfile();
+		$this->assertArrayHasKey('user_id', $user);
+		$this->assertArrayHasKey('username', $user);
+		$this->assertArrayHasKey('first_name', $user);
+		$this->assertArrayHasKey('last_name', $user);
+		$this->assertArrayHasKey('bio', $user);
+		$this->assertArrayHasKey('email', $user);
+		$this->assertArrayHasKey('nickname', $user);
+		$this->assertArrayHasKey('nicename', $user);
+		$this->assertArrayHasKey('url', $user);
+		$this->assertArrayHasKey('display_name', $user);
+		$this->assertArrayHasKey('registered', $user);
+		$this->assertArrayHasKey('roles', $user);
+
+		$user = $this->client->getProfile(array('user_id', 'email'));
+		$this->assertArrayHasKey('user_id', $user);
+		$this->assertArrayNotHasKey('username', $user);
+		$this->assertArrayNotHasKey('first_name', $user);
+		$this->assertArrayNotHasKey('last_name', $user);
+		$this->assertArrayNotHasKey('bio', $user);
+		$this->assertArrayHasKey('email', $user);
+		$this->assertArrayNotHasKey('nickname', $user);
+		$this->assertArrayNotHasKey('nicename', $user);
+		$this->assertArrayNotHasKey('url', $user);
+		$this->assertArrayNotHasKey('display_name', $user);
+		$this->assertArrayNotHasKey('registered', $user);
+		$this->assertArrayNotHasKey('roles', $user);
+	}
+
 }
