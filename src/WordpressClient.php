@@ -676,6 +676,34 @@ class WordpressClient
 		}
 	}
 
+	/**
+	 * Retrieve blog options. 
+	 * 
+	 * @param array $options
+	 * @return array
+	 * 
+	 * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Options#wp.getOptions
+	 */
+	function getOptions(array $options = array())
+	{
+		if (empty($options))
+		{
+			$params = array(1, $this->_username, $this->_password);
+		}
+		else
+		{
+			$params = array(1, $this->_username, $this->_password, $options);
+		}
+		if ($this->_sendRequest('wp.getOptions', $params))
+		{
+			return $this->getResponse();
+		}
+		else
+		{
+			return false;
+		}
+	}
+
 	private function _sendRequest($method, $params)
 	{
 		$this->_responseHeader	 = array();

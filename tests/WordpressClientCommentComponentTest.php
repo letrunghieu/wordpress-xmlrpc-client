@@ -213,5 +213,5 @@ class WordpressClientCommentComponentTest extends TestCase
 		$statuses = $this->client->getCommentStatusList();
 		$this->assertGreaterThan(0, count($statuses));
 	}
-
+	
 }
