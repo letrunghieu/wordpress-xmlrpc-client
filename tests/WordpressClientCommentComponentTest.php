@@ -138,4 +138,37 @@ class WordpressClientCommentComponentTest extends TestCase
 		$this->assertSame('xmlrpc: Invalid post ID. (404)', $this->client->getErrorMessage());
 	}
 
+	/**
+	 * @vcr comments/test-edit-comment-vcr.yml
+	 */
+	public function testEditComment()
+	{
+		$commentId	 = $this->client->newComment(1, array('content' => 'A comment to be edit'));
+		$this->assertGreaterThan(0, (int) $commentId);
+		$result		 = $this->client->editComment($commentId, array('content' => 'I have editted this comment!'));
+		$this->assertTrue($result);
+		$comment	 = $this->client->getComment($commentId);
+		$this->assertSame('I have editted this comment!', $comment['content']);
+	}
+
+	/**
+	 * @vcr comments/test-edit-comment-not-exist-vcr.yml
+	 */
+	public function testEditCommentNotExist()
+	{
+		$result = $this->client->editComment(1000, array('content' => 'I have editted this comment!'));
+		$this->assertFalse($result);
+		$this->assertSame('xmlrpc: Invalid comment ID. (404)', $this->client->getErrorMessage());
+	}
+	
+	/**
+	 * @vcr comments/test-edit-comment-no-privilege-vcr.yml
+	 */
+	public function testEditCommentNoPrivilege()
+	{
+		$result = $this->guestClient->editComment(1, array('content' => 'I have editted this comment!'));
+		$this->assertFalse($result);
+		$this->assertSame('xmlrpc: You are not allowed to moderate comments on this site. (403)', $this->guestClient->getErrorMessage());
+	}
+
 }

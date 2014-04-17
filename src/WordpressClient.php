@@ -614,6 +614,28 @@ class WordpressClient
 		}
 	}
 
+	/**
+	 * Edit an existing comment. 
+	 * 
+	 * @param integer $commentId
+	 * @param array $comment
+	 * @return boolean
+	 * 
+	 * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Comments#wp.editComment
+	 */
+	function editComment($commentId, array $comment)
+	{
+		$params = array(1, $this->_username, $this->_password, $commentId, $comment);
+		if ($this->_sendRequest('wp.editComment', $params))
+		{
+			return $this->getResponse();
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
 	private function _sendRequest($method, $params)
 	{
 		$this->_responseHeader	 = array();
