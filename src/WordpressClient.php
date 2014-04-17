@@ -5,9 +5,13 @@ namespace HieuLe\WordpressXmlrpcClient;
 use Illuminate\Log\Writer;
 
 /**
- * Description of WordpressClient
- *
- * @author TrungHieu
+ * A XML-RPC client that implement the {@link http://codex.wordpress.org/XML-RPC_WordPress_API Wordpress API}.
+ * 
+ * @version 2.0
+ * 
+ * @author Hieu Le <letrunghieu.cse09@gmail.com>
+ * 
+ * @license http://opensource.org/licenses/MIT MIT
  */
 class WordpressClient
 {
@@ -26,6 +30,14 @@ class WordpressClient
 	 */
 	private $_logger;
 
+	/**
+	 * Create a new client with credentials
+	 * 
+	 * @param string $xmlrpcEndPoint The wordpress XML-RPC endpoint
+	 * @param string $username The client's username
+	 * @param string $password The client's password
+	 * @param \Illuminate\Log\Writer $logger
+	 */
 	public function __construct($xmlrpcEndPoint, $username, $password, Writer $logger = null)
 	{
 		$this->_endPoint = $xmlrpcEndPoint;
@@ -47,9 +59,9 @@ class WordpressClient
 	/**
 	 * Retrieve a post of any registered post type. 
 	 * 
-	 * @param integer $postId	post id
+	 * @param integer $postId	post id The id of selected post
 	 * @param array $fields	Optional. List of field or meta-field names to include in response.
-	 * @return struct
+	 * @return array|boolean
 	 * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.getPosts
 	 */
 	function getPost($postId, array $fields = array())
@@ -75,9 +87,9 @@ class WordpressClient
 	/**
 	 * Retrieve list of posts of any registered post type. 
 	 * 
-	 * @param array $filters	Optional
+	 * @param array $filters Optional
 	 * @param array $fields	Optional
-	 * @return array array of struct
+	 * @return array|boolean array of struct
 	 * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.getPosts
 	 */
 	function getPosts(array $filters = array(), array $fields = array())
@@ -105,7 +117,7 @@ class WordpressClient
 	 * @param array $categorieIds	the list of category ids
 	 * @param integer $thumbnailId	the thumbnail id
 	 * @param array $content	the content array, see more at wordpress documentation
-	 * @return integer the new post id
+	 * @return integer|boolean the new post id
 	 * 
 	 * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.newPost
 	 */
@@ -142,29 +154,18 @@ class WordpressClient
 	/**
 	 * Edit an existing post of any registered post type. 
 	 * 
-	 * @param type $postId	the id of selected post
-	 * @param type $title	the new title
-	 * @param type $body	the new body
+	 * @param integer $postId	the id of selected post
+	 * @param string $title	the new title
+	 * @param string $body	the new body
 	 * @param array $categorieIds	the new list of category ids
-	 * @param type $thumbnailId	the new thumbnail id
+	 * @param integer $thumbnailId	the new thumbnail id
 	 * @param array $content	the advanced array
 	 * @return boolean
 	 * 
 	 * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.editPost
 	 */
-	function editPost($postId, $title, $body, array $categorieIds = array(), $thumbnailId = NULL, array $content = array())
+	function editPost($postId, array $content = array())
 	{
-		$content['post_title']	 = $title;
-		$content['post_content'] = $body;
-
-		if ($thumbnailId != NULL)
-		{
-			$content['post_thumbnail'] = $thumbnailId;
-		}
-		if (!empty($categorieIds))
-		{
-			$content['terms']['category'] = $categorieIds;
-		}
 		$params = array(1, $this->_username, $this->_password, $postId, $content);
 		if ($this->_sendRequest('wp.editPost', $params))
 		{
@@ -200,9 +201,9 @@ class WordpressClient
 	/**
 	 * Retrieve a registered post type. 
 	 * 
-	 * @param type $postTypeName the post type name
+	 * @param string $postTypeName the post type name
 	 * @param array $fields	Optional. List of field or meta-field names to include in response. 
-	 * @return struct
+	 * @return array|boolean
 	 * 
 	 * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.getPostType
 	 */
@@ -224,7 +225,7 @@ class WordpressClient
 	 * 
 	 * @param array $filter
 	 * @param array $fields
-	 * @return array	list of struct
+	 * @return array|boolean	list of struct
 	 * 
 	 * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.getPostTypes
 	 */
@@ -244,7 +245,7 @@ class WordpressClient
 	/**
 	 * Retrieve list of post formats. 
 	 * 
-	 * @return boolean
+	 * @return array|boolean
 	 * 
 	 * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.getPostFormats
 	 */
@@ -264,7 +265,7 @@ class WordpressClient
 	/**
 	 * Retrieve list of supported values for post_status field on posts. 
 	 * 
-	 * @return array	list of supported post status
+	 * @return array|boolean	list of supported post status
 	 * 
 	 * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.getPostStatusList
 	 */
@@ -285,7 +286,7 @@ class WordpressClient
 	 * Retrieve information about a taxonomy. 
 	 * 
 	 * @param string $taxonomy the name of the selected taxonomy
-	 * @return struct	taxonomy information
+	 * @return array|boolean	taxonomy information
 	 * 
 	 * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Taxonomies#wp.getTaxonomy
 	 */
@@ -305,7 +306,7 @@ class WordpressClient
 	/**
 	 * Retrieve a list of taxonomies. 
 	 * 
-	 * @return array array of taxonomy struct
+	 * @return array|boolean array of taxonomy struct
 	 * 
 	 * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Taxonomies#wp.getTaxonomies
 	 */
@@ -327,7 +328,7 @@ class WordpressClient
 	 * 
 	 * @param integer $termId 
 	 * @param string $taxonomy
-	 * @return struct
+	 * @return array|boolean
 	 * 
 	 * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Taxonomies#wp.getTerm
 	 */
@@ -349,7 +350,7 @@ class WordpressClient
 	 * 
 	 * @param string $taxonomy
 	 * @param array $filter
-	 * @return array
+	 * @return array|boolean
 	 * 
 	 * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Taxonomies#wp.getTerms
 	 */
@@ -374,7 +375,7 @@ class WordpressClient
 	 * @param string $slug
 	 * @param string $description
 	 * @param integer $parentId
-	 * @return integer new term id
+	 * @return integer|boolean new term id
 	 * 
 	 * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Taxonomies#wp.newTerm
 	 */
@@ -456,8 +457,8 @@ class WordpressClient
 	/**
 	 * Retrieve a media item (i.e, attachment). 
 	 * 
-	 * @param type $itemId
-	 * @return array
+	 * @param integer $itemId
+	 * @return array|boolean
 	 * 
 	 * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Media#wp.getMediaItem
 	 */
@@ -478,7 +479,7 @@ class WordpressClient
 	 * Retrieve list of media items. 
 	 * 
 	 * @param array $filter
-	 * @return array
+	 * @return array|boolean
 	 * 
 	 * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Media#wp.getMediaLibrary
 	 */
@@ -498,10 +499,10 @@ class WordpressClient
 	/**
 	 * Upload a media file. 
 	 * 
-	 * @param type $name
-	 * @param type $mime
-	 * @param type $bits Binary data (no encoded)
-	 * @return array
+	 * @param string $name
+	 * @param string $mime
+	 * @param string $bits Binary data (no encoded)
+	 * @return array|boolean
 	 * 
 	 * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Media#wp.uploadFile
 	 */
@@ -527,8 +528,8 @@ class WordpressClient
 	/**
 	 * Retrieve comment count for a specific post. 
 	 * 
-	 * @param type $postId
-	 * @return integer
+	 * @param integer $postId
+	 * @return integer|boolean
 	 * 
 	 * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Comments#wp.getCommentCount
 	 */
@@ -548,7 +549,7 @@ class WordpressClient
 	/**
 	 * Retrieve a comment. 
 	 * 
-	 * @param type $commentId
+	 * @param integer $commentId
 	 * @return array
 	 * 
 	 * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Comments#wp.getComment
@@ -634,7 +635,7 @@ class WordpressClient
 	/**
 	 * Remove an existing comment. 
 	 * 
-	 * @param type $commentId
+	 * @param integer $commentId
 	 * @return boolean
 	 * 
 	 * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Comments#wp.deleteComment
@@ -791,7 +792,7 @@ class WordpressClient
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Retrieve profile of the requesting user. 
 	 * 
@@ -816,7 +817,7 @@ class WordpressClient
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Edit profile of the requesting user. 
 	 * 
