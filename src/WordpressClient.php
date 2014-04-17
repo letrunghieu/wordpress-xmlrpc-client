@@ -34,19 +34,14 @@ class WordpressClient
 		$this->_logger	 = $logger;
 	}
 
-	function getResponseHeader()
-	{
-		return $this->_responseHeader;
-	}
-
+	/**
+	 * Get the latest error message
+	 * 
+	 * @return string
+	 */
 	function getErrorMessage()
 	{
 		return $this->_error;
-	}
-
-	function getResponse()
-	{
-		return $this->_response;
 	}
 
 	/**
@@ -69,7 +64,7 @@ class WordpressClient
 		}
 		if ($this->_sendRequest('wp.getPost', $params))
 		{
-			return $this->getResponse();
+			return $this->_response;
 		}
 		else
 		{
@@ -94,7 +89,7 @@ class WordpressClient
 		}
 		if ($this->_sendRequest('wp.getPosts', $params))
 		{
-			return $this->getResponse();
+			return $this->_response;
 		}
 		else
 		{
@@ -136,7 +131,7 @@ class WordpressClient
 		$params = array(1, $this->_username, $this->_password, $content);
 		if ($this->_sendRequest('wp.newPost', $params))
 		{
-			return $this->getResponse();
+			return $this->_response;
 		}
 		else
 		{
@@ -173,7 +168,7 @@ class WordpressClient
 		$params = array(1, $this->_username, $this->_password, $postId, $content);
 		if ($this->_sendRequest('wp.editPost', $params))
 		{
-			return $this->getResponse();
+			return $this->_response;
 		}
 		else
 		{
@@ -194,7 +189,7 @@ class WordpressClient
 		$params = array(1, $this->_username, $this->_password, $postId);
 		if ($this->_sendRequest('wp.deletePost', $params))
 		{
-			return $this->getResponse();
+			return $this->_response;
 		}
 		else
 		{
@@ -216,7 +211,7 @@ class WordpressClient
 		$params = array(1, $this->_username, $this->_password, $postTypeName, $fields);
 		if ($this->_sendRequest('wp.getPostType', $params))
 		{
-			return $this->getResponse();
+			return $this->_response;
 		}
 		else
 		{
@@ -238,7 +233,7 @@ class WordpressClient
 		$params = array(1, $this->_username, $this->_password, $filter, $fields);
 		if ($this->_sendRequest('wp.getPostTypes', $params))
 		{
-			return $this->getResponse();
+			return $this->_response;
 		}
 		else
 		{
@@ -258,7 +253,7 @@ class WordpressClient
 		$params = array(1, $this->_username, $this->_password);
 		if ($this->_sendRequest('wp.getPostFormats', $params))
 		{
-			return $this->getResponse();
+			return $this->_response;
 		}
 		else
 		{
@@ -278,7 +273,7 @@ class WordpressClient
 		$params = array(1, $this->_username, $this->_password);
 		if ($this->_sendRequest('wp.getPostStatusList', $params))
 		{
-			return $this->getResponse();
+			return $this->_response;
 		}
 		else
 		{
@@ -299,7 +294,7 @@ class WordpressClient
 		$params = array(1, $this->_username, $this->_password, $taxonomy);
 		if ($this->_sendRequest('wp.getTaxonomy', $params))
 		{
-			return $this->getResponse();
+			return $this->_response;
 		}
 		else
 		{
@@ -319,7 +314,7 @@ class WordpressClient
 		$params = array(1, $this->_username, $this->_password);
 		if ($this->_sendRequest('wp.getTaxonomies', $params))
 		{
-			return $this->getResponse();
+			return $this->_response;
 		}
 		else
 		{
@@ -341,7 +336,7 @@ class WordpressClient
 		$params = array(1, $this->_username, $this->_password, $taxonomy, $termId);
 		if ($this->_sendRequest('wp.getTerm', $params))
 		{
-			return $this->getResponse();
+			return $this->_response;
 		}
 		else
 		{
@@ -363,7 +358,7 @@ class WordpressClient
 		$params = array(1, $this->_username, $this->_password, $taxonomy, $filter);
 		if ($this->_sendRequest('wp.getTerms', $params))
 		{
-			return $this->getResponse();
+			return $this->_response;
 		}
 		else
 		{
@@ -404,7 +399,7 @@ class WordpressClient
 		$params = array(1, $this->_username, $this->_password, $content);
 		if ($this->_sendRequest('wp.newTerm', $params))
 		{
-			return $this->getResponse();
+			return $this->_response;
 		}
 		else
 		{
@@ -428,7 +423,7 @@ class WordpressClient
 		$params				 = array(1, $this->_username, $this->_password, $termId, $content);
 		if ($this->_sendRequest('wp.editTerm', $params))
 		{
-			return $this->getResponse();
+			return $this->_response;
 		}
 		else
 		{
@@ -450,7 +445,7 @@ class WordpressClient
 		$params = array(1, $this->_username, $this->_password, $taxonomy, $termId);
 		if ($this->_sendRequest('wp.deleteTerm', $params))
 		{
-			return $this->getResponse();
+			return $this->_response;
 		}
 		else
 		{
@@ -471,7 +466,7 @@ class WordpressClient
 		$params = array(1, $this->_username, $this->_password, $itemId);
 		if ($this->_sendRequest('wp.getMediaItem', $params))
 		{
-			return $this->getResponse();
+			return $this->_response;
 		}
 		else
 		{
@@ -492,7 +487,7 @@ class WordpressClient
 		$params = array(1, $this->_username, $this->_password, $filter);
 		if ($this->_sendRequest('wp.getMediaLibrary', $params))
 		{
-			return $this->getResponse();
+			return $this->_response;
 		}
 		else
 		{
@@ -521,7 +516,7 @@ class WordpressClient
 		$params	 = array(1, $this->_username, $this->_password, $struct);
 		if ($this->_sendRequest('wp.uploadFile', $params))
 		{
-			return $this->getResponse();
+			return $this->_response;
 		}
 		else
 		{
@@ -542,7 +537,7 @@ class WordpressClient
 		$params = array(1, $this->_username, $this->_password, $postId);
 		if ($this->_sendRequest('wp.getCommentCount', $params))
 		{
-			return $this->getResponse();
+			return $this->_response;
 		}
 		else
 		{
@@ -563,7 +558,7 @@ class WordpressClient
 		$params = array(1, $this->_username, $this->_password, $commentId);
 		if ($this->_sendRequest('wp.getComment', $params))
 		{
-			return $this->getResponse();
+			return $this->_response;
 		}
 		else
 		{
@@ -584,7 +579,7 @@ class WordpressClient
 		$params = array(1, $this->_username, $this->_password, $filter);
 		if ($this->_sendRequest('wp.getComments', $params))
 		{
-			return $this->getResponse();
+			return $this->_response;
 		}
 		else
 		{
@@ -606,7 +601,7 @@ class WordpressClient
 		$params = array(1, $this->_username, $this->_password, $post_id, $comment);
 		if ($this->_sendRequest('wp.newComment', $params))
 		{
-			return $this->getResponse();
+			return $this->_response;
 		}
 		else
 		{
@@ -628,7 +623,7 @@ class WordpressClient
 		$params = array(1, $this->_username, $this->_password, $commentId, $comment);
 		if ($this->_sendRequest('wp.editComment', $params))
 		{
-			return $this->getResponse();
+			return $this->_response;
 		}
 		else
 		{
@@ -649,7 +644,7 @@ class WordpressClient
 		$params = array(1, $this->_username, $this->_password, $commentId);
 		if ($this->_sendRequest('wp.deleteComment', $params))
 		{
-			return $this->getResponse();
+			return $this->_response;
 		}
 		else
 		{
@@ -668,7 +663,7 @@ class WordpressClient
 		$params = array(1, $this->_username, $this->_password);
 		if ($this->_sendRequest('wp.getCommentStatusList', $params))
 		{
-			return $this->getResponse();
+			return $this->_response;
 		}
 		else
 		{
@@ -696,7 +691,7 @@ class WordpressClient
 		}
 		if ($this->_sendRequest('wp.getOptions', $params))
 		{
-			return $this->getResponse();
+			return $this->_response;
 		}
 		else
 		{
@@ -704,12 +699,40 @@ class WordpressClient
 		}
 	}
 	
+	/**
+	 * Edit blog options. 
+	 * 
+	 * @param array $options
+	 * @return array
+	 * 
+	 * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Options#wp.setOptions
+	 */
 	function setOptions(array $options)
 	{
 		$params = array(1, $this->_username, $this->_password, $options);
 		if ($this->_sendRequest('wp.setOptions', $params))
 		{
-			return $this->getResponse();
+			return $this->_response;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	/**
+	 * Retrieve list of blogs for this user. 
+	 * 
+	 * @return array
+	 * 
+	 * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Users#wp.getUsersBlogs
+	 */
+	function getUsersBlogs()
+	{
+		$params = array($this->_username, $this->_password);
+		if ($this->_sendRequest('wp.getUsersBlogs', $params))
+		{
+			return $this->_response;
 		}
 		else
 		{

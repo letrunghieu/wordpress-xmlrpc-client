@@ -11,6 +11,7 @@ namespace HieuLe\WordpressXmlrpcClientTest;
  */
 class WordpressClientOptionComponentTest extends TestCase
 {
+
 	/**
 	 * @vcr options/test-get-options-vcr.yml
 	 */
@@ -22,7 +23,7 @@ class WordpressClientOptionComponentTest extends TestCase
 		$this->assertArrayHasKey('readonly', head($options));
 		$this->assertArrayHasKey('value', head($options));
 	}
-	
+
 	/**
 	 * @vcr options/test-get-options-with-filters-vcr.yml
 	 */
@@ -35,7 +36,7 @@ class WordpressClientOptionComponentTest extends TestCase
 		$this->assertArrayHasKey('thumbnail_size_w', $options);
 		$this->assertArrayHasKey('thumbnail_size_h', $options);
 	}
-	
+
 	/**
 	 * @vcr options/test-set-options-vcr.yml
 	 */
@@ -44,7 +45,7 @@ class WordpressClientOptionComponentTest extends TestCase
 		$result = $this->client->setOptions(array('thumbnail_size_w' => 1000));
 		$this->assertSame(1000, $result['thumbnail_size_w']['value']);
 	}
-	
+
 	/**
 	 * @vcr options/test-set-options-no-privilege-vcr.yml
 	 */
@@ -54,4 +55,5 @@ class WordpressClientOptionComponentTest extends TestCase
 		$this->assertFalse($result);
 		$this->assertSame('xmlrpc: You are not allowed to update options. (403)', $this->guestClient->getErrorMessage());
 	}
+
 }
