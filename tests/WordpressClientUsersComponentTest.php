@@ -82,12 +82,13 @@ class WordpressClientUsersComponentTest extends TestCase
 
 	/**
 	 * @vcr users/test-get-users-no-privilege-vcr.yml
+	 * @expectedException \HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
+	 * @expectedExceptionCode 401
+	 * @expectedExceptionMessage Sorry, you cannot list users.
 	 */
 	public function testGetUsersNoPrivilege()
 	{
 		$users = $this->guestClient->getUsers();
-		$this->assertFalse($users);
-		$this->assertSame('xmlrpc: Sorry, you cannot list users. (401)', $this->guestClient->getErrorMessage());
 	}
 
 	/**
