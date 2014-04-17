@@ -698,7 +698,7 @@ class WordpressClient
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Edit blog options. 
 	 * 
@@ -719,7 +719,7 @@ class WordpressClient
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Retrieve list of blogs for this user. 
 	 * 
@@ -731,6 +731,32 @@ class WordpressClient
 	{
 		$params = array($this->_username, $this->_password);
 		if ($this->_sendRequest('wp.getUsersBlogs', $params))
+		{
+			return $this->_response;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	/**
+	 * Retrieve a user. 
+	 * 
+	 * @param integer $userId
+	 * @param array $fields Optional. List of field or meta-field names to include in response. 
+	 * @return array
+	 * 
+	 * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Users#wp.getUser
+	 */
+	function getUser($userId, array $fields = array())
+	{
+		$params = array(1, $this->_username, $this->_password, $userId);
+		if (!empty($fields))
+		{
+			$params[] = $fields;
+		}
+		if ($this->_sendRequest('wp.getUser', $params))
 		{
 			return $this->_response;
 		}
