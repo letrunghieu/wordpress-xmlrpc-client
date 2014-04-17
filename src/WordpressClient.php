@@ -859,7 +859,7 @@ class WordpressClient
 				$this->_error			 = "file_get_contents: {$error}";
 				$this->_responseHeader	 = $http_response_header;
 				$this->_logError();
-				return false;
+				throw new Exception\NetworkException($error['message'], $error['type']);
 			}
 		}
 		catch (\Exception $ex)
@@ -867,14 +867,14 @@ class WordpressClient
 			$this->_error			 = ("file_get_contents: {$ex->getMessage()} ({$ex->getCode()})");
 			$this->_responseHeader	 = $http_response_header;
 			$this->_logError();
-			return false;
+			throw new Exception\NetworkException($ex->getMessage(), $ex->getCode());
 		}
 		$response = xmlrpc_decode($file);
 		if (is_array($response) && xmlrpc_is_fault($response))
 		{
 			$this->_error = ("xmlrpc: {$response['faultString']} ({$response['faultCode']})");
 			$this->_logError();
-			return false;
+			throw new Exception\XmlrpcException($response['faultString'], $response['faultCode']);
 		}
 		$this->_response = $response;
 		return true;
