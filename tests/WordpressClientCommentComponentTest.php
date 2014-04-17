@@ -75,4 +75,46 @@ class WordpressClientCommentComponentTest extends TestCase
 		$this->assertFalse($comment);
 		$this->assertSame('xmlrpc: Invalid comment ID. (404)', $this->client->getErrorMessage());
 	}
+	
+	/**
+	 * @vcr comments/test-get-comment-no-filter-vcr.yml
+	 */
+	public function testGetCommentsNoFilter()
+	{
+		$comments = $this->client->getComments();
+		$this->assertGreaterThan(0, count($comments));
+		$this->assertArrayHasKey('comment_id', $comments[0]);
+		$this->assertArrayHasKey('parent', $comments[0]);
+		$this->assertArrayHasKey('user_id', $comments[0]);
+		$this->assertArrayHasKey('date_created_gmt', $comments[0]);
+		$this->assertArrayHasKey('status', $comments[0]);
+		$this->assertArrayHasKey('content', $comments[0]);
+		$this->assertArrayHasKey('link', $comments[0]);
+		$this->assertArrayHasKey('post_id', $comments[0]);
+		$this->assertArrayHasKey('post_title', $comments[0]);
+		$this->assertArrayHasKey('author', $comments[0]);
+		$this->assertArrayHasKey('author_url', $comments[0]);
+		$this->assertArrayHasKey('author_email', $comments[0]);
+		$this->assertArrayHasKey('author_ip', $comments[0]);
+		$this->assertArrayHasKey('type', $comments[0]);
+	}
+	
+	/**
+	 * @vcr comments/test-get-commnents-no-privilege-vcr.yml
+	 */
+	public function testGetCommentsNoPrivilege()
+	{
+		$comments = $this->guestClient->getComments();
+		$this->assertFalse($comments);
+		$this->assertSame('xmlrpc: Sorry, you cannot edit comments. (401)', $this->guestClient->getErrorMessage());
+	}
+	
+	/**
+	 * @vcr comments/test-get-comments-with-filter-vcr.yml
+	 */
+	public function testGetCommentsWithFilter()
+	{
+		$comments = $this->client->getComments(array('post_id' => 223));
+		$this->assertCount(0, $comments);
+	}
 }

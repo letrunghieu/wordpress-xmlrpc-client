@@ -570,6 +570,27 @@ class WordpressClient
 			return false;
 		}
 	}
+	
+	/**
+	 * Retrieve list of comments. 
+	 * 
+	 * @param array $filter
+	 * @return array
+	 * 
+	 * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Comments#wp.getComments
+	 */
+	function getComments(array $filter = array())
+	{
+		$params = array(1, $this->_username, $this->_password, $filter);
+		if ($this->_sendRequest('wp.getComments', $params))
+		{
+			return $this->getResponse();
+		}
+		else
+		{
+			return false;
+		}
+	}
 
 	private function _sendRequest($method, $params)
 	{
