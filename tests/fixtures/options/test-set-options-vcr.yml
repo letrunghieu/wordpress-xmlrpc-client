@@ -1,0 +1,20 @@
+
+-
+    request:
+        method: POST
+        url: 'http://WP_DOMAIN/xmlrpc.php'
+        headers:
+            host: WP_DOMAIN
+            content-length: 496
+        body: "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<methodCall>\n<methodName>wp.setOptions</methodName>\n<params>\n <param>\n  <value>\n   <int>1</int>\n  </value>\n </param>\n <param>\n  <value>\n   <string>WP_USER</string>\n  </value>\n </param>\n <param>\n  <value>\n   <string>WP_PASSWORD</string>\n  </value>\n </param>\n <param>\n  <value>\n   <struct>\n    <member>\n     <name>thumbnail_size_w</name>\n     <value>\n      <int>1000</int>\n     </value>\n    </member>\n   </struct>\n  </value>\n </param>\n</params>\n</methodCall>\n"
+    response:
+        status: 200
+        headers:
+            Date: 'Thu, 17 Apr 2014 14:55:25 GMT'
+            Server: 'Apache/2.4.2 (Win64) OpenSSL/1.0.1c PHP/5.4.3'
+            X-Powered-By: PHP/5.4.3
+            Set-Cookie: '_icl_current_language=en; expires=Fri, 18-Apr-2014 14:55:26 GMT; path=/'
+            Connection: close
+            Content-Length: '486'
+            Content-Type: 'text/xml; charset=UTF-8'
+        body: "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<methodResponse>\n  <params>\n    <param>\n      <value>\n      <struct>\n  <member><name>thumbnail_size_w</name><value><struct>\n  <member><name>desc</name><value><string>Thumbnail Width</string></value></member>\n  <member><name>readonly</name><value><boolean>0</boolean></value></member>\n  <member><name>value</name><value><int>1000</int></value></member>\n</struct></value></member>\n</struct>\n      </value>\n    </param>\n  </params>\n</methodResponse>\n"

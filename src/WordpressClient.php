@@ -703,6 +703,19 @@ class WordpressClient
 			return false;
 		}
 	}
+	
+	function setOptions(array $options)
+	{
+		$params = array(1, $this->_username, $this->_password, $options);
+		if ($this->_sendRequest('wp.setOptions', $params))
+		{
+			return $this->getResponse();
+		}
+		else
+		{
+			return false;
+		}
+	}
 
 	private function _sendRequest($method, $params)
 	{

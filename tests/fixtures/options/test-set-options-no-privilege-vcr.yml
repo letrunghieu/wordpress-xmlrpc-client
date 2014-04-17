@@ -1,0 +1,20 @@
+
+-
+    request:
+        method: POST
+        url: 'http://WP_DOMAIN/xmlrpc.php'
+        headers:
+            host: WP_DOMAIN
+            content-length: 497
+        body: "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<methodCall>\n<methodName>wp.setOptions</methodName>\n<params>\n <param>\n  <value>\n   <int>1</int>\n  </value>\n </param>\n <param>\n  <value>\n   <string>WP_GUEST</string>\n  </value>\n </param>\n <param>\n  <value>\n   <string>WP_PASSWORD</string>\n  </value>\n </param>\n <param>\n  <value>\n   <struct>\n    <member>\n     <name>thumbnail_size_w</name>\n     <value>\n      <int>1000</int>\n     </value>\n    </member>\n   </struct>\n  </value>\n </param>\n</params>\n</methodCall>\n"
+    response:
+        status: 200
+        headers:
+            Date: 'Thu, 17 Apr 2014 14:55:27 GMT'
+            Server: 'Apache/2.4.2 (Win64) OpenSSL/1.0.1c PHP/5.4.3'
+            X-Powered-By: PHP/5.4.3
+            Set-Cookie: '_icl_current_language=en; expires=Fri, 18-Apr-2014 14:55:28 GMT; path=/'
+            Connection: close
+            Content-Length: '410'
+            Content-Type: 'text/xml; charset=UTF-8'
+        body: "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<methodResponse>\n  <fault>\n    <value>\n      <struct>\n        <member>\n          <name>faultCode</name>\n          <value><int>403</int></value>\n        </member>\n        <member>\n          <name>faultString</name>\n          <value><string>You are not allowed to update options.</string></value>\n        </member>\n      </struct>\n    </value>\n  </fault>\n</methodResponse>\n"
