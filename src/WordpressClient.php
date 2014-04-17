@@ -766,6 +766,32 @@ class WordpressClient
 		}
 	}
 
+	/**
+	 * Retrieve list of users. 
+	 * 
+	 * @param array $filters
+	 * @param array $fields
+	 * @return array
+	 * 
+	 * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Users#wp.getUsers
+	 */
+	function getUsers(array $filters = array(), array $fields = array())
+	{
+		$params = array(1, $this->_username, $this->_password, $filters);
+		if (!empty($fields))
+		{
+			$params[] = $fields;
+		}
+		if ($this->_sendRequest('wp.getUsers', $params))
+		{
+			return $this->_response;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
 	private function _sendRequest($method, $params)
 	{
 		$this->_responseHeader	 = array();

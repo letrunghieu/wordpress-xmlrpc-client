@@ -80,4 +80,60 @@ class WordpressClientUsersComponentTest extends TestCase
 		$this->assertArrayNotHasKey('roles', $user);
 	}
 
+	/**
+	 * @vcr users/test-get-users-no-privilege-vcr.yml
+	 */
+	public function testGetUsersNoPrivilege()
+	{
+		$users = $this->guestClient->getUsers();
+		$this->assertFalse($users);
+		$this->assertSame('xmlrpc: Sorry, you cannot list users. (401)', $this->guestClient->getErrorMessage());
+	}
+
+	/**
+	 * @vcr users/test-get-users-vcr.yml
+	 */
+	public function testGetUsers()
+	{
+		$users = $this->client->getUsers();
+		$this->assertGreaterThan(0, count($users));
+		$this->assertArrayHasKey('user_id', $users[0]);
+		$this->assertArrayHasKey('username', $users[0]);
+		$this->assertArrayHasKey('first_name', $users[0]);
+		$this->assertArrayHasKey('last_name', $users[0]);
+		$this->assertArrayHasKey('bio', $users[0]);
+		$this->assertArrayHasKey('email', $users[0]);
+		$this->assertArrayHasKey('nickname', $users[0]);
+		$this->assertArrayHasKey('nicename', $users[0]);
+		$this->assertArrayHasKey('url', $users[0]);
+		$this->assertArrayHasKey('display_name', $users[0]);
+		$this->assertArrayHasKey('registered', $users[0]);
+		$this->assertArrayHasKey('roles', $users[0]);
+
+		$users = $this->client->getUsers(array(), array('user_id', 'email'));
+		$this->assertGreaterThan(0, count($users));
+		$this->assertArrayHasKey('user_id', $users[0]);
+		$this->assertArrayNotHasKey('username', $users[0]);
+		$this->assertArrayNotHasKey('first_name', $users[0]);
+		$this->assertArrayNotHasKey('last_name', $users[0]);
+		$this->assertArrayNotHasKey('bio', $users[0]);
+		$this->assertArrayHasKey('email', $users[0]);
+		$this->assertArrayNotHasKey('nickname', $users[0]);
+		$this->assertArrayNotHasKey('nicename', $users[0]);
+		$this->assertArrayNotHasKey('url', $users[0]);
+		$this->assertArrayNotHasKey('display_name', $users[0]);
+		$this->assertArrayNotHasKey('registered', $users[0]);
+		$this->assertArrayNotHasKey('roles', $users[0]);
+	}
+
+	/**
+	 * @vcr users/test-get-users-invalid-role-vcr.yml
+	 */
+	public function testGetUsersInvalidRole()
+	{
+		$users = $this->client->getUsers(array('role' => 'foo'));
+		$this->assertFalse($users);
+		$this->assertSame('xmlrpc: The role specified is not valid (403)', $this->client->getErrorMessage());
+	}
+
 }
