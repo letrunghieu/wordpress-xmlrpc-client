@@ -636,6 +636,27 @@ class WordpressClient
 		}
 	}
 	
+	/**
+	 * Remove an existing comment. 
+	 * 
+	 * @param type $commentId
+	 * @return boolean
+	 * 
+	 * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Comments#wp.deleteComment
+	 */
+	function deleteComment($commentId)
+	{
+		$params = array(1, $this->_username, $this->_password, $commentId);
+		if ($this->_sendRequest('wp.deleteComment', $params))
+		{
+			return $this->getResponse();
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
 	private function _sendRequest($method, $params)
 	{
 		$this->_responseHeader	 = array();

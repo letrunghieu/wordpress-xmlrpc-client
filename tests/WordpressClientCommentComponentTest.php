@@ -170,5 +170,39 @@ class WordpressClientCommentComponentTest extends TestCase
 		$this->assertFalse($result);
 		$this->assertSame('xmlrpc: You are not allowed to moderate comments on this site. (403)', $this->guestClient->getErrorMessage());
 	}
+	
+	
+	/**
+	 * @vcr comments/test-delete-comment-vcr.yml
+	 */
+	public function testDeleteComment()
+	{
+		$commentId	 = $this->client->newComment(1, array('content' => 'A comment to be edit'));
+		$this->assertGreaterThan(0, (int) $commentId);
+		$result		 = $this->client->deleteComment($commentId);
+		$this->assertTrue($result);
+		$comment	 = $this->client->getComment($commentId);
+		$this->assertSame('trash', $comment['status']);
+	}
+
+	/**
+	 * @vcr comments/test-delete-comment-not-exist-vcr.yml
+	 */
+	public function testDeleteCommentNotExist()
+	{
+		$result = $this->client->deleteComment(1000);
+		$this->assertFalse($result);
+		$this->assertSame('xmlrpc: Invalid comment ID. (404)', $this->client->getErrorMessage());
+	}
+	
+	/**
+	 * @vcr comments/test-delete-comment-no-privilege-vcr.yml
+	 */
+	public function testDeleteCommentNoPrivilege()
+	{
+		$result = $this->guestClient->deleteComment(1);
+		$this->assertFalse($result);
+		$this->assertSame('xmlrpc: You are not allowed to moderate comments on this site. (403)', $this->guestClient->getErrorMessage());
+	}
 
 }

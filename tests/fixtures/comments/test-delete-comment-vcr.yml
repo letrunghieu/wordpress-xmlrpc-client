@@ -1,0 +1,58 @@
+
+-
+    request:
+        method: POST
+        url: 'http://WP_DOMAIN/xmlrpc.php'
+        headers:
+            host: WP_DOMAIN
+            content-length: 565
+        body: "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<methodCall>\n<methodName>wp.newComment</methodName>\n<params>\n <param>\n  <value>\n   <int>1</int>\n  </value>\n </param>\n <param>\n  <value>\n   <string>WP_USER</string>\n  </value>\n </param>\n <param>\n  <value>\n   <string>WP_PASSWORD</string>\n  </value>\n </param>\n <param>\n  <value>\n   <int>1</int>\n  </value>\n </param>\n <param>\n  <value>\n   <struct>\n    <member>\n     <name>content</name>\n     <value>\n      <string>A comment to be edit</string>\n     </value>\n    </member>\n   </struct>\n  </value>\n </param>\n</params>\n</methodCall>\n"
+    response:
+        status: 200
+        headers:
+            Date: 'Thu, 17 Apr 2014 04:08:09 GMT'
+            Server: 'Apache/2.4.2 (Win64) OpenSSL/1.0.1c PHP/5.4.3'
+            X-Powered-By: PHP/5.4.3
+            Set-Cookie: '_icl_current_language=en; expires=Fri, 18-Apr-2014 04:08:11 GMT; path=/'
+            Connection: close
+            Content-Length: '170'
+            Content-Type: 'text/xml; charset=UTF-8'
+        body: "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<methodResponse>\n  <params>\n    <param>\n      <value>\n      <int>5</int>\n      </value>\n    </param>\n  </params>\n</methodResponse>\n"
+-
+    request:
+        method: POST
+        url: 'http://WP_DOMAIN/xmlrpc.php'
+        headers:
+            host: WP_DOMAIN
+            content-length: 379
+        body: "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<methodCall>\n<methodName>wp.deleteComment</methodName>\n<params>\n <param>\n  <value>\n   <int>1</int>\n  </value>\n </param>\n <param>\n  <value>\n   <string>WP_USER</string>\n  </value>\n </param>\n <param>\n  <value>\n   <string>WP_PASSWORD</string>\n  </value>\n </param>\n <param>\n  <value>\n   <int>5</int>\n  </value>\n </param>\n</params>\n</methodCall>\n"
+    response:
+        status: 200
+        headers:
+            Date: 'Thu, 17 Apr 2014 04:08:12 GMT'
+            Server: 'Apache/2.4.2 (Win64) OpenSSL/1.0.1c PHP/5.4.3'
+            X-Powered-By: PHP/5.4.3
+            Set-Cookie: '_icl_current_language=en; expires=Fri, 18-Apr-2014 04:08:13 GMT; path=/'
+            Connection: close
+            Content-Length: '178'
+            Content-Type: 'text/xml; charset=UTF-8'
+        body: "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<methodResponse>\n  <params>\n    <param>\n      <value>\n      <boolean>1</boolean>\n      </value>\n    </param>\n  </params>\n</methodResponse>\n"
+-
+    request:
+        method: POST
+        url: 'http://WP_DOMAIN/xmlrpc.php'
+        headers:
+            host: WP_DOMAIN
+            content-length: 376
+        body: "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<methodCall>\n<methodName>wp.getComment</methodName>\n<params>\n <param>\n  <value>\n   <int>1</int>\n  </value>\n </param>\n <param>\n  <value>\n   <string>WP_USER</string>\n  </value>\n </param>\n <param>\n  <value>\n   <string>WP_PASSWORD</string>\n  </value>\n </param>\n <param>\n  <value>\n   <int>5</int>\n  </value>\n </param>\n</params>\n</methodCall>\n"
+    response:
+        status: 200
+        headers:
+            Date: 'Thu, 17 Apr 2014 04:08:14 GMT'
+            Server: 'Apache/2.4.2 (Win64) OpenSSL/1.0.1c PHP/5.4.3'
+            X-Powered-By: PHP/5.4.3
+            Set-Cookie: '_icl_current_language=en; expires=Fri, 18-Apr-2014 04:08:15 GMT; path=/'
+            Connection: close
+            Content-Length: '1370'
+            Content-Type: 'text/xml; charset=UTF-8'
+        body: "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<methodResponse>\n  <params>\n    <param>\n      <value>\n      <struct>\n  <member><name>date_created_gmt</name><value><dateTime.iso8601>20140417T04:08:11</dateTime.iso8601></value></member>\n  <member><name>user_id</name><value><string>1</string></value></member>\n  <member><name>comment_id</name><value><string>5</string></value></member>\n  <member><name>parent</name><value><string>0</string></value></member>\n  <member><name>status</name><value><string>trash</string></value></member>\n  <member><name>content</name><value><string>A comment to be edit</string></value></member>\n  <member><name>link</name><value><string>http://WP_DOMAIN/uncategorized/hello-world/#comment-5</string></value></member>\n  <member><name>post_id</name><value><string>1</string></value></member>\n  <member><name>post_title</name><value><string>Hello world!</string></value></member>\n  <member><name>author</name><value><string>John Doe</string></value></member>\n  <member><name>author_url</name><value><string></string></value></member>\n  <member><name>author_email</name><value><string>wp_user_email@mail.com</string></value></member>\n  <member><name>author_ip</name><value><string>127.0.0.1</string></value></member>\n  <member><name>type</name><value><string></string></value></member>\n</struct>\n      </value>\n    </param>\n  </params>\n</methodResponse>\n"
