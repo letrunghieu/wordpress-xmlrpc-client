@@ -591,6 +591,28 @@ class WordpressClient
 			return false;
 		}
 	}
+	
+	/**
+	 * Create a new comment.
+	 * 
+	 * @param integer $post_id
+	 * @param array $comment
+	 * @return integer new comment_id
+	 * 
+	 * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Comments#wp.newComment
+	 */
+	function newComment($post_id, array $comment)
+	{
+		$params = array(1, $this->_username, $this->_password, $post_id, $comment);
+		if ($this->_sendRequest('wp.newComment', $params))
+		{
+			return $this->getResponse();
+		}
+		else
+		{
+			return false;
+		}
+	}
 
 	private function _sendRequest($method, $params)
 	{

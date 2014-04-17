@@ -11,6 +11,7 @@ namespace HieuLe\WordpressXmlrpcClientTest;
  */
 class WordpressClientCommentComponentTest extends TestCase
 {
+
 	/**
 	 * @vcr comments/test-get-comment-count-vcr.yml
 	 */
@@ -23,7 +24,7 @@ class WordpressClientCommentComponentTest extends TestCase
 		$this->assertArrayHasKey('spam', $count);
 		$this->assertArrayHasKey('total_comments', $count);
 	}
-	
+
 	/**
 	 * @vcr comments/test-get-comment-count-no-privilege-vcr.yml
 	 */
@@ -33,7 +34,7 @@ class WordpressClientCommentComponentTest extends TestCase
 		$this->assertFalse($count);
 		$this->assertSame('xmlrpc: You are not allowed access to details about comments. (403)', $this->guestClient->getErrorMessage());
 	}
-	
+
 	/**
 	 * @vcr comments/test-get-comment-vcr.yml
 	 */
@@ -55,7 +56,7 @@ class WordpressClientCommentComponentTest extends TestCase
 		$this->assertArrayHasKey('author_ip', $comment);
 		$this->assertArrayHasKey('type', $comment);
 	}
-	
+
 	/**
 	 * @vcr comments/test-get-comment-no-privilege-vcr.yml
 	 */
@@ -65,7 +66,7 @@ class WordpressClientCommentComponentTest extends TestCase
 		$this->assertFalse($comment);
 		$this->assertSame('xmlrpc: You are not allowed to moderate comments on this site. (403)', $this->guestClient->getErrorMessage());
 	}
-	
+
 	/**
 	 * @vcr comments/test-get-comment-not-exist-vcr.yml
 	 */
@@ -75,7 +76,7 @@ class WordpressClientCommentComponentTest extends TestCase
 		$this->assertFalse($comment);
 		$this->assertSame('xmlrpc: Invalid comment ID. (404)', $this->client->getErrorMessage());
 	}
-	
+
 	/**
 	 * @vcr comments/test-get-comment-no-filter-vcr.yml
 	 */
@@ -98,7 +99,7 @@ class WordpressClientCommentComponentTest extends TestCase
 		$this->assertArrayHasKey('author_ip', $comments[0]);
 		$this->assertArrayHasKey('type', $comments[0]);
 	}
-	
+
 	/**
 	 * @vcr comments/test-get-commnents-no-privilege-vcr.yml
 	 */
@@ -108,7 +109,7 @@ class WordpressClientCommentComponentTest extends TestCase
 		$this->assertFalse($comments);
 		$this->assertSame('xmlrpc: Sorry, you cannot edit comments. (401)', $this->guestClient->getErrorMessage());
 	}
-	
+
 	/**
 	 * @vcr comments/test-get-comments-with-filter-vcr.yml
 	 */
@@ -117,4 +118,24 @@ class WordpressClientCommentComponentTest extends TestCase
 		$comments = $this->client->getComments(array('post_id' => 223));
 		$this->assertCount(0, $comments);
 	}
+
+	/**
+	 * @vcr comments/test-new-comment-vcr.yml
+	 */
+	public function testNewComment()
+	{
+		$commentId = $this->client->newComment(1, array('content' => 'Lorem ipsum'));
+		$this->assertGreaterThan(0, (int) $commentId);
+	}
+
+	/**
+	 * @vcr comments/test-new-conmment-no-post-exist-vcr.yml
+	 */
+	public function testNewCommentNoPostExist()
+	{
+		$commentId = $this->client->newComment(1000, array('content' => 'First comment'));
+		$this->assertFalse($commentId);
+		$this->assertSame('xmlrpc: Invalid post ID. (404)', $this->client->getErrorMessage());
+	}
+
 }
