@@ -816,6 +816,27 @@ class WordpressClient
 			return false;
 		}
 	}
+	
+	/**
+	 * Edit profile of the requesting user. 
+	 * 
+	 * @param array $content
+	 * @return boolean
+	 * 
+	 * http://codex.wordpress.org/XML-RPC_WordPress_API/Users#wp.editProfile
+	 */
+	function editProfile(array $content)
+	{
+		$params = array(1, $this->_username, $this->_password, $content);
+		if ($this->_sendRequest('wp.editProfile', $params))
+		{
+			return $this->_response;
+		}
+		else
+		{
+			return false;
+		}
+	}
 
 	private function _sendRequest($method, $params)
 	{

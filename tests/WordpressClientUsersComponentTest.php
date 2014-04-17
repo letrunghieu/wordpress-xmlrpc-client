@@ -170,4 +170,14 @@ class WordpressClientUsersComponentTest extends TestCase
 		$this->assertArrayNotHasKey('roles', $user);
 	}
 
+	/**
+	 * @vcr users/test-edit-profile-vcr.yml
+	 */
+	public function testEditProfile()
+	{
+		$result = $this->client->editProfile(array('nickname' => 'JD'));
+		$this->assertTrue($result);
+		$user = $this->client->getProfile();
+		$this->assertSame('JD', $user['nickname']);
+	}
 }
