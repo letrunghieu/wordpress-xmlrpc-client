@@ -1,0 +1,16 @@
+{
+    "name": "php-vcr/phpunit-testlistener-vcr",
+    "description": "Integrates PHPUnit with PHP-VCR.",
+    "license": "MIT",
+
+    "authors": [
+        {
+            "name": "Adrian Philipp",
+            "email": "mail@adrian-philipp.com"
+        }
+    ],
+
+    "require": {
+        "php-vcr/php-vcr": "*"
+    }
+}

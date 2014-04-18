@@ -1,0 +1,3 @@
+User-agent: *
+Disallow:
+Sitemap: http://letrunghieu.github.io/wordpress-xmlrpc-client/api/sitemap.xml
