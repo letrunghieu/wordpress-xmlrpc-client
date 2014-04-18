@@ -885,9 +885,9 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testUploadFile()
 	{
-		$content		 = file_get_contents("tests/image.jpg");
-		$mime			 = mime_content_type("tests/image.jpg");
-		$file			 = $this->client->uploadFile('foo image.jpg', $mime, $content);
+		$content = file_get_contents("tests/image.jpg");
+		$mime	 = mime_content_type("tests/image.jpg");
+		$file	 = $this->client->uploadFile('foo image.jpg', $mime, $content);
 		$this->assertArrayHasKey('id', $file);
 		$this->assertArrayHasKey('file', $file);
 		$this->assertArrayHasKey('url', $file);
@@ -997,6 +997,56 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
 	public function testGetMediaLibraryNoPrivilege()
 	{
 		$medias = $this->guestClient->getMediaLibrary();
+	}
+
+	#
+	# Test option API
+
+	#
+	
+	/**
+	 * @vcr options/test-get-options-vcr.yml
+	 */
+	public function testGetOptions()
+	{
+		$options = $this->client->getOptions();
+		$this->assertNotEmpty($options);
+		$this->assertArrayHasKey('desc', head($options));
+		$this->assertArrayHasKey('readonly', head($options));
+		$this->assertArrayHasKey('value', head($options));
+	}
+
+	/**
+	 * @vcr options/test-get-options-with-filters-vcr.yml
+	 */
+	public function testGetOptionsWithFilter()
+	{
+		$options = $this->client->getOptions(array('thumbnail_size_w', 'thumbnail_size_h'));
+		$this->assertArrayHasKey('desc', head($options));
+		$this->assertArrayHasKey('readonly', head($options));
+		$this->assertArrayHasKey('value', head($options));
+		$this->assertArrayHasKey('thumbnail_size_w', $options);
+		$this->assertArrayHasKey('thumbnail_size_h', $options);
+	}
+
+	/**
+	 * @vcr options/test-set-options-vcr.yml
+	 */
+	public function testSetOptions()
+	{
+		$result = $this->client->setOptions(array('thumbnail_size_w' => 1000));
+		$this->assertSame(1000, $result['thumbnail_size_w']['value']);
+	}
+
+	/**
+	 * @vcr options/test-set-options-no-privilege-vcr.yml
+	 * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
+	 * @expectedExceptionCode 403
+	 * @expectedExceptionMessage You are not allowed to update options.
+	 */
+	public function testSetOptionsNoPrivilege()
+	{
+		$result = $this->guestClient->setOptions(array('thumbnail_size_w' => 1000));
 	}
 
 }
