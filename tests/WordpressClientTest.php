@@ -740,8 +740,8 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testNewTermNoHierachical()
 	{
-		$tagId = $this->client->newTerm('Tag bar', 'post_tag');
-		$termId = $this->client->newTerm('Tag Foo', 'post_tag', null, null, $tagId);
+		$tagId	 = $this->client->newTerm('Tag bar', 'post_tag');
+		$termId	 = $this->client->newTerm('Tag Foo', 'post_tag', null, null, $tagId);
 	}
 
 	/**
@@ -760,9 +760,9 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testEditTerm()
 	{
-		$termId = $this->client->newTerm('Created to delete', 'category');
+		$termId	 = $this->client->newTerm('Created to delete', 'category');
 		$this->assertGreaterThan(0, (int) $termId);
-		$result = $this->client->EditTerm($termId, 'category', array('name' => 'Category Lorem 2',));
+		$result	 = $this->client->EditTerm($termId, 'category', array('name' => 'Category Lorem 2',));
 		$this->assertTrue($result);
 
 		$term = $this->client->getTerm($termId, 'category');
@@ -777,9 +777,9 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testEditTermNoPrivilege()
 	{
-		$terms = $this->client->getTerms('category', array('number' => 1));
+		$terms	 = $this->client->getTerms('category', array('number' => 1));
 		$this->assertNotEmpty($terms);
-		$result = $this->guestClient->EditTerm($terms[0]['term_id'], 'category');
+		$result	 = $this->guestClient->EditTerm($terms[0]['term_id'], 'category');
 	}
 
 	/**
@@ -801,9 +801,9 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testEditTermEmptyName()
 	{
-		$terms = $this->client->getTerms('category', array('number' => 1));
+		$terms	 = $this->client->getTerms('category', array('number' => 1));
 		$this->assertNotEmpty($terms);
-		$result = $this->client->EditTerm($terms[0]['term_id'], 'category', array('name' => ''));
+		$result	 = $this->client->EditTerm($terms[0]['term_id'], 'category', array('name' => ''));
 	}
 
 	/**
@@ -814,9 +814,9 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testEditTermInvalidParent()
 	{
-		$terms = $this->client->getTerms('category', array('number' => 1));
+		$terms	 = $this->client->getTerms('category', array('number' => 1));
 		$this->assertNotEmpty($terms);
-		$result = $this->client->EditTerm($terms[0]['term_id'], 'category', array('parent' => 999));
+		$result	 = $this->client->EditTerm($terms[0]['term_id'], 'category', array('parent' => 999));
 	}
 
 	/**
@@ -835,8 +835,8 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testDeleteTerm()
 	{
-		$termId = $this->client->newTerm('Deleted term', 'category');
-		$result = $this->client->deleteTerm($termId, 'category');
+		$termId	 = $this->client->newTerm('Deleted term', 'category');
+		$result	 = $this->client->deleteTerm($termId, 'category');
 		$this->assertTrue($result);
 	}
 
@@ -848,9 +848,9 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testDeleteTermNoPrivilege()
 	{
-		$terms = $this->client->getTerms('category', array('number' => 1));
+		$terms	 = $this->client->getTerms('category', array('number' => 1));
 		$this->assertNotEmpty($terms);
-		$termId = $this->guestClient->DeleteTerm($terms[0]['term_id'], 'category');
+		$termId	 = $this->guestClient->DeleteTerm($terms[0]['term_id'], 'category');
 	}
 
 	/**
@@ -873,6 +873,130 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
 	public function testDeleteTermNotExist()
 	{
 		$termId = $this->client->deleteTerm(444, 'category');
+	}
+
+	#
+	# Test media API
+
+	#
+	
+	/**
+	 * @vcr media/test-upload-file-vcr.yml
+	 */
+	public function testUploadFile()
+	{
+		$content		 = file_get_contents("tests/image.jpg");
+		$mime			 = mime_content_type("tests/image.jpg");
+		$file			 = $this->client->uploadFile('foo image.jpg', $mime, $content);
+		$this->assertArrayHasKey('id', $file);
+		$this->assertArrayHasKey('file', $file);
+		$this->assertArrayHasKey('url', $file);
+		$this->assertArrayHasKey('type', $file);
+	}
+
+	/**
+	 * @vcr media/test-upload-file-no-privilege-vcr.yml
+	 * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
+	 * @expectedExceptionCode 401
+	 * @expectedExceptionMessage You do not have permission to upload files.
+	 */
+	public function testUploadFileNoPrivilege()
+	{
+		$file = $this->guestClient->uploadFile('Foo', 'image/jpeg', 'file_content');
+	}
+
+	/**
+	 * @vcr media/test-upload-file-error-vcr.yml
+	 * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
+	 * @expectedExceptionCode 500
+	 * @expectedExceptionMessage Could not write file Foo (Invalid file type)
+	 */
+	public function testUploadFileError()
+	{
+		$file = $this->client->uploadFile('Foo', 'bar', '');
+	}
+
+	/**
+	 * @vcr media/test-get-media-item-vcr.yml
+	 */
+	public function testGetMediaItem()
+	{
+		$content = file_get_contents("tests/image.jpg");
+		$mime	 = mime_content_type("tests/image.jpg");
+		$file	 = $this->client->uploadFile('foo image 1.jpg', $mime, $content);
+		$media	 = $this->client->getMediaItem($file['id']);
+		$this->assertArrayHasKey('attachment_id', $media);
+		$this->assertArrayHasKey('date_created_gmt', $media);
+		$this->assertArrayHasKey('parent', $media);
+		$this->assertArrayHasKey('link', $media);
+		$this->assertArrayHasKey('title', $media);
+		$this->assertArrayHasKey('caption', $media);
+		$this->assertArrayHasKey('description', $media);
+		$this->assertArrayHasKey('metadata', $media);
+		$this->assertArrayHasKey('thumbnail', $media);
+	}
+
+	/**
+	 * @vcr media/test-get-media-item-no-privilege-vcr.yml
+	 * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
+	 * @expectedExceptionCode 403
+	 * @expectedExceptionMessage You do not have permission to upload files.
+	 */
+	public function testGetMediaItemNoPrivilege()
+	{
+		$media = $this->guestClient->getMediaItem(229);
+	}
+
+	/**
+	 * @vcr media/test-get-media-item-no-exist-vcr.yml
+	 * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
+	 * @expectedExceptionCode 404
+	 * @expectedExceptionMessage Invalid attachment ID.
+	 */
+	public function testGetMediaItemNoExist()
+	{
+		$media = $this->client->getMediaItem(999);
+	}
+
+	/**
+	 * @vcr media/test-get-media-library-vcr.yml
+	 */
+	public function testGetMediaLibrary()
+	{
+		$content = file_get_contents("tests/image.jpg");
+		$mime	 = mime_content_type("tests/image.jpg");
+		$file	 = $this->client->uploadFile('foo image 2.jpg', $mime, $content);
+		$medias	 = $this->client->getMediaLibrary();
+		$this->assertNotEmpty($medias);
+		$this->assertArrayHasKey('attachment_id', $medias[0]);
+		$this->assertArrayHasKey('date_created_gmt', $medias[0]);
+		$this->assertArrayHasKey('parent', $medias[0]);
+		$this->assertArrayHasKey('link', $medias[0]);
+		$this->assertArrayHasKey('title', $medias[0]);
+		$this->assertArrayHasKey('caption', $medias[0]);
+		$this->assertArrayHasKey('description', $medias[0]);
+		$this->assertArrayHasKey('metadata', $medias[0]);
+		$this->assertArrayHasKey('thumbnail', $medias[0]);
+	}
+
+	/**
+	 * @vcr media/test-get-media-library-with-filter-vcr.yml
+	 */
+	public function testGetMediaLibraryWithFilter()
+	{
+		$medias = $this->client->getMediaLibrary(array('number' => 5));
+		$this->assertLessThanOrEqual(5, count($medias));
+	}
+
+	/**
+	 * @vcr media/test-get-media-library-no-privilege-vcr.yml
+	 * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
+	 * @expectedException 401
+	 * @expectedExceptionMessage You do not have permission to upload files.
+	 */
+	public function testGetMediaLibraryNoPrivilege()
+	{
+		$medias = $this->guestClient->getMediaLibrary();
 	}
 
 }
