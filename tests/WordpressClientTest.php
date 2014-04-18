@@ -53,6 +53,27 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
 		$this->client		 = null;
 		$this->guestClient	 = null;
 	}
+	
+	/**
+	 * @vcr test-login-failed-vcr.yml
+	 * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
+	 * @expectedExceptionCode 403
+	 * @expectedExceptionMessage Incorrect username or password.
+	 */
+	public function testLoginFailed()
+	{
+		$client = new HieuLe\WordpressXmlrpcClient\WordpressClient(static::$_endpoint, 'admin', '');
+		$client->getPosts();
+	}
+	
+	/**
+	 * @expectedException \HieuLe\WordpressXmlrpcClient\Exception\NetworkException
+	 */
+	public function testNetworkError()
+	{
+		$client = new HieuLe\WordpressXmlrpcClient\WordpressClient('xxx.domain', '', '');
+		$client->getPosts();
+	}
 
 	#
 	# Test posts API
