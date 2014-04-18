@@ -107,25 +107,16 @@ class WordpressClient
 	 * 
 	 * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.newPost
 	 */
-	function newPost($title, $body, array $categorieIds = array(), $thumbnailId = NULL, array $content = array())
+	function newPost($title, $body, array $content = array())
 	{
 		$default				 = array(
 			'post_type'		 => 'post',
 			'post_status'	 => 'publish',
-			'terms'			 => array(),
 		);
 		$content				 = array_merge($default, $content);
 		$content['post_title']	 = $title;
 		$content['post_content'] = $body;
 
-		if ($thumbnailId != NULL)
-		{
-			$content['post_thumbnail'] = $thumbnailId;
-		}
-		if (!empty($categorieIds))
-		{
-			$content['terms']['category'] = $categorieIds;
-		}
 		$params = array(1, $this->_username, $this->_password, $content);
 		return $this->_sendRequest('wp.newPost', $params);
 	}
