@@ -9,7 +9,7 @@ use Illuminate\Log\Writer;
  * 
  * @version 2.0
  * 
- * @author Hieu Le <letrunghieu.cse09@gmail.com>
+ * @author Hieu Le <http://www.hieule.info>
  * 
  * @license http://opensource.org/licenses/MIT MIT
  */
