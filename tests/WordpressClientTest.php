@@ -36,6 +36,11 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
 		$this->guestClient	 = null;
 	}
 
+	#
+	# Test posts API
+
+	#
+
 	/**
 	 * @vcr posts/test-get-posts-with-default-config-vcr.yml
 	 */
@@ -382,10 +387,10 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testDeletePost()
 	{
-		$postId = $this->client->newPost('Created to delete', '');
-		$result = $this->client->deletePost($postId);
+		$postId	 = $this->client->newPost('Created to delete', '');
+		$result	 = $this->client->deletePost($postId);
 		$this->assertTrue($result);
-		$post = $this->client->getPost($postId);
+		$post	 = $this->client->getPost($postId);
 		$this->assertSame('trash', $post['post_status']);
 	}
 
@@ -504,6 +509,370 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
 	public function testGetPostStatusListNoPrivilege()
 	{
 		$statuses = $this->guestClient->getPostStatusList();
+	}
+
+	#
+	# Test taxonomies API
+
+	#
+	
+	/**
+	 * @vcr taxonomies/test-get-taxonomy-vcr.yml
+	 */
+	public function testGetTaxonomy()
+	{
+		$taxonomy = $this->client->getTaxonomy('category');
+		$this->assertArrayHasKey('name', $taxonomy);
+		$this->assertArrayHasKey('label', $taxonomy);
+		$this->assertArrayHasKey('hierarchical', $taxonomy);
+		$this->assertArrayHasKey('public', $taxonomy);
+		$this->assertArrayHasKey('show_ui', $taxonomy);
+		$this->assertArrayHasKey('_builtin', $taxonomy);
+		$this->assertArrayHasKey('labels', $taxonomy);
+		$this->assertArrayHasKey('cap', $taxonomy);
+		$this->assertArrayHasKey('object_type', $taxonomy);
+	}
+
+	/**
+	 * @vcr taxonomies/test-get-taxonomy-no-privilege-vcr.yml
+	 * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
+	 * @expectedExceptionCode 401
+	 * @expectedExceptionMessage You are not allowed to assign terms in this taxonomy.
+	 */
+	public function testGetTaxonomyNoPrivilege()
+	{
+		$taxonomy = $this->guestClient->getTaxonomy('category');
+	}
+
+	/**
+	 * @vcr taxonomies/test-get-taxonomy-invalid-name-vcr.yml
+	 * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
+	 * @expectedExceptionCode 403
+	 * @expectedExceptionMessage Invalid taxonomy
+	 */
+	public function testGetTaxonomyInvalidName()
+	{
+		$taxonomy = $this->client->getTaxonomy('foo');
+	}
+
+	/**
+	 * @vcr taxonomies/test-get-taxonomies-vcr.yml
+	 */
+	public function testGetTaxonomies()
+	{
+		$taxonomies = $this->client->getTaxonomies();
+		$this->assertGreaterThan(0, count($taxonomies));
+		$this->assertArrayHasKey('name', $taxonomies[0]);
+		$this->assertArrayHasKey('label', $taxonomies[0]);
+		$this->assertArrayHasKey('hierarchical', $taxonomies[0]);
+		$this->assertArrayHasKey('public', $taxonomies[0]);
+		$this->assertArrayHasKey('show_ui', $taxonomies[0]);
+		$this->assertArrayHasKey('_builtin', $taxonomies[0]);
+		$this->assertArrayHasKey('labels', $taxonomies[0]);
+		$this->assertArrayHasKey('cap', $taxonomies[0]);
+		$this->assertArrayHasKey('object_type', $taxonomies[0]);
+	}
+
+	/**
+	 * @cvr taxonomies/test-get-taxonomies-no-privilege-vcr.yml
+	 */
+	public function testGetTaxonomiesNoPrivilege()
+	{
+		$taxonomies = $this->guestClient->getTaxonomies();
+		$this->assertEmpty($taxonomies);
+	}
+
+	/**
+	 * @vcr taxonomies/test-get-terms-vcr.yml
+	 */
+	public function testGetTerms()
+	{
+		$terms = $this->client->getTerms('category');
+		$this->assertGreaterThan(0, count($terms));
+		$this->assertArrayHasKey('term_id', $terms[0]);
+		$this->assertArrayHasKey('name', $terms[0]);
+		$this->assertArrayHasKey('slug', $terms[0]);
+		$this->assertArrayHasKey('term_group', $terms[0]);
+		$this->assertArrayHasKey('term_taxonomy_id', $terms[0]);
+		$this->assertArrayHasKey('taxonomy', $terms[0]);
+		$this->assertArrayHasKey('description', $terms[0]);
+		$this->assertArrayHasKey('parent', $terms[0]);
+		$this->assertArrayHasKey('count', $terms[0]);
+	}
+
+	/**
+	 * @vcr taxonomies/test-get-terms-no-privilege-vcr.yml
+	 * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
+	 * @expectedExceptionCode 401
+	 * @expectedExceptionMessage You are not allowed to assign terms in this taxonomy.
+	 */
+	public function testGetTermsNoPrivilege()
+	{
+		$terms = $this->guestClient->getTerms('post_tag');
+	}
+
+	/**
+	 * @vcr taxonomies/test-get-terms-invalid-taxonomy-name-vcr.yml
+	 * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
+	 * @expectedExceptionCode 403
+	 * @expectedExceptionMessage Invalid taxonomy
+	 */
+	public function testGetTermsInvalidTaxonomyName()
+	{
+		$terms = $this->client->getTerms('foo');
+	}
+
+	/**
+	 * @vcr taxonomies/test-get-term-vcr.yml
+	 */
+	public function testGetTerm()
+	{
+		$terms	 = $this->client->getTerms('category', array('number' => 1));
+		$term	 = $this->client->getTerm($terms[0]['term_id'], 'category');
+		$this->assertArrayHasKey('term_id', $term);
+		$this->assertArrayHasKey('name', $term);
+		$this->assertArrayHasKey('slug', $term);
+		$this->assertArrayHasKey('term_group', $term);
+		$this->assertArrayHasKey('term_taxonomy_id', $term);
+		$this->assertArrayHasKey('taxonomy', $term);
+		$this->assertArrayHasKey('description', $term);
+		$this->assertArrayHasKey('parent', $term);
+		$this->assertArrayHasKey('count', $term);
+	}
+
+	/**
+	 * @vcr taxonomies/test-get-term-no-privilege-vcr.yml
+	 * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
+	 * @expectedExceptionCode 401
+	 * @expectedExceptionMessage You are not allowed to assign terms in this taxonomy.
+	 */
+	public function testGetTermNoPrivilege()
+	{
+		$term = $this->guestClient->getTerm(23, 'category');
+	}
+
+	/**
+	 * @vcr taxonomies/test-get-term-invalid-taxonomy-name-vcr.yml
+	 * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
+	 * @expectedExceptionCode 403
+	 * @expectedExceptionMessage Invalid taxonomy
+	 */
+	public function testGetTermInvalidTaxonomyName()
+	{
+		$term = $this->client->getTerm(1000, 'foo');
+	}
+
+	/**
+	 * @vcr taxonomies/test-get-term-invalid-term-id-vcr.yml
+	 * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
+	 * @expectedExceptionCode 404
+	 * @expectedExceptionMessage Invalid term ID
+	 */
+	public function testGetTermInvalidTermId()
+	{
+		$term = $this->client->getTerm(1000, 'category');
+	}
+
+	/**
+	 * @vcr taxonomies/test-new-term-vcr.yml
+	 */
+	public function testNewTerm()
+	{
+		$termId = (int) $this->client->newTerm('Category Lorem Ipsum', 'category');
+		$this->assertGreaterThan(0, $termId);
+
+		$term = $this->client->getTerm($termId, 'category');
+		$this->assertSame('Category Lorem Ipsum', $term['name']);
+	}
+
+	/**
+	 * @vcr taxonomies/test-new-term-with-more-info-vcr.yml
+	 */
+	public function testNewTermWithMoreInfo()
+	{
+		$termId = (int) $this->client->newTerm('Category Lorem', 'category', 'cat-lorem', 'Lorem Ipsum');
+		$this->assertGreaterThan(0, $termId);
+
+		$term = $this->client->getTerm($termId, 'category');
+		$this->assertSame('Category Lorem', $term['name']);
+		$this->assertSame('cat-lorem', $term['slug']);
+		$this->assertSame('Lorem Ipsum', $term['description']);
+	}
+
+	/**
+	 * @vcr taxonomies/test-new-term-no-privilege-vcr.yml
+	 * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
+	 * @expectedExceptionCode 401
+	 * @expectedExceptionMessage You are not allowed to create terms in this taxonomy.
+	 */
+	public function testNewTermNoPrivilege()
+	{
+		$termId = $this->guestClient->newTerm('foo', 'category');
+	}
+
+	/**
+	 * @vcr taxonomies/test-new-term-invalid-taxonomy-name-vcr.yml
+	 * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
+	 * @expectedExceptionCode 403
+	 * @expectedExceptionMessage Invalid taxonomy
+	 */
+	public function testNewTermInvalidTaxonomyName()
+	{
+		$termId = $this->client->newTerm('foo', 'category-foo');
+	}
+
+	/**
+	 * @vcr taxonomies/test-new-term-empty-name-vcr.yml
+	 * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
+	 * @expectedExceptionCode 403
+	 * @expectedExceptionMessage The term name cannot be empty.
+	 */
+	public function testNewTermEmptyName()
+	{
+		$termId = $this->client->newTerm('', 'category');
+	}
+
+	/**
+	 * @vcr taxonomies/test-new-term-no-hierachical-vcr.yml
+	 * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
+	 * @expectedExceptionCode 403
+	 * @expectedExceptionMessage This taxonomy is not hierarchical.
+	 */
+	public function testNewTermNoHierachical()
+	{
+		$tagId = $this->client->newTerm('Tag bar', 'post_tag');
+		$termId = $this->client->newTerm('Tag Foo', 'post_tag', null, null, $tagId);
+	}
+
+	/**
+	 * @vcr taxonomies/test-new-term-invalid-parent-vcr.yml
+	 * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
+	 * @expectedExceptionCode 403
+	 * @expectedExceptionMessage Parent term does not exist.
+	 */
+	public function testNewTermInvalidParent()
+	{
+		$termId = $this->client->newTerm('Tag Foo', 'category', null, null, 999);
+	}
+
+	/**
+	 * @vcr taxonomies/test-edit-term-vcr.yml
+	 */
+	public function testEditTerm()
+	{
+		$termId = $this->client->newTerm('Created to delete', 'category');
+		$this->assertGreaterThan(0, (int) $termId);
+		$result = $this->client->EditTerm($termId, 'category', array('name' => 'Category Lorem 2',));
+		$this->assertTrue($result);
+
+		$term = $this->client->getTerm($termId, 'category');
+		$this->assertSame('Category Lorem 2', $term['name']);
+	}
+
+	/**
+	 * @vcr taxonomies/test-edit-term-no-privilege-vcr.yml
+	 * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
+	 * @expectedExceptionCode 401
+	 * @expectedExceptionMessage You are not allowed to edit terms in this taxonomy.
+	 */
+	public function testEditTermNoPrivilege()
+	{
+		$terms = $this->client->getTerms('category', array('number' => 1));
+		$this->assertNotEmpty($terms);
+		$result = $this->guestClient->EditTerm($terms[0]['term_id'], 'category');
+	}
+
+	/**
+	 * @vcr taxonomies/test-edit-term-invalid-taxonomy-name-vcr.yml
+	 * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
+	 * @expectedExceptionCode 403
+	 * @expectedExceptionMessage Invalid taxonomy
+	 */
+	public function testEditTermInvalidTaxonomyName()
+	{
+		$termId = $this->client->EditTerm(47, 'category-foo');
+	}
+
+	/**
+	 * @vcr taxonomies/test-edit-term-empty-name-vcr.yml
+	 * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
+	 * @expectedExceptionCode 403
+	 * @expectedExceptionMessage The term name cannot be empty.
+	 */
+	public function testEditTermEmptyName()
+	{
+		$terms = $this->client->getTerms('category', array('number' => 1));
+		$this->assertNotEmpty($terms);
+		$result = $this->client->EditTerm($terms[0]['term_id'], 'category', array('name' => ''));
+	}
+
+	/**
+	 * @vcr taxonomies/test-edit-term-invalid-parent-vcr.yml
+	 * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
+	 * @expectedExceptionCode 403
+	 * @expectedExceptionMessage Parent term does not exist.
+	 */
+	public function testEditTermInvalidParent()
+	{
+		$terms = $this->client->getTerms('category', array('number' => 1));
+		$this->assertNotEmpty($terms);
+		$result = $this->client->EditTerm($terms[0]['term_id'], 'category', array('parent' => 999));
+	}
+
+	/**
+	 * @vcr taxonomies/test-edit-term-not-exist-vcr.yml
+	 * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
+	 * @expectedExceptionCode 404
+	 * @expectedExceptionMessage Invalid term ID
+	 */
+	public function testEditTermNotExist()
+	{
+		$termId = $this->client->EditTerm(444, 'category');
+	}
+
+	/**
+	 * @vcr taxonomies/test-delete-term-vcr.yml
+	 */
+	public function testDeleteTerm()
+	{
+		$termId = $this->client->newTerm('Deleted term', 'category');
+		$result = $this->client->deleteTerm($termId, 'category');
+		$this->assertTrue($result);
+	}
+
+	/**
+	 * @vcr taxonomies/test-delete-term-no-privilege-vcr.yml
+	 * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
+	 * @expectedExceptionCode 401
+	 * @expectedExceptionMessage You are not allowed to delete terms in this taxonomy.
+	 */
+	public function testDeleteTermNoPrivilege()
+	{
+		$terms = $this->client->getTerms('category', array('number' => 1));
+		$this->assertNotEmpty($terms);
+		$termId = $this->guestClient->DeleteTerm($terms[0]['term_id'], 'category');
+	}
+
+	/**
+	 * @vcr taxonomies/test-delete-term-invalid-taxonomy-name-vcr.yml
+	 * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
+	 * @expectedExceptionCode 403
+	 * @expectedExceptionMessage Invalid taxonomy
+	 */
+	public function testDeleteTermInvalidTaxonomyName()
+	{
+		$result = $this->client->deleteTerm(28, 'category-foo');
+	}
+
+	/**
+	 * @vcr taxonomies/test-delete-term-not-exist-vcr.yml
+	 * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
+	 * @expectedExceptionCode 404
+	 * @expectedExceptionMessage Invalid term ID
+	 */
+	public function testDeleteTermNotExist()
+	{
+		$termId = $this->client->deleteTerm(444, 'category');
 	}
 
 }
