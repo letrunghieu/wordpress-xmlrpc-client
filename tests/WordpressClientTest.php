@@ -242,7 +242,7 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testGetPostErrorInvalidPostId()
 	{
-		$post = $this->client->getPost(10000);
+		$post = $this->client->getPost(-1);
 	}
 
 	/**
@@ -368,7 +368,7 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testEditPostWithInvalidId()
 	{
-		$result = $this->client->editPost(1000, array('post_title' => 'Lorem Ipsum (edited)', 'post_content' => 'Muahahaha!'));
+		$result = $this->client->editPost(-1, array('post_title' => 'Lorem Ipsum (edited)', 'post_content' => 'Muahahaha!'));
 	}
 
 	/**
@@ -402,7 +402,7 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testDeletePostWithInvalidId()
 	{
-		$result = $this->client->deletePost(1000);
+		$result = $this->client->deletePost(-1);
 	}
 
 	/**
@@ -659,7 +659,7 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testGetTermInvalidTaxonomyName()
 	{
-		$term = $this->client->getTerm(1000, 'foo');
+		$term = $this->client->getTerm(-1, 'foo');
 	}
 
 	/**
@@ -670,7 +670,7 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testGetTermInvalidTermId()
 	{
-		$term = $this->client->getTerm(1000, 'category');
+		$term = $this->client->getTerm(-1, 'category');
 	}
 
 	/**
@@ -1148,7 +1148,7 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testGetCommentNotExist()
 	{
-		$comment = $this->client->getComment(1000);
+		$comment = $this->client->getComment(-1);
 	}
 
 	/**
@@ -1211,7 +1211,7 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testEditCommentNotExist()
 	{
-		$result = $this->client->editComment(1000, array('content' => 'I have editted this comment!'));
+		$result = $this->client->editComment(-1, array('content' => 'I have editted this comment!'));
 	}
 
 	/**
@@ -1248,7 +1248,7 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testDeleteCommentNotExist()
 	{
-		$result = $this->client->deleteComment(1000);
+		$result = $this->client->deleteComment(-1);
 	}
 
 	/**
@@ -1269,6 +1269,186 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
 	{
 		$statuses = $this->client->getCommentStatusList();
 		$this->assertGreaterThan(0, count($statuses));
+	}
+
+	#
+	# Test user API
+
+	#
+	
+	/**
+	 * @vcr users/test-get-profile-vcr.yml
+	 */
+	public function testGetProfile()
+	{
+		$user = $this->client->getProfile();
+		$this->assertArrayHasKey('user_id', $user);
+		$this->assertArrayHasKey('username', $user);
+		$this->assertArrayHasKey('first_name', $user);
+		$this->assertArrayHasKey('last_name', $user);
+		$this->assertArrayHasKey('bio', $user);
+		$this->assertArrayHasKey('email', $user);
+		$this->assertArrayHasKey('nickname', $user);
+		$this->assertArrayHasKey('nicename', $user);
+		$this->assertArrayHasKey('url', $user);
+		$this->assertArrayHasKey('display_name', $user);
+		$this->assertArrayHasKey('registered', $user);
+		$this->assertArrayHasKey('roles', $user);
+
+		$user = $this->client->getProfile(array('user_id', 'email'));
+		$this->assertArrayHasKey('user_id', $user);
+		$this->assertArrayNotHasKey('username', $user);
+		$this->assertArrayNotHasKey('first_name', $user);
+		$this->assertArrayNotHasKey('last_name', $user);
+		$this->assertArrayNotHasKey('bio', $user);
+		$this->assertArrayHasKey('email', $user);
+		$this->assertArrayNotHasKey('nickname', $user);
+		$this->assertArrayNotHasKey('nicename', $user);
+		$this->assertArrayNotHasKey('url', $user);
+		$this->assertArrayNotHasKey('display_name', $user);
+		$this->assertArrayNotHasKey('registered', $user);
+		$this->assertArrayNotHasKey('roles', $user);
+	}
+
+	/**
+	 * @vcr users/test-get-users-blogs-vcr.yml
+	 */
+	public function testGetUsersBlogs()
+	{
+		$result = $this->client->getUsersBlogs();
+		$this->assertGreaterThan(0, count($result));
+		$this->assertArrayHasKey('blogid', head($result));
+		$this->assertArrayHasKey('blogName', head($result));
+		$this->assertArrayHasKey('url', head($result));
+		$this->assertArrayHasKey('xmlrpc', head($result));
+		$this->assertArrayHasKey('isAdmin', head($result));
+	}
+
+	/**
+	 * @vcr users/test-get-user-no-privilege-vcr.yml
+	 * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
+	 * @expectedExceptionCode 401
+	 * @expectedExceptionMessage Sorry, you cannot edit users.
+	 */
+	public function testGetUserNoPrivilege()
+	{
+		$profile = $this->client->getProfile();
+		$user	 = $this->guestClient->getUser($profile['user_id']);
+	}
+
+	/**
+	 * @vcr users/test-get-user-not-exist-vcr.yml
+	 * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
+	 * @expectedExceptionCode 404
+	 * @expectedExceptionMessage Invalid user ID
+	 */
+	public function testGetUserNotExist()
+	{
+		$user = $this->client->getUser(-1);
+	}
+
+	/**
+	 * @vcr users/test-get-user-vcr.yml
+	 */
+	public function testGetUser()
+	{
+		$profile = $this->client->getProfile();
+		$user	 = $this->client->getUser($profile['user_id']);
+		$this->assertArrayHasKey('user_id', $user);
+		$this->assertArrayHasKey('username', $user);
+		$this->assertArrayHasKey('first_name', $user);
+		$this->assertArrayHasKey('last_name', $user);
+		$this->assertArrayHasKey('bio', $user);
+		$this->assertArrayHasKey('email', $user);
+		$this->assertArrayHasKey('nickname', $user);
+		$this->assertArrayHasKey('nicename', $user);
+		$this->assertArrayHasKey('url', $user);
+		$this->assertArrayHasKey('display_name', $user);
+		$this->assertArrayHasKey('registered', $user);
+		$this->assertArrayHasKey('roles', $user);
+
+		$user = $this->client->getUser($profile['user_id'], array('user_id', 'email'));
+		$this->assertArrayHasKey('user_id', $user);
+		$this->assertArrayNotHasKey('username', $user);
+		$this->assertArrayNotHasKey('first_name', $user);
+		$this->assertArrayNotHasKey('last_name', $user);
+		$this->assertArrayNotHasKey('bio', $user);
+		$this->assertArrayHasKey('email', $user);
+		$this->assertArrayNotHasKey('nickname', $user);
+		$this->assertArrayNotHasKey('nicename', $user);
+		$this->assertArrayNotHasKey('url', $user);
+		$this->assertArrayNotHasKey('display_name', $user);
+		$this->assertArrayNotHasKey('registered', $user);
+		$this->assertArrayNotHasKey('roles', $user);
+	}
+
+	/**
+	 * @vcr users/test-get-users-no-privilege-vcr.yml
+	 * @expectedException \HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
+	 * @expectedExceptionCode 401
+	 * @expectedExceptionMessage Sorry, you cannot list users.
+	 */
+	public function testGetUsersNoPrivilege()
+	{
+		$users = $this->guestClient->getUsers();
+	}
+
+	/**
+	 * @vcr users/test-get-users-vcr.yml
+	 */
+	public function testGetUsers()
+	{
+		$users = $this->client->getUsers();
+		$this->assertGreaterThan(0, count($users));
+		$this->assertArrayHasKey('user_id', $users[0]);
+		$this->assertArrayHasKey('username', $users[0]);
+		$this->assertArrayHasKey('first_name', $users[0]);
+		$this->assertArrayHasKey('last_name', $users[0]);
+		$this->assertArrayHasKey('bio', $users[0]);
+		$this->assertArrayHasKey('email', $users[0]);
+		$this->assertArrayHasKey('nickname', $users[0]);
+		$this->assertArrayHasKey('nicename', $users[0]);
+		$this->assertArrayHasKey('url', $users[0]);
+		$this->assertArrayHasKey('display_name', $users[0]);
+		$this->assertArrayHasKey('registered', $users[0]);
+		$this->assertArrayHasKey('roles', $users[0]);
+
+		$users = $this->client->getUsers(array(), array('user_id', 'email'));
+		$this->assertGreaterThan(0, count($users));
+		$this->assertArrayHasKey('user_id', $users[0]);
+		$this->assertArrayNotHasKey('username', $users[0]);
+		$this->assertArrayNotHasKey('first_name', $users[0]);
+		$this->assertArrayNotHasKey('last_name', $users[0]);
+		$this->assertArrayNotHasKey('bio', $users[0]);
+		$this->assertArrayHasKey('email', $users[0]);
+		$this->assertArrayNotHasKey('nickname', $users[0]);
+		$this->assertArrayNotHasKey('nicename', $users[0]);
+		$this->assertArrayNotHasKey('url', $users[0]);
+		$this->assertArrayNotHasKey('display_name', $users[0]);
+		$this->assertArrayNotHasKey('registered', $users[0]);
+		$this->assertArrayNotHasKey('roles', $users[0]);
+	}
+
+	/**
+	 * @vcr users/test-get-users-invalid-role-vcr.yml
+	 * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
+	 * @expectedExceptionCode 403
+	 * @expectedExceptionMessage The role specified is not valid
+	 */
+	public function testGetUsersInvalidRole()
+	{
+		$users = $this->client->getUsers(array('role' => 'foo'));
+	}
+
+	/**
+	 * @vcr users/test-edit-profile-vcr.yml
+	 */
+	public function testEditProfile()
+	{
+		$result	 = $this->client->editProfile(array('nickname' => 'JD'));
+		$this->assertTrue($result);
+		$user	 = $this->client->getProfile();
+		$this->assertSame('JD', $user['nickname']);
 	}
 
 }
