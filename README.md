@@ -7,6 +7,8 @@ Created by [Hieu Le](http://www.hieule.info)
 
 MIT licensed.
 
+Current version: 2.0
+
 ## Features
 * Full test suit built in supporting testing using your own Wordpress site.
 * Support error logging to files with Monolog library.
@@ -68,7 +70,7 @@ There will be 2 types of exception may be thrown from this library:
   * `XmlrpcException`: this kind of exception will be thrown if there is an error when the server executing your request
   * `NetworkException`: this kind of exception will be thrown if there is an error when transfer your request to server or when getting the response.
 
-For API reference, visit [Wordpress documentation](http://codex.Wordpress.org/XML-RPC_WordPress_API) or [Library API documentation](http://letrunghieu.github.io/Wordpress-xmlrpc-client/api/index.html)
+For API reference, visit [Wordpress documentation](http://codex.Wordpress.org/XML-RPC_WordPress_API) or [Library API documentation](http://letrunghieu.github.io/wordpress-xmlrpc-client/api/index.html)
 
 ## Unit testing
 By default, the project use recorded data as the default data for test suite. However, if you want to test with your own Wordpress installation, there are available options inside the `./tests/xmlrpc.yml` file:
