@@ -574,7 +574,7 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @cvr taxonomies/test-get-taxonomies-no-privilege-vcr.yml
+	 * @vcr taxonomies/test-get-taxonomies-no-privilege-vcr.yml
 	 */
 	public function testGetTaxonomiesNoPrivilege()
 	{

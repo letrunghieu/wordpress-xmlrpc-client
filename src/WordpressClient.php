@@ -619,7 +619,7 @@ class WordpressClient
 				$this->_error			 = "file_get_contents: {$error}";
 				$this->_responseHeader	 = $http_response_header;
 				$this->_logError();
-				throw new Exception\NetworkException($error['message'], $error['type']);
+				throw new Exception\NetworkException($error, 127);
 			}
 		}
 		catch (\Exception $ex)
