@@ -61,7 +61,7 @@ class WordpressClient
 	 * 
 	 * @param integer $postId	post id The id of selected post
 	 * @param array $fields	Optional. List of field or meta-field names to include in response.
-	 * @return array|boolean
+	 * @return array
 	 * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.getPosts
 	 */
 	function getPost($postId, array $fields = array())
@@ -82,7 +82,7 @@ class WordpressClient
 	 * 
 	 * @param array $filters Optional
 	 * @param array $fields	Optional
-	 * @return array|boolean array of struct
+	 * @return array array of struct
 	 * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.getPosts
 	 */
 	function getPosts(array $filters = array(), array $fields = array())
@@ -103,7 +103,7 @@ class WordpressClient
 	 * @param array $categorieIds	the list of category ids
 	 * @param integer $thumbnailId	the thumbnail id
 	 * @param array $content	the content array, see more at wordpress documentation
-	 * @return integer|boolean the new post id
+	 * @return integer the new post id
 	 * 
 	 * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.newPost
 	 */
@@ -159,7 +159,7 @@ class WordpressClient
 	 * 
 	 * @param string $postTypeName the post type name
 	 * @param array $fields	Optional. List of field or meta-field names to include in response. 
-	 * @return array|boolean
+	 * @return array
 	 * 
 	 * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.getPostType
 	 */
@@ -174,7 +174,7 @@ class WordpressClient
 	 * 
 	 * @param array $filter
 	 * @param array $fields
-	 * @return array|boolean	list of struct
+	 * @return array	list of struct
 	 * 
 	 * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.getPostTypes
 	 */
@@ -187,7 +187,7 @@ class WordpressClient
 	/**
 	 * Retrieve list of post formats. 
 	 * 
-	 * @return array|boolean
+	 * @return array
 	 * 
 	 * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.getPostFormats
 	 */
@@ -200,7 +200,7 @@ class WordpressClient
 	/**
 	 * Retrieve list of supported values for post_status field on posts. 
 	 * 
-	 * @return array|boolean	list of supported post status
+	 * @return array	list of supported post status
 	 * 
 	 * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.getPostStatusList
 	 */
@@ -214,7 +214,7 @@ class WordpressClient
 	 * Retrieve information about a taxonomy. 
 	 * 
 	 * @param string $taxonomy the name of the selected taxonomy
-	 * @return array|boolean	taxonomy information
+	 * @return array	taxonomy information
 	 * 
 	 * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Taxonomies#wp.getTaxonomy
 	 */
@@ -227,7 +227,7 @@ class WordpressClient
 	/**
 	 * Retrieve a list of taxonomies. 
 	 * 
-	 * @return array|boolean array of taxonomy struct
+	 * @return array array of taxonomy struct
 	 * 
 	 * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Taxonomies#wp.getTaxonomies
 	 */
@@ -242,7 +242,7 @@ class WordpressClient
 	 * 
 	 * @param integer $termId 
 	 * @param string $taxonomy
-	 * @return array|boolean
+	 * @return array
 	 * 
 	 * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Taxonomies#wp.getTerm
 	 */
@@ -257,7 +257,7 @@ class WordpressClient
 	 * 
 	 * @param string $taxonomy
 	 * @param array $filter
-	 * @return array|boolean
+	 * @return array
 	 * 
 	 * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Taxonomies#wp.getTerms
 	 */
@@ -275,7 +275,7 @@ class WordpressClient
 	 * @param string $slug
 	 * @param string $description
 	 * @param integer $parentId
-	 * @return integer|boolean new term id
+	 * @return integer new term id
 	 * 
 	 * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Taxonomies#wp.newTerm
 	 */
@@ -337,7 +337,7 @@ class WordpressClient
 	 * Retrieve a media item (i.e, attachment). 
 	 * 
 	 * @param integer $itemId
-	 * @return array|boolean
+	 * @return array
 	 * 
 	 * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Media#wp.getMediaItem
 	 */
@@ -351,7 +351,7 @@ class WordpressClient
 	 * Retrieve list of media items. 
 	 * 
 	 * @param array $filter
-	 * @return array|boolean
+	 * @return array
 	 * 
 	 * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Media#wp.getMediaLibrary
 	 */
@@ -367,7 +367,7 @@ class WordpressClient
 	 * @param string $name
 	 * @param string $mime
 	 * @param string $bits Binary data (no encoded)
-	 * @return array|boolean
+	 * @return array
 	 * 
 	 * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Media#wp.uploadFile
 	 */
@@ -387,7 +387,7 @@ class WordpressClient
 	 * Retrieve comment count for a specific post. 
 	 * 
 	 * @param integer $postId
-	 * @return integer|boolean
+	 * @return integer
 	 * 
 	 * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Comments#wp.getCommentCount
 	 */
