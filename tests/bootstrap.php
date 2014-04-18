@@ -24,5 +24,5 @@ if (!$useCustomInfo)
 }
 else
 {
-	VCR\VCR::onfigure()->enableLibraryHooks(array());
+	VCR\VCR::configure()->enableLibraryHooks(array());
 }

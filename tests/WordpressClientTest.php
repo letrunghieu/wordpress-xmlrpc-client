@@ -23,11 +23,29 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
 	 * @var \HieuLe\WordpressXmlrpcClient\WordpressClient
 	 */
 	protected $guestClient;
+	private static $_endpoint		 = 'http://WP_DOMAIN/xmlrpc.php';
+	private static $_adminLogin		 = 'WP_USER';
+	private static $_adminPassword	 = 'WP_PASSWORD';
+	private static $_guestLogin		 = 'WP_GUEST';
+	private static $_guestPassword	 = 'WP_PASSWORD';
+
+	public static function setUpBeforeClass()
+	{
+		$testConfig = \Symfony\Component\Yaml\Yaml::parse('tests/xmlrpc.yml');
+		if ($testConfig['endpoint'] && $testConfig['admin_login'] && $testConfig['admin_password'] && $testConfig['guest_login'] && $testConfig['guest_password'])
+		{
+			static::$_endpoint = $testConfig['endpoint'];
+			static::$_adminLogin = $testConfig['admin_login'];
+			static::$_adminPassword = $testConfig['admin_password'];
+			static::$_guestLogin = $testConfig['guest_login'];
+			static::$_guestPassword = $testConfig['guest_password'];
+		}
+	}
 
 	public function setUp()
 	{
-		$this->client		 = new HieuLe\WordpressXmlrpcClient\WordpressClient('http://WP_DOMAIN/xmlrpc.php', 'WP_USER', 'WP_PASSWORD');
-		$this->guestClient	 = new HieuLe\WordpressXmlrpcClient\WordpressClient('http://WP_DOMAIN/xmlrpc.php', 'WP_GUEST', 'WP_PASSWORD');
+		$this->client		 = new HieuLe\WordpressXmlrpcClient\WordpressClient(static::$_endpoint, static::$_adminLogin, static::$_adminPassword);
+		$this->guestClient	 = new HieuLe\WordpressXmlrpcClient\WordpressClient(static::$_endpoint, static::$_guestLogin, static::$_guestPassword);
 	}
 
 	public function tearDown()
