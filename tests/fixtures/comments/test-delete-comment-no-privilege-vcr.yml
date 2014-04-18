@@ -10,10 +10,10 @@
     response:
         status: 200
         headers:
-            Date: 'Thu, 17 Apr 2014 04:08:17 GMT'
+            Date: 'Fri, 18 Apr 2014 03:49:44 GMT'
             Server: 'Apache/2.4.2 (Win64) OpenSSL/1.0.1c PHP/5.4.3'
             X-Powered-By: PHP/5.4.3
-            Set-Cookie: '_icl_current_language=en; expires=Fri, 18-Apr-2014 04:08:19 GMT; path=/'
+            Set-Cookie: '_icl_current_language=en; expires=Sat, 19-Apr-2014 03:49:46 GMT; path=/'
             Connection: close
             Content-Length: '426'
             Content-Type: 'text/xml; charset=UTF-8'
