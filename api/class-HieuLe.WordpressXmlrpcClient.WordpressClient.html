@@ -1,0 +1,1772 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta name="generator" content="ApiGen 2.8.0">
+
+	<title>Class HieuLe\WordpressXmlrpcClient\WordpressClient | Wordpress XML-RPC PHP Client</title>
+
+	<script type="text/javascript" src="resources/combined.js?955602237"></script>
+	<script type="text/javascript" src="elementlist.js?2488814889"></script>
+	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?3505392360">
+
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', "UA-49054610-2"]);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+</head>
+
+<body>
+<div id="left">
+	<div id="menu">
+		<a href="index.html" title="Overview"><span>Overview</span></a>
+
+
+		<div id="groups">
+			<h3>Namespaces</h3>
+			<ul>
+				<li class="active"><a href="namespace-HieuLe.html">HieuLe<span></span></a>
+						<ul>
+				<li class="active"><a href="namespace-HieuLe.WordpressXmlrpcClient.html">WordpressXmlrpcClient<span></span></a>
+						<ul>
+				<li><a href="namespace-HieuLe.WordpressXmlrpcClient.Exception.html">Exception</a>
+						</li>
+							</ul></li></ul></li>
+			</ul>
+		</div>
+
+		<hr>
+
+
+		<div id="elements">
+			<h3>Classes</h3>
+			<ul>
+				<li class="active"><a href="class-HieuLe.WordpressXmlrpcClient.WordpressClient.html">WordpressClient</a></li>
+			</ul>
+
+
+
+
+
+		</div>
+	</div>
+</div>
+
+<div id="splitter"></div>
+
+<div id="right">
+<div id="rightInner">
+	<form id="search">
+		<input type="hidden" name="cx" value="">
+		<input type="hidden" name="ie" value="UTF-8">
+		<input type="text" name="q" class="text">
+		<input type="submit" value="Search">
+	</form>
+
+	<div id="navigation">
+		<ul>
+			<li>
+				<a href="index.html" title="Overview"><span>Overview</span></a>
+			</li>
+			<li>
+				<a href="namespace-HieuLe.WordpressXmlrpcClient.html" title="Summary of HieuLe\WordpressXmlrpcClient"><span>Namespace</span></a>
+			</li>
+			<li class="active">
+<span>Class</span>			</li>
+		</ul>
+		<ul>
+			<li>
+				<a href="tree.html" title="Tree view of classes, interfaces, traits and exceptions"><span>Tree</span></a>
+			</li>
+		</ul>
+		<ul>
+		</ul>
+	</div>
+
+<div id="content" class="class">
+	<h1>Class WordpressClient</h1>
+
+
+	<div class="description">
+	
+<p>A XML-RPC client that implement the <a href="http://codex.wordpress.org/XML-RPC_WordPress_API">Wordpress API</a>.</p>
+
+	</div>
+
+
+
+
+
+
+
+
+
+	<div class="info">
+		
+		
+		<b>Namespace:</b> <a href="namespace-HieuLe.html">HieuLe</a>\<a href="namespace-HieuLe.WordpressXmlrpcClient.html">WordpressXmlrpcClient</a><br>
+		
+
+				<b>License:</b>
+				<a href="http://opensource.org/licenses/MIT">MIT</a><br>
+				<b>Author:</b>
+				Hieu Le &lt;<a href="http://www.hieule.info">http://www.hieule.info</a>&gt;<br>
+				<b>Version:</b>
+				2.0<br>
+		<b>Located at</b> WordpressClient.php<br>
+	</div>
+
+
+
+	<table class="summary" id="methods">
+	<caption>Methods summary</caption>
+	<tr data-order="__construct" id="___construct">
+
+		<td class="attributes"><code>
+			 public 
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#___construct">#</a>
+		<code>__construct( <span>string <var>$xmlrpcEndPoint</var></span>, <span>string <var>$username</var></span>, <span>string <var>$password</var></span>, <span>Illuminate\Log\Writer <var>$logger</var> = <span class="php-keyword1">null</span></span> )</code>
+
+		<div class="description short">
+			
+<p>Create a new client with credentials</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Create a new client with credentials</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$xmlrpcEndPoint</var></dt>
+					<dd><code>string</code><br>$xmlrpcEndPoint The wordpress XML-RPC endpoint</dd>
+					<dt><var>$username</var></dt>
+					<dd><code>string</code><br>$username The client's username</dd>
+					<dt><var>$password</var></dt>
+					<dd><code>string</code><br>$password The client's password</dd>
+					<dt><var>$logger</var></dt>
+					<dd><code>Illuminate\Log\Writer</code><br>$logger</dd>
+				</dl></div>
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getErrorMessage" id="_getErrorMessage">
+
+		<td class="attributes"><code>
+			 public 
+			string
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getErrorMessage">#</a>
+		<code>getErrorMessage( )</code>
+
+		<div class="description short">
+			
+<p>Get the latest error message</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Get the latest error message</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>string</code><br>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getPost" id="_getPost">
+
+		<td class="attributes"><code>
+			 public 
+			array
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getPost">#</a>
+		<code>getPost( <span>integer <var>$postId</var></span>, <span>array <var>$fields</var> = <span class="php-keyword1">array</span>()</span> )</code>
+
+		<div class="description short">
+			
+<p>Retrieve a post of any registered post type.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Retrieve a post of any registered post type.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$postId</var></dt>
+					<dd><code>integer</code><br>$postId post id The id of selected post</dd>
+					<dt><var>$fields</var></dt>
+					<dd><code>array</code><br>$fields Optional. List of field or meta-field names to include in response.</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>array</code><br>
+				</div>
+
+
+				<h4>Link</h4>
+				<div class="list">
+						<a href="http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.getPosts">http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.getPosts</a><br>
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getPosts" id="_getPosts">
+
+		<td class="attributes"><code>
+			 public 
+			array
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getPosts">#</a>
+		<code>getPosts( <span>array <var>$filters</var> = <span class="php-keyword1">array</span>()</span>, <span>array <var>$fields</var> = <span class="php-keyword1">array</span>()</span> )</code>
+
+		<div class="description short">
+			
+<p>Retrieve list of posts of any registered post type.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Retrieve list of posts of any registered post type.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$filters</var></dt>
+					<dd><code>array</code><br>$filters Optional</dd>
+					<dt><var>$fields</var></dt>
+					<dd><code>array</code><br>$fields Optional</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>array</code><br>array of struct<br>
+				</div>
+
+
+				<h4>Link</h4>
+				<div class="list">
+						<a href="http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.getPosts">http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.getPosts</a><br>
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="newPost" id="_newPost">
+
+		<td class="attributes"><code>
+			 public 
+			integer
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_newPost">#</a>
+		<code>newPost( <span>string <var>$title</var></span>, <span>string <var>$body</var></span>, <span>array <var>$content</var> = <span class="php-keyword1">array</span>()</span> )</code>
+
+		<div class="description short">
+			
+<p>Create a new post of any registered post type.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Create a new post of any registered post type.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$title</var></dt>
+					<dd><code>string</code><br>$title the post title</dd>
+					<dt><var>$body</var></dt>
+					<dd><code>string</code><br>$body the post body</dd>
+					<dt><var>$content</var></dt>
+					<dd><code>array</code><br>$categorieIds the list of category ids</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>integer</code><br>the new post id<br>
+				</div>
+
+
+				<h4>Link</h4>
+				<div class="list">
+						<a href="http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.newPost">http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.newPost</a><br>
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="editPost" id="_editPost">
+
+		<td class="attributes"><code>
+			 public 
+			boolean
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_editPost">#</a>
+		<code>editPost( <span>integer <var>$postId</var></span>, <span>array <var>$content</var></span> )</code>
+
+		<div class="description short">
+			
+<p>Edit an existing post of any registered post type.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Edit an existing post of any registered post type.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$postId</var></dt>
+					<dd><code>integer</code><br>$postId the id of selected post</dd>
+					<dt><var>$content</var></dt>
+					<dd><code>string</code><br>$title the new title</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>boolean</code><br>
+				</div>
+
+
+				<h4>Link</h4>
+				<div class="list">
+						<a href="http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.editPost">http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.editPost</a><br>
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="deletePost" id="_deletePost">
+
+		<td class="attributes"><code>
+			 public 
+			boolean
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_deletePost">#</a>
+		<code>deletePost( <span>integer <var>$postId</var></span> )</code>
+
+		<div class="description short">
+			
+<p>Delete an existing post of any registered post type.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Delete an existing post of any registered post type.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$postId</var></dt>
+					<dd><code>integer</code><br>$postId the id of selected post</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>boolean</code><br>
+				</div>
+
+
+				<h4>Link</h4>
+				<div class="list">
+						<a href="http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.deletePost">http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.deletePost</a><br>
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getPostType" id="_getPostType">
+
+		<td class="attributes"><code>
+			 public 
+			array
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getPostType">#</a>
+		<code>getPostType( <span>string <var>$postTypeName</var></span>, <span>array <var>$fields</var> = <span class="php-keyword1">array</span>()</span> )</code>
+
+		<div class="description short">
+			
+<p>Retrieve a registered post type.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Retrieve a registered post type.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$postTypeName</var></dt>
+					<dd><code>string</code><br>$postTypeName the post type name</dd>
+					<dt><var>$fields</var></dt>
+					<dd><code>array</code><br>$fields Optional. List of field or meta-field names to include in response.</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>array</code><br>
+				</div>
+
+
+				<h4>Link</h4>
+				<div class="list">
+						<a href="http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.getPostType">http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.getPostType</a><br>
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getPostTypes" id="_getPostTypes">
+
+		<td class="attributes"><code>
+			 public 
+			array
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getPostTypes">#</a>
+		<code>getPostTypes( <span>array <var>$filter</var> = <span class="php-keyword1">array</span>()</span>, <span>array <var>$fields</var> = <span class="php-keyword1">array</span>()</span> )</code>
+
+		<div class="description short">
+			
+<p>Retrieve list of registered post types.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Retrieve list of registered post types.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$filter</var></dt>
+					<dd><code>array</code><br>$filter</dd>
+					<dt><var>$fields</var></dt>
+					<dd><code>array</code><br>$fields</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>array</code><br>list of struct<br>
+				</div>
+
+
+				<h4>Link</h4>
+				<div class="list">
+						<a href="http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.getPostTypes">http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.getPostTypes</a><br>
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getPostFormats" id="_getPostFormats">
+
+		<td class="attributes"><code>
+			 public 
+			array
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getPostFormats">#</a>
+		<code>getPostFormats( )</code>
+
+		<div class="description short">
+			
+<p>Retrieve list of post formats.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Retrieve list of post formats.</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>array</code><br>
+				</div>
+
+
+				<h4>Link</h4>
+				<div class="list">
+						<a href="http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.getPostFormats">http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.getPostFormats</a><br>
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getPostStatusList" id="_getPostStatusList">
+
+		<td class="attributes"><code>
+			 public 
+			array
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getPostStatusList">#</a>
+		<code>getPostStatusList( )</code>
+
+		<div class="description short">
+			
+<p>Retrieve list of supported values for post_status field on posts.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Retrieve list of supported values for post_status field on posts.</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>array</code><br>list of supported post status<br>
+				</div>
+
+
+				<h4>Link</h4>
+				<div class="list">
+						<a href="http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.getPostStatusList">http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.getPostStatusList</a><br>
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getTaxonomy" id="_getTaxonomy">
+
+		<td class="attributes"><code>
+			 public 
+			array
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getTaxonomy">#</a>
+		<code>getTaxonomy( <span>string <var>$taxonomy</var></span> )</code>
+
+		<div class="description short">
+			
+<p>Retrieve information about a taxonomy.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Retrieve information about a taxonomy.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$taxonomy</var></dt>
+					<dd><code>string</code><br>$taxonomy the name of the selected taxonomy</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>array</code><br>taxonomy information<br>
+				</div>
+
+
+				<h4>Link</h4>
+				<div class="list">
+						<a href="http://codex.wordpress.org/XML-RPC_WordPress_API/Taxonomies#wp.getTaxonomy">http://codex.wordpress.org/XML-RPC_WordPress_API/Taxonomies#wp.getTaxonomy</a><br>
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getTaxonomies" id="_getTaxonomies">
+
+		<td class="attributes"><code>
+			 public 
+			array
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getTaxonomies">#</a>
+		<code>getTaxonomies( )</code>
+
+		<div class="description short">
+			
+<p>Retrieve a list of taxonomies.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Retrieve a list of taxonomies.</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>array</code><br>array of taxonomy struct<br>
+				</div>
+
+
+				<h4>Link</h4>
+				<div class="list">
+						<a href="http://codex.wordpress.org/XML-RPC_WordPress_API/Taxonomies#wp.getTaxonomies">http://codex.wordpress.org/XML-RPC_WordPress_API/Taxonomies#wp.getTaxonomies</a><br>
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getTerm" id="_getTerm">
+
+		<td class="attributes"><code>
+			 public 
+			array
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getTerm">#</a>
+		<code>getTerm( <span>integer <var>$termId</var></span>, <span>string <var>$taxonomy</var></span> )</code>
+
+		<div class="description short">
+			
+<p>Retrieve a taxonomy term.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Retrieve a taxonomy term.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$termId</var></dt>
+					<dd><code>integer</code><br>$termId</dd>
+					<dt><var>$taxonomy</var></dt>
+					<dd><code>string</code><br>$taxonomy</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>array</code><br>
+				</div>
+
+
+				<h4>Link</h4>
+				<div class="list">
+						<a href="http://codex.wordpress.org/XML-RPC_WordPress_API/Taxonomies#wp.getTerm">http://codex.wordpress.org/XML-RPC_WordPress_API/Taxonomies#wp.getTerm</a><br>
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getTerms" id="_getTerms">
+
+		<td class="attributes"><code>
+			 public 
+			array
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getTerms">#</a>
+		<code>getTerms( <span>string <var>$taxonomy</var></span>, <span>array <var>$filter</var> = <span class="php-keyword1">array</span>()</span> )</code>
+
+		<div class="description short">
+			
+<p>Retrieve list of terms in a taxonomy.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Retrieve list of terms in a taxonomy.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$taxonomy</var></dt>
+					<dd><code>string</code><br>$taxonomy</dd>
+					<dt><var>$filter</var></dt>
+					<dd><code>array</code><br>$filter</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>array</code><br>
+				</div>
+
+
+				<h4>Link</h4>
+				<div class="list">
+						<a href="http://codex.wordpress.org/XML-RPC_WordPress_API/Taxonomies#wp.getTerms">http://codex.wordpress.org/XML-RPC_WordPress_API/Taxonomies#wp.getTerms</a><br>
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="newTerm" id="_newTerm">
+
+		<td class="attributes"><code>
+			 public 
+			integer
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_newTerm">#</a>
+		<code>newTerm( <span>string <var>$name</var></span>, <span>string <var>$taxomony</var></span>, <span>string <var>$slug</var> = <span class="php-keyword1">null</span></span>, <span>string <var>$description</var> = <span class="php-keyword1">null</span></span>, <span>integer <var>$parentId</var> = <span class="php-keyword1">null</span></span> )</code>
+
+		<div class="description short">
+			
+<p>Create a new taxonomy term.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Create a new taxonomy term.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$name</var></dt>
+					<dd><code>string</code><br>$name</dd>
+					<dt><var>$taxomony</var></dt>
+					<dd><code>string</code><br>$taxomony</dd>
+					<dt><var>$slug</var></dt>
+					<dd><code>string</code><br>$slug</dd>
+					<dt><var>$description</var></dt>
+					<dd><code>string</code><br>$description</dd>
+					<dt><var>$parentId</var></dt>
+					<dd><code>integer</code><br>$parentId</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>integer</code><br>new term id<br>
+				</div>
+
+
+				<h4>Link</h4>
+				<div class="list">
+						<a href="http://codex.wordpress.org/XML-RPC_WordPress_API/Taxonomies#wp.newTerm">http://codex.wordpress.org/XML-RPC_WordPress_API/Taxonomies#wp.newTerm</a><br>
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="editTerm" id="_editTerm">
+
+		<td class="attributes"><code>
+			 public 
+			boolean
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_editTerm">#</a>
+		<code>editTerm( <span>integer <var>$termId</var></span>, <span>string <var>$taxonomy</var></span>, <span>array <var>$content</var> = <span class="php-keyword1">array</span>()</span> )</code>
+
+		<div class="description short">
+			
+<p>Edit an existing taxonomy term.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Edit an existing taxonomy term.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$termId</var></dt>
+					<dd><code>integer</code><br>$termId</dd>
+					<dt><var>$taxonomy</var></dt>
+					<dd><code>string</code><br>$taxonomy</dd>
+					<dt><var>$content</var></dt>
+					<dd><code>array</code><br>$content</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>boolean</code><br>
+				</div>
+
+
+				<h4>Link</h4>
+				<div class="list">
+						<a href="http://codex.wordpress.org/XML-RPC_WordPress_API/Taxonomies#wp.editTerm">http://codex.wordpress.org/XML-RPC_WordPress_API/Taxonomies#wp.editTerm</a><br>
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="deleteTerm" id="_deleteTerm">
+
+		<td class="attributes"><code>
+			 public 
+			boolean
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_deleteTerm">#</a>
+		<code>deleteTerm( <span>integer <var>$termId</var></span>, <span>string <var>$taxonomy</var></span> )</code>
+
+		<div class="description short">
+			
+<p>Delete an existing taxonomy term.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Delete an existing taxonomy term.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$termId</var></dt>
+					<dd><code>integer</code><br>$termId</dd>
+					<dt><var>$taxonomy</var></dt>
+					<dd><code>string</code><br>$taxonomy</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>boolean</code><br>
+				</div>
+
+
+				<h4>Link</h4>
+				<div class="list">
+						<a href="http://codex.wordpress.org/XML-RPC_WordPress_API/Taxonomies#wp.deleteTerm">http://codex.wordpress.org/XML-RPC_WordPress_API/Taxonomies#wp.deleteTerm</a><br>
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getMediaItem" id="_getMediaItem">
+
+		<td class="attributes"><code>
+			 public 
+			array
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getMediaItem">#</a>
+		<code>getMediaItem( <span>integer <var>$itemId</var></span> )</code>
+
+		<div class="description short">
+			
+<p>Retrieve a media item (i.e, attachment).</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Retrieve a media item (i.e, attachment).</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$itemId</var></dt>
+					<dd><code>integer</code><br>$itemId</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>array</code><br>
+				</div>
+
+
+				<h4>Link</h4>
+				<div class="list">
+						<a href="http://codex.wordpress.org/XML-RPC_WordPress_API/Media#wp.getMediaItem">http://codex.wordpress.org/XML-RPC_WordPress_API/Media#wp.getMediaItem</a><br>
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getMediaLibrary" id="_getMediaLibrary">
+
+		<td class="attributes"><code>
+			 public 
+			array
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getMediaLibrary">#</a>
+		<code>getMediaLibrary( <span>array <var>$filter</var> = <span class="php-keyword1">array</span>()</span> )</code>
+
+		<div class="description short">
+			
+<p>Retrieve list of media items.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Retrieve list of media items.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$filter</var></dt>
+					<dd><code>array</code><br>$filter</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>array</code><br>
+				</div>
+
+
+				<h4>Link</h4>
+				<div class="list">
+						<a href="http://codex.wordpress.org/XML-RPC_WordPress_API/Media#wp.getMediaLibrary">http://codex.wordpress.org/XML-RPC_WordPress_API/Media#wp.getMediaLibrary</a><br>
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="uploadFile" id="_uploadFile">
+
+		<td class="attributes"><code>
+			 public 
+			array
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_uploadFile">#</a>
+		<code>uploadFile( <span>string <var>$name</var></span>, <span>string <var>$mime</var></span>, <span>string <var>$bits</var></span> )</code>
+
+		<div class="description short">
+			
+<p>Upload a media file.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Upload a media file.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$name</var></dt>
+					<dd><code>string</code><br>$name</dd>
+					<dt><var>$mime</var></dt>
+					<dd><code>string</code><br>$mime</dd>
+					<dt><var>$bits</var></dt>
+					<dd><code>string</code><br>$bits Binary data (no encoded)</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>array</code><br>
+				</div>
+
+
+				<h4>Link</h4>
+				<div class="list">
+						<a href="http://codex.wordpress.org/XML-RPC_WordPress_API/Media#wp.uploadFile">http://codex.wordpress.org/XML-RPC_WordPress_API/Media#wp.uploadFile</a><br>
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getCommentCount" id="_getCommentCount">
+
+		<td class="attributes"><code>
+			 public 
+			integer
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getCommentCount">#</a>
+		<code>getCommentCount( <span>integer <var>$postId</var></span> )</code>
+
+		<div class="description short">
+			
+<p>Retrieve comment count for a specific post.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Retrieve comment count for a specific post.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$postId</var></dt>
+					<dd><code>integer</code><br>$postId</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>integer</code><br>
+				</div>
+
+
+				<h4>Link</h4>
+				<div class="list">
+						<a href="http://codex.wordpress.org/XML-RPC_WordPress_API/Comments#wp.getCommentCount">http://codex.wordpress.org/XML-RPC_WordPress_API/Comments#wp.getCommentCount</a><br>
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getComment" id="_getComment">
+
+		<td class="attributes"><code>
+			 public 
+			array
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getComment">#</a>
+		<code>getComment( <span>integer <var>$commentId</var></span> )</code>
+
+		<div class="description short">
+			
+<p>Retrieve a comment.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Retrieve a comment.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$commentId</var></dt>
+					<dd><code>integer</code><br>$commentId</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>array</code><br>
+				</div>
+
+
+				<h4>Link</h4>
+				<div class="list">
+						<a href="http://codex.wordpress.org/XML-RPC_WordPress_API/Comments#wp.getComment">http://codex.wordpress.org/XML-RPC_WordPress_API/Comments#wp.getComment</a><br>
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getComments" id="_getComments">
+
+		<td class="attributes"><code>
+			 public 
+			array
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getComments">#</a>
+		<code>getComments( <span>array <var>$filter</var> = <span class="php-keyword1">array</span>()</span> )</code>
+
+		<div class="description short">
+			
+<p>Retrieve list of comments.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Retrieve list of comments.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$filter</var></dt>
+					<dd><code>array</code><br>$filter</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>array</code><br>
+				</div>
+
+
+				<h4>Link</h4>
+				<div class="list">
+						<a href="http://codex.wordpress.org/XML-RPC_WordPress_API/Comments#wp.getComments">http://codex.wordpress.org/XML-RPC_WordPress_API/Comments#wp.getComments</a><br>
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="newComment" id="_newComment">
+
+		<td class="attributes"><code>
+			 public 
+			integer
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_newComment">#</a>
+		<code>newComment( <span>integer <var>$post_id</var></span>, <span>array <var>$comment</var></span> )</code>
+
+		<div class="description short">
+			
+<p>Create a new comment.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Create a new comment.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$post_id</var></dt>
+					<dd><code>integer</code><br>$post_id</dd>
+					<dt><var>$comment</var></dt>
+					<dd><code>array</code><br>$comment</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>integer</code><br>new comment_id<br>
+				</div>
+
+
+				<h4>Link</h4>
+				<div class="list">
+						<a href="http://codex.wordpress.org/XML-RPC_WordPress_API/Comments#wp.newComment">http://codex.wordpress.org/XML-RPC_WordPress_API/Comments#wp.newComment</a><br>
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="editComment" id="_editComment">
+
+		<td class="attributes"><code>
+			 public 
+			boolean
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_editComment">#</a>
+		<code>editComment( <span>integer <var>$commentId</var></span>, <span>array <var>$comment</var></span> )</code>
+
+		<div class="description short">
+			
+<p>Edit an existing comment.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Edit an existing comment.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$commentId</var></dt>
+					<dd><code>integer</code><br>$commentId</dd>
+					<dt><var>$comment</var></dt>
+					<dd><code>array</code><br>$comment</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>boolean</code><br>
+				</div>
+
+
+				<h4>Link</h4>
+				<div class="list">
+						<a href="http://codex.wordpress.org/XML-RPC_WordPress_API/Comments#wp.editComment">http://codex.wordpress.org/XML-RPC_WordPress_API/Comments#wp.editComment</a><br>
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="deleteComment" id="_deleteComment">
+
+		<td class="attributes"><code>
+			 public 
+			boolean
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_deleteComment">#</a>
+		<code>deleteComment( <span>integer <var>$commentId</var></span> )</code>
+
+		<div class="description short">
+			
+<p>Remove an existing comment.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Remove an existing comment.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$commentId</var></dt>
+					<dd><code>integer</code><br>$commentId</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>boolean</code><br>
+				</div>
+
+
+				<h4>Link</h4>
+				<div class="list">
+						<a href="http://codex.wordpress.org/XML-RPC_WordPress_API/Comments#wp.deleteComment">http://codex.wordpress.org/XML-RPC_WordPress_API/Comments#wp.deleteComment</a><br>
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getCommentStatusList" id="_getCommentStatusList">
+
+		<td class="attributes"><code>
+			 public 
+			array
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getCommentStatusList">#</a>
+		<code>getCommentStatusList( )</code>
+
+		<div class="description short">
+			
+<p>Retrieve list of comment statuses.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Retrieve list of comment statuses.</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>array</code><br>
+				</div>
+
+
+				<h4>Link</h4>
+				<div class="list">
+						<a href="http://codex.wordpress.org/XML-RPC_WordPress_API/Comments#wp.getCommentStatusList">http://codex.wordpress.org/XML-RPC_WordPress_API/Comments#wp.getCommentStatusList</a><br>
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getOptions" id="_getOptions">
+
+		<td class="attributes"><code>
+			 public 
+			array
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getOptions">#</a>
+		<code>getOptions( <span>array <var>$options</var> = <span class="php-keyword1">array</span>()</span> )</code>
+
+		<div class="description short">
+			
+<p>Retrieve blog options.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Retrieve blog options.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$options</var></dt>
+					<dd><code>array</code><br>$options</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>array</code><br>
+				</div>
+
+
+				<h4>Link</h4>
+				<div class="list">
+						<a href="http://codex.wordpress.org/XML-RPC_WordPress_API/Options#wp.getOptions">http://codex.wordpress.org/XML-RPC_WordPress_API/Options#wp.getOptions</a><br>
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="setOptions" id="_setOptions">
+
+		<td class="attributes"><code>
+			 public 
+			array
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_setOptions">#</a>
+		<code>setOptions( <span>array <var>$options</var></span> )</code>
+
+		<div class="description short">
+			
+<p>Edit blog options.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Edit blog options.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$options</var></dt>
+					<dd><code>array</code><br>$options</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>array</code><br>
+				</div>
+
+
+				<h4>Link</h4>
+				<div class="list">
+						<a href="http://codex.wordpress.org/XML-RPC_WordPress_API/Options#wp.setOptions">http://codex.wordpress.org/XML-RPC_WordPress_API/Options#wp.setOptions</a><br>
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getUsersBlogs" id="_getUsersBlogs">
+
+		<td class="attributes"><code>
+			 public 
+			array
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getUsersBlogs">#</a>
+		<code>getUsersBlogs( )</code>
+
+		<div class="description short">
+			
+<p>Retrieve list of blogs for this user.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Retrieve list of blogs for this user.</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>array</code><br>
+				</div>
+
+
+				<h4>Link</h4>
+				<div class="list">
+						<a href="http://codex.wordpress.org/XML-RPC_WordPress_API/Users#wp.getUsersBlogs">http://codex.wordpress.org/XML-RPC_WordPress_API/Users#wp.getUsersBlogs</a><br>
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getUser" id="_getUser">
+
+		<td class="attributes"><code>
+			 public 
+			array
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getUser">#</a>
+		<code>getUser( <span>integer <var>$userId</var></span>, <span>array <var>$fields</var> = <span class="php-keyword1">array</span>()</span> )</code>
+
+		<div class="description short">
+			
+<p>Retrieve a user.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Retrieve a user.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$userId</var></dt>
+					<dd><code>integer</code><br>$userId</dd>
+					<dt><var>$fields</var></dt>
+					<dd><code>array</code><br>$fields Optional. List of field or meta-field names to include in response.</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>array</code><br>
+				</div>
+
+
+				<h4>Link</h4>
+				<div class="list">
+						<a href="http://codex.wordpress.org/XML-RPC_WordPress_API/Users#wp.getUser">http://codex.wordpress.org/XML-RPC_WordPress_API/Users#wp.getUser</a><br>
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getUsers" id="_getUsers">
+
+		<td class="attributes"><code>
+			 public 
+			array
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getUsers">#</a>
+		<code>getUsers( <span>array <var>$filters</var> = <span class="php-keyword1">array</span>()</span>, <span>array <var>$fields</var> = <span class="php-keyword1">array</span>()</span> )</code>
+
+		<div class="description short">
+			
+<p>Retrieve list of users.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Retrieve list of users.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$filters</var></dt>
+					<dd><code>array</code><br>$filters</dd>
+					<dt><var>$fields</var></dt>
+					<dd><code>array</code><br>$fields</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>array</code><br>
+				</div>
+
+
+				<h4>Link</h4>
+				<div class="list">
+						<a href="http://codex.wordpress.org/XML-RPC_WordPress_API/Users#wp.getUsers">http://codex.wordpress.org/XML-RPC_WordPress_API/Users#wp.getUsers</a><br>
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getProfile" id="_getProfile">
+
+		<td class="attributes"><code>
+			 public 
+			array
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getProfile">#</a>
+		<code>getProfile( <span>array <var>$fields</var> = <span class="php-keyword1">array</span>()</span> )</code>
+
+		<div class="description short">
+			
+<p>Retrieve profile of the requesting user.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Retrieve profile of the requesting user.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$fields</var></dt>
+					<dd><code>array</code><br>$fields</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>array</code><br>
+				</div>
+
+
+				<h4>Link</h4>
+				<div class="list">
+						<a href="http://codex.wordpress.org/XML-RPC_WordPress_API/Users#wp.getProfile">http://codex.wordpress.org/XML-RPC_WordPress_API/Users#wp.getProfile</a><br>
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="editProfile" id="_editProfile">
+
+		<td class="attributes"><code>
+			 public 
+			boolean
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_editProfile">#</a>
+		<code>editProfile( <span>array <var>$content</var></span> )</code>
+
+		<div class="description short">
+			
+<p>Edit profile of the requesting user.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Edit profile of the requesting user.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$content</var></dt>
+					<dd><code>array</code><br>$content</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>boolean</code><br><a
+href="http://codex.wordpress.org/XML-RPC_WordPress_API/Users#wp.editProfile">http://codex.wordpress.org/XML-RPC_WordPress_API/Users#wp.editProfile</a><br>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+	<div id="footer">
+		Wordpress XML-RPC PHP Client API documentation generated by <a href="http://apigen.org">ApiGen 2.8.0</a>
+	</div>
+</div>
+</div>
+</body>
+</html>
