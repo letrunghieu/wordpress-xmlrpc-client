@@ -602,7 +602,7 @@ class WordpressClient
 	private function _sendRequest($method, $params)
 	{
 		$this->_responseHeader	 = array();
-		$this->_request			 = xmlrpc_encode_request($method, $params, array('encoding' => 'UTF-8', 'escaping' => 'markup', 'verbosity' => 'no_white_space'));
+		$this->_request			 = xmlrpc_encode_request($method, $params, array('encoding' => 'UTF-8', 'escaping' => 'markup'));
 		$body					 = "";
 		if (function_exists('curl_init'))
 		{
