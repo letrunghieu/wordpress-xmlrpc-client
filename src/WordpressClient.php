@@ -603,6 +603,58 @@ class WordpressClient
 	{
 		$this->_responseHeader	 = array();
 		$this->_request			 = xmlrpc_encode_request($method, $params, array('encoding' => 'UTF-8', 'escaping' => 'markup'));
+		$body					 = "";
+		if (function_exists('curl_init'))
+		{
+			$body = $this->_requestWithCurl();
+		}
+		else
+		{
+			$body = $this->_requestWithFile();
+		}
+		$response = xmlrpc_decode($body);
+		if (is_array($response) && xmlrpc_is_fault($response))
+		{
+			$this->_error = ("xmlrpc: {$response['faultString']} ({$response['faultCode']})");
+			$this->_logError();
+			throw new Exception\XmlrpcException($response['faultString'], $response['faultCode']);
+		}
+		return $response;
+	}
+
+	private function _requestWithCurl()
+	{
+		$ch			 = curl_init($this->_endPoint);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_POST, 1);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $this->_request);
+		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+		$response	 = curl_exec($ch);
+		if (curl_errno($ch))
+		{
+			$message		 = curl_error($ch);
+			$code			 = curl_errno($ch);
+			$this->_error	 = "curl: {$message} ({$code})";
+			$this->_logError();
+			curl_close($ch);
+			throw new Exception\NetworkException($message, $code);
+		}
+		$httpStatusCode = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
+		if ($httpStatusCode >= 400)
+		{
+			$message		 = $response;
+			$code			 = $httpStatusCode;
+			$this->_error	 = "http: {$message} ({$code})";
+			$this->_logError();
+			curl_close($ch);
+			throw new Exception\NetworkException($message, $code);
+		}
+		curl_close($ch);
+		return $response;
+	}
+
+	private function _requestWithFile()
+	{
 		$context				 = stream_context_create(array('http' => array(
 				'method'	 => "POST",
 				'header'	 => "Content-Type: text/xml",
@@ -629,14 +681,7 @@ class WordpressClient
 			$this->_logError();
 			throw new Exception\NetworkException($ex->getMessage(), $ex->getCode());
 		}
-		$response = xmlrpc_decode($file);
-		if (is_array($response) && xmlrpc_is_fault($response))
-		{
-			$this->_error = ("xmlrpc: {$response['faultString']} ({$response['faultCode']})");
-			$this->_logError();
-			throw new Exception\XmlrpcException($response['faultString'], $response['faultCode']);
-		}
-		return $response;
+		return $file;
 	}
 
 	private function _logError()

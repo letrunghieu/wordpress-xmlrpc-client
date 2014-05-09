@@ -20,7 +20,7 @@ if ($testConfig['endpoint'] && $testConfig['admin_login'] && $testConfig['admin_
 }
 if (!$useCustomInfo)
 {
-	\VCR\VCR::configure()->enableLibraryHooks(array('stream_wrapper'));
+	\VCR\VCR::configure()->enableLibraryHooks(array('stream_wrapper', 'curl'));
 }
 else
 {
