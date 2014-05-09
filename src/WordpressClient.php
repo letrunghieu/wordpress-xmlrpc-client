@@ -602,7 +602,7 @@ class WordpressClient
 	private function _sendRequest($method, $params)
 	{
 		$this->_responseHeader	 = array();
-		$this->_request			 = xmlrpc_encode_request($method, $params, array('encoding' => 'UTF-8', 'escaping' => 'markup'));
+		$this->_request			 = xmlrpc_encode_request($method, $params, array('encoding' => 'UTF-8', 'escaping' => 'markup', 'verbosity' => 'no_white_space'));
 		$body					 = "";
 		if (function_exists('curl_init'))
 		{
@@ -669,7 +669,6 @@ class WordpressClient
 				$error					 = error_get_last();
 				$error					 = $error ? trim($error['message']) : "error";
 				$this->_error			 = "file_get_contents: {$error}";
-				$this->_responseHeader	 = $http_response_header;
 				$this->_logError();
 				throw new Exception\NetworkException($error, 127);
 			}
@@ -677,7 +676,6 @@ class WordpressClient
 		catch (\Exception $ex)
 		{
 			$this->_error			 = ("file_get_contents: {$ex->getMessage()} ({$ex->getCode()})");
-			$this->_responseHeader	 = $http_response_header;
 			$this->_logError();
 			throw new Exception\NetworkException($ex->getMessage(), $ex->getCode());
 		}
@@ -692,7 +690,6 @@ class WordpressClient
 				'endPoint'			 => $this->_endPoint,
 				'username'			 => $this->_username,
 				'password'			 => $this->_password,
-				'response_header'	 => $this->_responseHeader,
 				'request'			 => $this->_request,
 			));
 		}
