@@ -73,6 +73,7 @@ class WordpressClient
 	 * </ul>
 	 * @throws \InvalidArgumentException
 	 * @see curl_setopt
+	 * @since 2.2
 	 */
 	function setProxy($proxyConfig)
 	{
@@ -90,7 +91,6 @@ class WordpressClient
 	 * Get current proxy config
 	 * 
 	 * @return boolean|array
-	 * 
 	 * @since 2.2
 	 */
 	function getProxy()
@@ -109,7 +109,6 @@ class WordpressClient
 	 * </ul>
 	 * @throws \InvalidArgumentException
 	 * @see curl_setopt
-	 * 
 	 * @since 2.2
 	 */
 	function setAuth($authConfig)
@@ -128,7 +127,6 @@ class WordpressClient
 	 * Get the current HTTP authentication config
 	 * 
 	 * @return type
-	 * 
 	 * @since 2.2
 	 */
 	function getAuth()
