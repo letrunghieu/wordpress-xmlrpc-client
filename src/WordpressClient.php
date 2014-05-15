@@ -26,9 +26,10 @@ class WordpressClient
 
 	/**
 	 *
-	 * @var \Illuminate\Log\Writer;
+	 * @var \Illuminate\Log\Writer
 	 */
 	private $_logger;
+	private $_proxyConfig = false;
 
 	/**
 	 * Create a new client with credentials
@@ -54,6 +55,40 @@ class WordpressClient
 	function getErrorMessage()
 	{
 		return $this->_error;
+	}
+
+	/**
+	 * Set the proxy config. To disable proxy, using <code>false</code> as parameter
+	 * 
+	 * @param boolean|array $proxyConfig The configuration array has these fields:
+	 * <ul>
+	 * 	<li><code>proxy_ip</code>: the ip of the proxy server (WITHOUT port)</li>
+	 * 	<li><code>proxy_port</code>: the port of the proxy server</li>
+	 * 	<li><code>proxy_user</code>: the username for proxy authorization</li>
+	 * 	<li><code>proxy_pass</code>: the password for proxy authorization</li>
+	 * 	<li><code>proxy_ntlm</code>: whether using NTLM authentication method (cURL only)</li>
+	 * </ul>
+	 */
+	function setProxy($proxyConfig)
+	{
+		if ($proxyConfig === 'false' || is_array($proxyConfig))
+		{
+			$this->_proxyConfig = $proxyConfig;
+		}
+		else
+		{
+			throw new \InvalidArgumentException(__METHOD__ . " only accept boolean 'false' or an array as parameter.");
+		}
+	}
+
+	/**
+	 * Get current proxy config
+	 * 
+	 * @return boolean|array
+	 */
+	function getProxy()
+	{
+		return $this->_proxyConfig;
 	}
 
 	/**
@@ -624,12 +659,31 @@ class WordpressClient
 
 	private function _requestWithCurl()
 	{
-		$ch			 = curl_init($this->_endPoint);
+		$ch = curl_init($this->_endPoint);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_POST, 1);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $this->_request);
 		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
-		$response	 = curl_exec($ch);
+		if ($this->_proxyConfig != false)
+		{
+			if (isset($this->_proxyConfig['proxy_ip']))
+			{
+				curl_setopt($ch, CURLOPT_PROXY, $this->_proxyConfig['proxy_ip']);
+			}
+			if (isset($this->_proxyConfig['proxy_port']))
+			{
+				curl_setopt($ch, CURLOPT_PROXYPORT, $this->_proxyConfig['proxy_port']);
+			}
+			if (isset($this->_proxyConfig['proxy_user']) && isset($this->_proxyConfig['proxy_pass']))
+			{
+				curl_setopt($ch, CURLOPT_PROXYUSERPWD, "{$this->_proxyConfig['proxy_user']}:{$this->_proxyConfig['proxy_pass']}");
+			}
+			if (isset($this->_proxyConfig['proxy_ntlm']) && $this->_proxyConfig['proxy_ntlm'])
+			{
+				curl_setopt($ch, CURLOPT_PROXYAUTH, CURLAUTH_NTLM);
+			}
+		}
+		$response = curl_exec($ch);
 		if (curl_errno($ch))
 		{
 			$message		 = curl_error($ch);
@@ -655,27 +709,46 @@ class WordpressClient
 
 	private function _requestWithFile()
 	{
-		$context				 = stream_context_create(array('http' => array(
+		$contextOptions = array('http' => array(
 				'method'	 => "POST",
-				'header'	 => "Content-Type: text/xml",
+				'header'	 => "Content-Type: text/xml\r\n",
 				'content'	 => $this->_request
-		)));
+		));
+
+		if ($this->_proxyConfig != false)
+		{
+			if (isset($this->_proxyConfig['proxy_ip']) && isset($this->_proxyConfig['proxy_port']))
+			{
+				$contextOptions['http']['proxy']			 = "tcp://{$this->_proxyConfig['proxy_ip']}:{$this->_proxyConfig['proxy_port']}";
+				$contextOptions['http']['request_fulluri']	 = true;
+			}
+			if (isset($this->_proxyConfig['proxy_user']) && isset($this->_proxyConfig['proxy_pass']))
+			{
+				$auth = base64_encode("{$this->_proxyConfig['proxy_user']}:{$this->_proxyConfig['proxy_pass']}");
+				$contextOptions['http']['header'] .= "Proxy-Authorization: Basic {$auth}\r\n";
+			}
+			if (isset($this->_proxyConfig['proxy_ntlm']) && $this->_proxyConfig['proxy_ntlm'])
+			{
+				throw new \InvalidArgumentException('Cannot use NTLM proxy authorization without cURL extension');
+			}
+		}
+		$context				 = stream_context_create($contextOptions);
 		$http_response_header	 = array();
 		try
 		{
 			$file = @file_get_contents($this->_endPoint, false, $context);
 			if ($file === false)
 			{
-				$error					 = error_get_last();
-				$error					 = $error ? trim($error['message']) : "error";
-				$this->_error			 = "file_get_contents: {$error}";
+				$error			 = error_get_last();
+				$error			 = $error ? trim($error['message']) : "error";
+				$this->_error	 = "file_get_contents: {$error}";
 				$this->_logError();
 				throw new Exception\NetworkException($error, 127);
 			}
 		}
 		catch (\Exception $ex)
 		{
-			$this->_error			 = ("file_get_contents: {$ex->getMessage()} ({$ex->getCode()})");
+			$this->_error = ("file_get_contents: {$ex->getMessage()} ({$ex->getCode()})");
 			$this->_logError();
 			throw new Exception\NetworkException($ex->getMessage(), $ex->getCode());
 		}
@@ -687,10 +760,10 @@ class WordpressClient
 		if ($this->_logger)
 		{
 			$this->_logger->getMonolog()->error($this->_error, array(
-				'endPoint'			 => $this->_endPoint,
-				'username'			 => $this->_username,
-				'password'			 => $this->_password,
-				'request'			 => $this->_request,
+				'endPoint'	 => $this->_endPoint,
+				'username'	 => $this->_username,
+				'password'	 => $this->_password,
+				'request'	 => $this->_request,
 			));
 		}
 	}
