@@ -7,7 +7,8 @@ Created by [Hieu Le](http://www.hieule.info)
 
 MIT licensed.
 
-Current version: 2.0
+Current version: 2.2
+
 
 ## Features
 * Full test suit built in supporting testing using your own Wordpress site.
@@ -15,6 +16,7 @@ Current version: 2.0
 * Support UTF-8 content.
 * Closely implement the whole [XML-RPC WordPress API](http://codex.Wordpress.org/XML-RPC_WordPress_API).
 * Detail exception will be thrown when errors occurs.
+* (v2.2) Support proxy and http authentication
 
 ## Installation
 
