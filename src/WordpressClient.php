@@ -29,7 +29,8 @@ class WordpressClient
 	 * @var \Illuminate\Log\Writer
 	 */
 	private $_logger;
-	private $_proxyConfig = false;
+	private $_proxyConfig	 = false;
+	private $_authConfig	 = false;
 
 	/**
 	 * Create a new client with credentials
@@ -66,8 +67,10 @@ class WordpressClient
 	 * 	<li><code>proxy_port</code>: the port of the proxy server</li>
 	 * 	<li><code>proxy_user</code>: the username for proxy authorization</li>
 	 * 	<li><code>proxy_pass</code>: the password for proxy authorization</li>
-	 * 	<li><code>proxy_ntlm</code>: whether using NTLM authentication method (cURL only)</li>
+	 * 	<li><code>proxy_mode</code>: value for CURLOPT_PROXYAUTH option (default to CURLAUTH_BASIC)</li>
 	 * </ul>
+	 * @throws \InvalidArgumentException
+	 * @see curl_setopt
 	 */
 	function setProxy($proxyConfig)
 	{
@@ -89,6 +92,35 @@ class WordpressClient
 	function getProxy()
 	{
 		return $this->_proxyConfig;
+	}
+
+	/**
+	 * Set authentication info
+	 * 
+	 * @param boolean|array $authConfig the configuation array
+	 * <ul>
+	 * 	<li><code>auth_user</code>: the username for server authentication</li>
+	 * 	<li><code>auth_pass</code>: the password for server authentication</li>
+	 * 	<li><code>auth_mode</code>: value for CURLOPT_HTTPAUTH option (default to CURLAUTH_BASIC)</li>
+	 * </ul>
+	 * @throws \InvalidArgumentException
+	 * @see curl_setopt
+	 */
+	function setAuth($authConfig)
+	{
+		if ($authConfig === 'false' || is_array($authConfig))
+		{
+			$this->_authConfig = $authConfig;
+		}
+		else
+		{
+			throw new \InvalidArgumentException(__METHOD__ . " only accept boolean 'false' or an array as parameter.");
+		}
+	}
+
+	function getAuth()
+	{
+		return $this->_authConfig;
 	}
 
 	/**
@@ -678,9 +710,21 @@ class WordpressClient
 			{
 				curl_setopt($ch, CURLOPT_PROXYUSERPWD, "{$this->_proxyConfig['proxy_user']}:{$this->_proxyConfig['proxy_pass']}");
 			}
-			if (isset($this->_proxyConfig['proxy_ntlm']) && $this->_proxyConfig['proxy_ntlm'])
+			if (isset($this->_proxyConfig['proxy_mode']))
 			{
-				curl_setopt($ch, CURLOPT_PROXYAUTH, CURLAUTH_NTLM);
+				curl_setopt($ch, CURLOPT_PROXYAUTH, $this->_proxyConfig['proxy_mode']);
+			}
+		}
+		if ($this->_authConfig)
+		{
+			if (isset($this->_authConfig['auth_user']) && isset($this->_authConfig['auth_pass']))
+			{
+				curl_setopt($ch, CURLOPT_USERPWD, "{$this->_authConfig['auth_user']}:{$this->_authConfig['auth_pass']}");
+				curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+			}
+			if (isset($this->_authConfig['auth_mode']))
+			{
+				curl_setopt($ch, CURLOPT_HTTPAUTH, $this->_authConfig['auth_mode']);
 			}
 		}
 		$response = curl_exec($ch);
@@ -727,9 +771,21 @@ class WordpressClient
 				$auth = base64_encode("{$this->_proxyConfig['proxy_user']}:{$this->_proxyConfig['proxy_pass']}");
 				$contextOptions['http']['header'] .= "Proxy-Authorization: Basic {$auth}\r\n";
 			}
-			if (isset($this->_proxyConfig['proxy_ntlm']) && $this->_proxyConfig['proxy_ntlm'])
+			if (isset($this->_proxyConfig['proxy_mode']))
 			{
 				throw new \InvalidArgumentException('Cannot use NTLM proxy authorization without cURL extension');
+			}
+		}
+		if ($this->_authConfig)
+		{
+			if (isset($this->_authConfig['auth_user']) && isset($this->_authConfig['auth_pass']))
+			{
+				$auth = base64_encode("{$this->_authConfig['auth_user']}:{$this->_authConfig['auth_pass']}");
+				$contextOptions['http']['header'] .= "Authorization: Basic {$auth}\r\n";
+			}
+			if (isset($this->_authConfig['auth_mode']))
+			{
+				throw new \InvalidArgumentException('Cannot use other authentication method without cURL extension');
 			}
 		}
 		$context				 = stream_context_create($contextOptions);
@@ -764,6 +820,8 @@ class WordpressClient
 				'username'	 => $this->_username,
 				'password'	 => $this->_password,
 				'request'	 => $this->_request,
+				'proxy'		 => $this->_proxyConfig,
+				'auth'		 => $this->_authConfig,
 			));
 		}
 	}
