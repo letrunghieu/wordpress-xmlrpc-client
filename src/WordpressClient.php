@@ -7,7 +7,7 @@ use Illuminate\Log\Writer;
 /**
  * A XML-RPC client that implement the {@link http://codex.wordpress.org/XML-RPC_WordPress_API Wordpress API}.
  * 
- * @version 2.0
+ * @version 2.2
  * 
  * @author Hieu Le <http://www.hieule.info>
  * 
@@ -52,6 +52,8 @@ class WordpressClient
 	 * Get the latest error message
 	 * 
 	 * @return string
+	 * 
+	 * @since 2.2
 	 */
 	function getErrorMessage()
 	{
@@ -88,6 +90,8 @@ class WordpressClient
 	 * Get current proxy config
 	 * 
 	 * @return boolean|array
+	 * 
+	 * @since 2.2
 	 */
 	function getProxy()
 	{
@@ -105,6 +109,8 @@ class WordpressClient
 	 * </ul>
 	 * @throws \InvalidArgumentException
 	 * @see curl_setopt
+	 * 
+	 * @since 2.2
 	 */
 	function setAuth($authConfig)
 	{
@@ -118,6 +124,13 @@ class WordpressClient
 		}
 	}
 
+	/**
+	 * Get the current HTTP authentication config
+	 * 
+	 * @return type
+	 * 
+	 * @since 2.2
+	 */
 	function getAuth()
 	{
 		return $this->_authConfig;
