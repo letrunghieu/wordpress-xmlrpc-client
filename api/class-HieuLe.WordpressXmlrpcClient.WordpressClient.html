@@ -208,6 +208,188 @@
 		</div>
 		</div></td>
 	</tr>
+	<tr data-order="setProxy" id="_setProxy">
+
+		<td class="attributes"><code>
+			 public 
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_setProxy">#</a>
+		<code>setProxy( <span>boolean|array <var>$proxyConfig</var></span> )</code>
+
+		<div class="description short">
+			
+<p>Set the proxy config. To disable proxy, using <code>&lt;span
+class="php-keyword1"&gt;false&lt;/span&gt;</code> as parameter</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Set the proxy config. To disable proxy, using <code>&lt;span
+class="php-keyword1"&gt;false&lt;/span&gt;</code> as parameter</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$proxyConfig</var></dt>
+					<dd><code>boolean|array</code><br>$proxyConfig The configuration array has these fields:
+<ul>
+	<li><code>proxy_ip</code>: the ip of the proxy server (WITHOUT port)</li>
+
+	<li><code>proxy_port</code>: the port of the proxy server</li>
+
+	<li><code>proxy_user</code>: the username for proxy authorization</li>
+
+	<li><code>proxy_pass</code>: the password for proxy authorization</li>
+
+	<li><code>proxy_mode</code>: value for CURLOPT_PROXYAUTH option (default to
+	CURLAUTH_BASIC)</li>
+</ul>
+</dd>
+				</dl></div>
+
+
+				<h4>Throws</h4>
+				<div class="list">
+					<code>InvalidArgumentException</code><br>
+				</div>
+
+				<h4>See</h4>
+				<div class="list">
+						curl_setopt<br>
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getProxy" id="_getProxy">
+
+		<td class="attributes"><code>
+			 public 
+			boolean|array
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getProxy">#</a>
+		<code>getProxy( )</code>
+
+		<div class="description short">
+			
+<p>Get current proxy config</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Get current proxy config</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>boolean|array</code><br>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="setAuth" id="_setAuth">
+
+		<td class="attributes"><code>
+			 public 
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_setAuth">#</a>
+		<code>setAuth( <span>boolean|array <var>$authConfig</var></span> )</code>
+
+		<div class="description short">
+			
+<p>Set authentication info</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Set authentication info</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$authConfig</var></dt>
+					<dd><code>boolean|array</code><br>$authConfig the configuation array
+<ul>
+	<li><code>auth_user</code>: the username for server authentication</li>
+
+	<li><code>auth_pass</code>: the password for server authentication</li>
+
+	<li><code>auth_mode</code>: value for CURLOPT_HTTPAUTH option (default to
+	CURLAUTH_BASIC)</li>
+</ul>
+</dd>
+				</dl></div>
+
+
+				<h4>Throws</h4>
+				<div class="list">
+					<code>InvalidArgumentException</code><br>
+				</div>
+
+				<h4>See</h4>
+				<div class="list">
+						curl_setopt<br>
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getAuth" id="_getAuth">
+
+		<td class="attributes"><code>
+			 public 
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getAuth">#</a>
+		<code>getAuth( )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
 	<tr data-order="getPost" id="_getPost">
 
 		<td class="attributes"><code>
