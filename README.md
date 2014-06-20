@@ -32,7 +32,7 @@ Choose one of the following methods to install **Wordpress XML-RPC PHP Client**
 Add this dependency into your `composer.json` file
 
 ```
-hieu-le/wordpress-xmlrpc-client:"~2.0"
+"hieu-le/wordpress-xmlrpc-client":"~2.0"
 ```
 
 After that, run `composer update` to install this package.
