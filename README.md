@@ -1,13 +1,15 @@
 Wordpress XML-RPC PHP Client
 =======================
 
+[![Build Status](https://travis-ci.org/letrunghieu/wordpress-xmlrpc-client.svg?branch=master)](https://travis-ci.org/letrunghieu/wordpress-xmlrpc-client) [![Latest Stable Version](https://poser.pugx.org/hieu-le/wordpress-xmlrpc-client/v/stable.svg)](https://packagist.org/packages/hieu-le/wordpress-xmlrpc-client) [![Total Downloads](https://poser.pugx.org/hieu-le/wordpress-xmlrpc-client/downloads.svg)](https://packagist.org/packages/hieu-le/wordpress-xmlrpc-client) [![Latest Unstable Version](https://poser.pugx.org/hieu-le/wordpress-xmlrpc-client/v/unstable.svg)](https://packagist.org/packages/hieu-le/wordpress-xmlrpc-client) [![License](https://poser.pugx.org/hieu-le/wordpress-xmlrpc-client/license.svg)](https://packagist.org/packages/hieu-le/wordpress-xmlrpc-client)
+
 A PHP client for Wordpress websites that closely implement the [XML-RPC WordPress API](http://codex.Wordpress.org/XML-RPC_WordPress_API)
 
 Created by [Hieu Le](http://www.hieule.info)
 
 MIT licensed.
 
-Current version: 2.2
+Current version: 2.2.1
 
 
 ## Features
@@ -16,7 +18,8 @@ Current version: 2.2
 * Support UTF-8 content.
 * Closely implement the whole [XML-RPC WordPress API](http://codex.Wordpress.org/XML-RPC_WordPress_API).
 * Detail exception will be thrown when errors occurs.
-* (v2.2) Support proxy and http authentication
+* (v2.2) Support proxy and http authentication.
+* (v2.2.1) Allow value of `DateTime` class to be convert correctly to `datetime.iso8601` XML-RPC type,
 
 ## Installation
 
@@ -66,6 +69,7 @@ $wpLog->useFiles('path-to-your-log-file');
 # The logger instance is optional
 $wpClient = new \HieuLe\WordpressXmlrpcClient\WordpressClient($endpoint, 'username', 'password', $wpLog);
 ```
+To use date time value, you must use an instance of `DateTime` class instead of a string.
 
 There will be 2 types of exception may be thrown from this library:
 
