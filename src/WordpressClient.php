@@ -680,6 +680,7 @@ class WordpressClient
 	private function _sendRequest($method, $params)
 	{
 		$this->_responseHeader	 = array();
+        $this->_setXmlrpcType($params);
 		$this->_request			 = xmlrpc_encode_request($method, $params, array('encoding' => 'UTF-8', 'escaping' => 'markup'));
 		$body					 = "";
 		if (function_exists('curl_init'))
@@ -699,6 +700,22 @@ class WordpressClient
 		}
 		return $response;
 	}
+    
+    private function _setXmlrpcType(&$array)
+    {
+        foreach($array as $key => $element)
+        {
+            if (is_a($element, '\DateTime'))
+            {
+                $array[$key] = $element->format("Ymd\TH:i:sO");
+                xmlrpc_set_type($array[$key], 'datetime');
+            }
+            elseif(is_array($element))
+            {
+                $this->_setXmlrpcType($array[$key]);
+            }
+        }
+    }
 
 	private function _requestWithCurl()
 	{

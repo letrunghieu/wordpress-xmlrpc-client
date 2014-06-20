@@ -301,12 +301,15 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testNewPostWithAdvancedFields()
 	{
-		$postId = (int) $this->client->newPost('Lorem ipsum advanced', 'This is a demo post', array('custom_fields' => array(array('key' => 'foo', 'value' => 'bar'))));
+        $postDate = new DateTime('20140101T00:00:00+07:00');
+		$postId = (int) $this->client->newPost('Lorem ipsum advanced', 'This is a demo post', array('post_date' => $postDate, 'custom_fields' => array(array('key' => 'foo', 'value' => 'bar'))));
 		$this->assertGreaterThan(0, $postId);
 
 		$post	 = $this->client->getPost($postId);
 		$this->assertSame('Lorem ipsum advanced', $post['post_title']);
 		$this->assertGreaterThanOrEqual(1, count($post['custom_fields']));
+        $this->assertSame($postDate->format('Ymd\TH:i:s'), $post['post_date']->scalar);
+        $this->assertSame($postDate->getTimestamp(), $post['post_date_gmt']->timestamp);
 		$ok		 = false;
 		foreach ($post['custom_fields'] as $field)
 		{
