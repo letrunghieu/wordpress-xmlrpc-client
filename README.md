@@ -25,7 +25,7 @@ Current version: 2.2.1
 
 You will need [Composer](https://getcomposer.org/) installed on your machine to use this library. Verify that composer is installed by typing this command
 
-```
+```bash
 composer --version
 ```
 
@@ -34,7 +34,7 @@ Choose one of the following methods to install **Wordpress XML-RPC PHP Client**
 ### Your project has used composer:
 Add this dependency into your `composer.json` file
 
-```
+```json
 "hieu-le/wordpress-xmlrpc-client":"~2.0"
 ```
 
@@ -43,7 +43,7 @@ After that, run `composer update` to install this package.
 ### Your project does not use composer:
 Clone or download the archive of this package from [github](https://github.com/letrunghieu/Wordpress-xmlrpc-client/releases). Copy the package directory into a location of your project. Open the command line terminal and do these command
 
-```
+```bash
 cd library/installed/dir
 composer install
 ```
