@@ -36,8 +36,8 @@ class WordpressClient
      * Create a new client with credentials
      * 
      * @param string $xmlrpcEndPoint The wordpress XML-RPC endpoint
-     * @param string $username The client's username
-     * @param string $password The client's password
+     * @param string $username       The client's username
+     * @param string $password       The client's password
      * @param \Illuminate\Log\Writer $logger
      */
     public function __construct($xmlrpcEndPoint, $username, $password, Writer $logger = null)
@@ -137,8 +137,9 @@ class WordpressClient
     /**
      * Retrieve a post of any registered post type. 
      * 
-     * @param integer $postId	post id The id of selected post
-     * @param array $fields	Optional. List of field or meta-field names to include in response.
+     * @param integer $postId the id of selected post
+     * @param array   $fields (optional) list of field or meta-field names to include in response.
+     * 
      * @return array
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.getPosts
      */
@@ -158,8 +159,9 @@ class WordpressClient
     /**
      * Retrieve list of posts of any registered post type. 
      * 
-     * @param array $filters Optional
-     * @param array $fields	Optional
+     * @param array $filters optional
+     * @param array $fields	 optional
+     * 
      * @return array array of struct
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.getPosts
      */
@@ -176,11 +178,12 @@ class WordpressClient
     /**
      * Create a new post of any registered post type. 
      * 
-     * @param string $title	the post title
-     * @param string $body	the post body
-     * @param array $categorieIds	the list of category ids
-     * @param integer $thumbnailId	the thumbnail id
-     * @param array $content	the content array, see more at wordpress documentation
+     * @param string  $title        the post title
+     * @param string  $body	        the post body
+     * @param array   $categorieIds	the list of category ids
+     * @param integer $thumbnailId  the thumbnail id
+     * @param array   $content	    the content array, see more at wordpress documentation
+     * 
      * @return integer the new post id
      * 
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.newPost
@@ -202,12 +205,13 @@ class WordpressClient
     /**
      * Edit an existing post of any registered post type. 
      * 
-     * @param integer $postId	the id of selected post
-     * @param string $title	the new title
-     * @param string $body	the new body
-     * @param array $categorieIds	the new list of category ids
-     * @param integer $thumbnailId	the new thumbnail id
-     * @param array $content	the advanced array
+     * @param integer $postId       the id of selected post
+     * @param string  $title        the new title
+     * @param string  $body         the new body
+     * @param array   $categorieIds the new list of category ids
+     * @param integer $thumbnailId  the new thumbnail id
+     * @param array   $content      the advanced array
+     * 
      * @return boolean
      * 
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.editPost
@@ -221,7 +225,8 @@ class WordpressClient
     /**
      * Delete an existing post of any registered post type. 
      * 
-     * @param integer $postId	the id of selected post
+     * @param integer $postId the id of selected post
+     * 
      * @return boolean
      * 
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.deletePost
@@ -236,7 +241,8 @@ class WordpressClient
      * Retrieve a registered post type. 
      * 
      * @param string $postTypeName the post type name
-     * @param array $fields	Optional. List of field or meta-field names to include in response. 
+     * @param array  $fields       (optional) list of field or meta-field names to include in response. 
+     * 
      * @return array
      * 
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.getPostType
@@ -252,6 +258,7 @@ class WordpressClient
      * 
      * @param array $filter
      * @param array $fields
+     * 
      * @return array	list of struct
      * 
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.getPostTypes
@@ -292,6 +299,7 @@ class WordpressClient
      * Retrieve information about a taxonomy. 
      * 
      * @param string $taxonomy the name of the selected taxonomy
+     * 
      * @return array	taxonomy information
      * 
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Taxonomies#wp.getTaxonomy
@@ -319,7 +327,8 @@ class WordpressClient
      * Retrieve a taxonomy term. 
      * 
      * @param integer $termId 
-     * @param string $taxonomy
+     * @param string  $taxonomy
+     * 
      * @return array
      * 
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Taxonomies#wp.getTerm
@@ -334,7 +343,8 @@ class WordpressClient
      * Retrieve list of terms in a taxonomy. 
      * 
      * @param string $taxonomy
-     * @param array $filter
+     * @param array  $filter
+     * 
      * @return array
      * 
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Taxonomies#wp.getTerms
@@ -353,6 +363,7 @@ class WordpressClient
      * @param string $slug
      * @param string $description
      * @param integer $parentId
+     *  
      * @return integer new term id
      * 
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Taxonomies#wp.newTerm
@@ -385,6 +396,7 @@ class WordpressClient
      * @param integer $termId
      * @param string $taxonomy
      * @param array $content
+     * 
      * @return boolean
      * 
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Taxonomies#wp.editTerm
@@ -401,6 +413,7 @@ class WordpressClient
      * 
      * @param integer $termId
      * @param string $taxonomy
+     * 
      * @return boolean
      * 
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Taxonomies#wp.deleteTerm
@@ -415,6 +428,7 @@ class WordpressClient
      * Retrieve a media item (i.e, attachment). 
      * 
      * @param integer $itemId
+     * 
      * @return array
      * 
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Media#wp.getMediaItem
@@ -429,6 +443,7 @@ class WordpressClient
      * Retrieve list of media items. 
      * 
      * @param array $filter
+     * 
      * @return array
      * 
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Media#wp.getMediaLibrary
@@ -442,9 +457,12 @@ class WordpressClient
     /**
      * Upload a media file. 
      * 
-     * @param string $name
-     * @param string $mime
-     * @param string $bits Binary data (no encoded)
+     * @param string  $name      file name
+     * @param string  $mime      file mime type
+     * @param string  $bits      binary data (no encoded)
+     * @param boolean $overwrite (optional)
+     * @param int     $postId    (optional)
+     * 
      * @return array
      * 
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Media#wp.uploadFile
@@ -473,6 +491,7 @@ class WordpressClient
      * Retrieve comment count for a specific post. 
      * 
      * @param integer $postId
+     * 
      * @return integer
      * 
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Comments#wp.getCommentCount
@@ -501,6 +520,7 @@ class WordpressClient
      * Retrieve list of comments. 
      * 
      * @param array $filter
+     * 
      * @return array
      * 
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Comments#wp.getComments
@@ -515,7 +535,8 @@ class WordpressClient
      * Create a new comment.
      * 
      * @param integer $post_id
-     * @param array $comment
+     * @param array   $comment
+     * 
      * @return integer new comment_id
      * 
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Comments#wp.newComment
@@ -530,7 +551,8 @@ class WordpressClient
      * Edit an existing comment. 
      * 
      * @param integer $commentId
-     * @param array $comment
+     * @param array   $comment
+     * 
      * @return boolean
      * 
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Comments#wp.editComment
@@ -545,6 +567,7 @@ class WordpressClient
      * Remove an existing comment. 
      * 
      * @param integer $commentId
+     * 
      * @return boolean
      * 
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Comments#wp.deleteComment
@@ -557,6 +580,7 @@ class WordpressClient
 
     /**
      * Retrieve list of comment statuses. 
+     * 
      * @return array
      * 
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Comments#wp.getCommentStatusList
@@ -571,6 +595,7 @@ class WordpressClient
      * Retrieve blog options. 
      * 
      * @param array $options
+     * 
      * @return array
      * 
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Options#wp.getOptions
@@ -592,6 +617,7 @@ class WordpressClient
      * Edit blog options. 
      * 
      * @param array $options
+     * 
      * @return array
      * 
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Options#wp.setOptions
@@ -657,6 +683,7 @@ class WordpressClient
      * Retrieve profile of the requesting user. 
      * 
      * @param array $fields
+     * 
      * @return array
      * 
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Users#wp.getProfile
@@ -675,6 +702,7 @@ class WordpressClient
      * Edit profile of the requesting user. 
      * 
      * @param array $content
+     * 
      * @return boolean
      * 
      * http://codex.wordpress.org/XML-RPC_WordPress_API/Users#wp.editProfile
