@@ -7,7 +7,7 @@ use Illuminate\Log\Writer;
 /**
  * A XML-RPC client that implement the {@link http://codex.wordpress.org/XML-RPC_WordPress_API Wordpress API}.
  * 
- * @version 2.2
+ * @version 2.2.1
  * 
  * @author Hieu Le <http://www.hieule.info>
  * 
@@ -701,6 +701,13 @@ class WordpressClient
 		return $response;
 	}
     
+    /**
+     * Set the correct type for each element in an array
+     * 
+     * @param array $array
+     * 
+     * @since 2.2
+     */
     private function _setXmlrpcType(&$array)
     {
         foreach($array as $key => $element)
