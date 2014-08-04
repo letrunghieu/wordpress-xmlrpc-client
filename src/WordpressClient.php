@@ -712,6 +712,11 @@ class WordpressClient
         $params = array(1, $this->_username, $this->_password, $content);
         return $this->_sendRequest('wp.editProfile', $params);
     }
+    
+    public function callCustomMethod($method, $params)
+    {
+        return $this->_sendRequest($method, $params);
+    }
 
     private function _sendRequest($method, $params)
     {
