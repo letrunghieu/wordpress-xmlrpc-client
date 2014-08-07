@@ -77,7 +77,7 @@ class WordpressClient
      */
     function setProxy($proxyConfig)
     {
-        if ($proxyConfig === 'false' || is_array($proxyConfig))
+        if ($proxyConfig === false || is_array($proxyConfig))
         {
             $this->_proxyConfig = $proxyConfig;
         }
@@ -113,7 +113,7 @@ class WordpressClient
      */
     function setAuth($authConfig)
     {
-        if ($authConfig === 'false' || is_array($authConfig))
+        if ($authConfig === false || is_array($authConfig))
         {
             $this->_authConfig = $authConfig;
         }
