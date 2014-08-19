@@ -724,7 +724,7 @@ class WordpressClient
         $this->_setXmlrpcType($params);
         $this->_request        = xmlrpc_encode_request($method, $params, array('encoding' => 'UTF-8', 'escaping' => 'markup'));
         $body                  = "";
-        if (false && function_exists('curl_init'))
+        if (function_exists('curl_init'))
         {
             $body = $this->_requestWithCurl();
         }
