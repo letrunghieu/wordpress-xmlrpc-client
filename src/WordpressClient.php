@@ -724,7 +724,7 @@ class WordpressClient
         $this->_setXmlrpcType($params);
         $this->_request        = xmlrpc_encode_request($method, $params, array('encoding' => 'UTF-8', 'escaping' => 'markup'));
         $body                  = "";
-        if (function_exists('curl_init'))
+        if (false && function_exists('curl_init'))
         {
             $body = $this->_requestWithCurl();
         }
@@ -833,7 +833,7 @@ class WordpressClient
     {
         $contextOptions = array('http' => array(
                 'method'  => "POST",
-                'header'  => "Content-Type: text/xml\r\n",
+                'header'  => "Content-Type: text/xml\r\nUser-Agent: PHP/" . phpversion() . "\r\n",
                 'content' => $this->_request
         ));
 
