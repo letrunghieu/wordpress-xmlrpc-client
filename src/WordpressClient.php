@@ -772,6 +772,8 @@ class WordpressClient
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $this->_request);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+        $curl_version = curl_version();
+        curl_setopt($ch, CURLOPT_USERAGENT, 'curl/' . $curl_version['version']);
         if ($this->_proxyConfig != false)
         {
             if (isset($this->_proxyConfig['proxy_ip']))
@@ -831,7 +833,7 @@ class WordpressClient
     {
         $contextOptions = array('http' => array(
                 'method'  => "POST",
-                'header'  => "Content-Type: text/xml\r\n",
+                'header'  => "Content-Type: text/xml\r\nUser-Agent: PHP/" . phpversion() . "\r\n",
                 'content' => $this->_request
         ));
 
