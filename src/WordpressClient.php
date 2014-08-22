@@ -43,6 +43,30 @@ class WordpressClient
     }
 
     /**
+     * Add a callback for `error` event
+     *
+     * @param Closure $callback
+     *
+     * @since 2.4.0
+     */
+    function onError($callback)
+    {
+        $this->_callbacks['error'][] = $callback;
+    }
+
+    /**
+     * Add a callback for `sending` event
+     *
+     * @param Closure $callback
+     *
+     * @since 2.4.0
+     */
+    function onSending($callback)
+    {
+        $this->_callbacks['sending'][] = $callback;
+    }
+
+    /**
      * Set the endpoint, username and password for next requests
      *
      * @param string $xmlrpcEndPoint The wordpress XML-RPC endpoint
