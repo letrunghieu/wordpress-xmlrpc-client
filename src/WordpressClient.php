@@ -75,7 +75,7 @@ class WordpressClient
      * 
      * @since 2.4.0
      */
-    function setCredentials($endpoint, $username, $password)
+    function setCredentials($xmlrpcEndPoint, $username, $password)
     {
         $this->_endPoint = $xmlrpcEndPoint;
         $this->_username = $username;
