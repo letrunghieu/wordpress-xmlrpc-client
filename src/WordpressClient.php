@@ -732,13 +732,29 @@ class WordpressClient
     {
         if (!$this->_endPoint || !$this->_username || !$this->_password)
         {
-            throw new Exception("Invalid credentials");
+            throw new Exception("Invalid credentials " . json_encode(array('endpoint' => $this->_endPoint, 'username' => $this->_username, 'password' => $this->_password)));
             
         }
         $this->_responseHeader = array();
         $this->_setXmlrpcType($params);
         $this->_request        = xmlrpc_encode_request($method, $params, array('encoding' => 'UTF-8', 'escaping' => 'markup'));
         $body                  = "";
+        // Call sending event callbacks
+        $callbacks = $this->_getCallback('sending');
+        $event = array(
+            'event'    => 'sending',
+            'endpoint' => $this->_endPoint,
+            'username' => $this->_username,
+            'password' => $this->_password,
+            'method'   => $method,
+            'params'   => $params,
+            'request'  => $this->_request,
+            'proxy'    => $this->_proxyConfig,
+            'auth'     => $this->_authConfig,
+        );
+        foreach ($callbacks as $callback) {
+            $callback($event);
+        }
         if (function_exists('curl_init'))
         {
             $body = $this->_requestWithCurl();
@@ -906,17 +922,28 @@ class WordpressClient
 
     private function _logError()
     {
-        if ($this->_logger)
+        $callbacks = $this->_getCallback('error');
+        $event = array(
+            'event'    => 'error',
+            'endPoint' => $this->_endPoint,
+            'request'  => $this->_request,
+            'proxy'    => $this->_proxyConfig,
+            'auth'     => $this->_authConfig,
+        );
+        foreach($callbacks as $callback)
         {
-            $this->_logger->getMonolog()->error($this->_error, array(
-                'endPoint' => $this->_endPoint,
-                'username' => $this->_username,
-                'password' => $this->_password,
-                'request'  => $this->_request,
-                'proxy'    => $this->_proxyConfig,
-                'auth'     => $this->_authConfig,
-            ));
+            $callback($this->_error, $event);
         }
+    }
+
+    private function _getCallback($name)
+    {
+        $callbacks = array();
+        if (isset($this->_callbacks[$name]) && is_array($this->_callbacks[$name]))
+        {
+            $callbacks = $this->_callbacks[$name];
+        }
+        return $callbacks;
     }
 
 }
