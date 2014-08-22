@@ -730,6 +730,11 @@ class WordpressClient
 
     private function _sendRequest($method, $params)
     {
+        if (!$this->_endPoint || !$this->_username || !$this->_password)
+        {
+            throw new Exception("Invalid credentials");
+            
+        }
         $this->_responseHeader = array();
         $this->_setXmlrpcType($params);
         $this->_request        = xmlrpc_encode_request($method, $params, array('encoding' => 'UTF-8', 'escaping' => 'markup'));
