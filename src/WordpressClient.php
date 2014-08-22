@@ -23,6 +23,7 @@ class WordpressClient
     private $_error;
     private $_proxyConfig = false;
     private $_authConfig  = false;
+    private $_userAgent;
 
     /**
      * Event custom callbacks
@@ -40,6 +41,7 @@ class WordpressClient
     public function __construct($xmlrpcEndPoint = null, $username = null, $password = null, $logger = null)
     {
         $this->setCredentials($xmlrpcEndPoint, $username, $password);
+        $this->_userAgent = $this->getDefaultUserAgent();
     }
 
     /**
@@ -80,6 +82,39 @@ class WordpressClient
         $this->_endPoint = $xmlrpcEndPoint;
         $this->_username = $username;
         $this->_password = $password;
+    }
+
+    /**
+     * Get library default user agent
+     *
+     * @return string
+     *
+     * @since 2.4.0
+     */
+    function getDefaultUserAgent()
+    {
+        $phpVersion = phpversion();
+        $curlVersion = curl_version();
+        return "XML-RPC client (hieu-le/wordpress-xmlrpc-client 2.4.0) PHP {$phpVersion} cUrl {$curlVersion['version']}";
+    }
+
+    /**
+     * Set the user agent for next requests
+     *
+     * @param string $userAgent custom user agent, give a falsy value to use library user agent
+     *
+     * @since 2.4.0
+     */
+    function setUserAgent($userAgent)
+    {
+        if ($userAgent)
+        {
+            $this->_userAgent = $userAgent;
+        }
+        else
+        {
+            $this->_userAgent = $this->getDefaultUserAgent();
+        }
     }
 
     /**
@@ -837,8 +872,7 @@ class WordpressClient
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $this->_request);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
-        $curl_version = curl_version();
-        curl_setopt($ch, CURLOPT_USERAGENT, 'curl/' . $curl_version['version']);
+        curl_setopt($ch, CURLOPT_USERAGENT, $this->_userAgent);
         if ($this->_proxyConfig != false)
         {
             if (isset($this->_proxyConfig['proxy_ip']))
@@ -897,9 +931,10 @@ class WordpressClient
     private function _requestWithFile()
     {
         $contextOptions = array('http' => array(
-                'method'  => "POST",
-                'header'  => "Content-Type: text/xml\r\nUser-Agent: PHP/" . phpversion() . "\r\n",
-                'content' => $this->_request
+                'method'     => "POST",
+                'user_agent' => $this->_userAgent,
+                'header'     => "Content-Type: text/xml\r\n",
+                'content'    => $this->_request
         ));
 
         if ($this->_proxyConfig != false)
