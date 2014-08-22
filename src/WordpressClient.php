@@ -764,9 +764,9 @@ class WordpressClient
 
     private function _sendRequest($method, $params)
     {
-        if (!$this->_endPoint || !$this->_username || !$this->_password)
+        if (!$this->_endPoint)
         {
-            throw new \Exception("Invalid credentials " . json_encode(array('endpoint' => $this->_endPoint, 'username' => $this->_username, 'password' => $this->_password)));
+            throw new \Exception("Invalid endpoint " . json_encode(array('endpoint' => $this->_endPoint, 'username' => $this->_username, 'password' => $this->_password)));
             
         }
         $this->_responseHeader = array();
