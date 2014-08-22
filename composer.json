@@ -21,10 +21,11 @@
 		"ext-xmlrpc": "*"
 	},
 	"require-dev": {
-		"phpunit/phpunit": "3.7.*",
+		"phpunit/phpunit": "*",
 		"symfony/yaml": "2.*",
 		"php-vcr/php-vcr": "dev-master",
-		"php-vcr/phpunit-testlistener-vcr": "*"
+		"php-vcr/phpunit-testlistener-vcr": "*",
+		"illuminate/support": "~4.0"
 	},
 	"autoload": {
 		"psr-4": {
