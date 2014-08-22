@@ -2,12 +2,10 @@
 
 namespace HieuLe\WordpressXmlrpcClient;
 
-use Illuminate\Log\Writer;
-
 /**
  * A XML-RPC client that implement the {@link http://codex.wordpress.org/XML-RPC_WordPress_API Wordpress API}.
  * 
- * @version 2.2.1
+ * @version 2.4.0
  * 
  * @author Hieu Le <http://www.hieule.info>
  * 
@@ -23,29 +21,41 @@ class WordpressClient
     private $_response;
     private $_responseHeader = array();
     private $_error;
-
-    /**
-     *
-     * @var \Illuminate\Log\Writer
-     */
-    private $_logger;
     private $_proxyConfig = false;
     private $_authConfig  = false;
 
     /**
-     * Create a new client with credentials
+     * Event custom callbacks
+     */
+    private $_callbacks = array();
+
+    /**
+     * Create a new client
      * 
+     * @param string $xmlrpcEndPoint The wordpress XML-RPC endpoint (optional)
+     * @param string $username       The client's username (optional)
+     * @param string $password       The client's password (optional)
+     * @param \Illuminate\Log\Writer $logger deprecated. This variable will not be used since 2.4.0 
+     */
+    public function __construct($xmlrpcEndPoint = null, $username = null, $password = null, $logger = null)
+    {
+        $this->setCredentials($xmlrpcEndPoint, $username, $password);
+    }
+
+    /**
+     * Set the endpoint, username and password for next requests
+     *
      * @param string $xmlrpcEndPoint The wordpress XML-RPC endpoint
      * @param string $username       The client's username
      * @param string $password       The client's password
-     * @param \Illuminate\Log\Writer $logger
+     * 
+     * @since 2.4.0
      */
-    public function __construct($xmlrpcEndPoint, $username, $password, Writer $logger = null)
+    function setCredentials($endpoint, $username, $password)
     {
         $this->_endPoint = $xmlrpcEndPoint;
         $this->_username = $username;
         $this->_password = $password;
-        $this->_logger   = $logger;
     }
 
     /**
