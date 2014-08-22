@@ -747,6 +747,16 @@ class WordpressClient
         return $this->_sendRequest('wp.editProfile', $params);
     }
     
+    /**
+     * Call a custom XML-RPC method
+     * 
+     * @param string $method the method name
+     * @param array  $params the parameters of this call
+     * 
+     * @return mixed
+     *
+     * @since 2.3.0
+     */
     public function callCustomMethod($method, $params)
     {
         return $this->_sendRequest($method, $params);
