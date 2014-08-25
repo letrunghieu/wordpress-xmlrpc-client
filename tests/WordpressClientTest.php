@@ -1510,5 +1510,19 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
         $user   = $this->client->getProfile();
         $this->assertSame('JD', $user['nickname']);
     }
+    
+    public function testUserAgent()
+    {
+        $xmlrpcClient = new HieuLe\WordpressXmlrpcClient\WordpressClient();
+        $defaultUserAgent = $xmlrpcClient->getDefaultUserAgent();
+        $this->assertNotEmpty($xmlrpcClient->getUserAgent());
+        
+        $cutomUserAgent = "XML-RPC client";
+        $xmlrpcClient->setUserAgent($cutomUserAgent);
+        $this->assertSame($cutomUserAgent, $xmlrpcClient->getUserAgent());
+        
+        $xmlrpcClient->setUserAgent(false);
+        $this->assertSame($defaultUserAgent, $xmlrpcClient->getUserAgent());
+    }
 
 }

@@ -116,6 +116,16 @@ class WordpressClient
             $this->_userAgent = $this->getDefaultUserAgent();
         }
     }
+    
+    /**
+     * Get current user agent string
+     * 
+     * @return string
+     */
+    function getUserAgent()
+    {
+        return $this->_userAgent;
+    }
 
     /**
      * Get the latest error message
