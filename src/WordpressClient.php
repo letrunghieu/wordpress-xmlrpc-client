@@ -18,7 +18,6 @@ class WordpressClient
     private $_password;
     private $_endPoint;
     private $_request;
-    private $_response;
     private $_responseHeader = array();
     private $_error;
     private $_proxyConfig = false;
@@ -121,6 +120,8 @@ class WordpressClient
      * Get current user agent string
      * 
      * @return string
+     * 
+     * @since 2.4.0
      */
     function getUserAgent()
     {
