@@ -2,9 +2,9 @@
 <html>
 
   <head>
-    <meta charset='utf-8' />
-    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
-    <meta name="description" content="Wordpress-xmlrpc-client : A PHP XML-RPC client for Wordpress websites" />
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="Wordpress-xmlrpc-client : A PHP XML-RPC client for Wordpress websites">
 
     <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
 
@@ -31,30 +31,40 @@
     <!-- MAIN CONTENT -->
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
-        <p>A PHP client for Wordpress websites that closely implement the <a href="http://codex.Wordpress.org/XML-RPC_WordPress_API">XML-RPC WordPress API</a></p>
+        <h1>
+<a name="wordpress-xml-rpc-php-client" class="anchor" href="#wordpress-xml-rpc-php-client"><span class="octicon octicon-link"></span></a>Wordpress XML-RPC PHP Client</h1>
+
+<p><a href="https://travis-ci.org/letrunghieu/wordpress-xmlrpc-client"><img src="https://travis-ci.org/letrunghieu/wordpress-xmlrpc-client.svg?branch=master" alt="Build Status"></a> <a href="https://packagist.org/packages/hieu-le/wordpress-xmlrpc-client"><img src="https://poser.pugx.org/hieu-le/wordpress-xmlrpc-client/v/stable.svg" alt="Latest Stable Version"></a> <a href="https://packagist.org/packages/hieu-le/wordpress-xmlrpc-client"><img src="https://poser.pugx.org/hieu-le/wordpress-xmlrpc-client/downloads.svg" alt="Total Downloads"></a> <a href="https://packagist.org/packages/hieu-le/wordpress-xmlrpc-client"><img src="https://poser.pugx.org/hieu-le/wordpress-xmlrpc-client/v/unstable.svg" alt="Latest Unstable Version"></a> <a href="https://packagist.org/packages/hieu-le/wordpress-xmlrpc-client"><img src="https://poser.pugx.org/hieu-le/wordpress-xmlrpc-client/license.svg" alt="License"></a></p>
+
+<p>A PHP client for Wordpress websites that closely implement the <a href="http://codex.Wordpress.org/XML-RPC_WordPress_API">XML-RPC WordPress API</a></p>
 
 <p>Created by <a href="http://www.hieule.info">Hieu Le</a></p>
 
 <p>MIT licensed.</p>
 
-<p>Current version: 2.0</p>
+<p>Current version: 2.4.0</p>
 
 <h2>
 <a name="features" class="anchor" href="#features"><span class="octicon octicon-link"></span></a>Features</h2>
 
 <ul>
 <li>Full test suit built in supporting testing using your own Wordpress site.</li>
-<li>Support error logging to files with Monolog library.</li>
+<li>
+<del>Support error logging to files with Monolog library.</del> Now, erros can be logged in a more felxible way via <strong>error callbacks</strong> (v 2.4.0)</li>
 <li>Support UTF-8 content.</li>
 <li>Closely implement the whole <a href="http://codex.Wordpress.org/XML-RPC_WordPress_API">XML-RPC WordPress API</a>.</li>
 <li>Detail exception will be thrown when errors occurs.</li>
+<li>(v2.2) Support proxy and http authentication.</li>
+<li>(v2.2.1) Allow value of <code>DateTime</code> class to be convert correctly to <code>datetime.iso8601</code> XML-RPC type,</li>
+<li>(v2.4.0) Support using custom User Agent string beside the default User Agent string.</li>
+<li>(v2.4.0) Support callbacks on <strong>sending</strong> and <strong>error</strong> events</li>
 </ul><h2>
 <a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h2>
 
-<p>You will need <a href="https://getcomposer.org/">Composer</a> installed on your machine to use this library. Verify that composer is installed by typing this command</p>
+<p><del>You will need <a href="https://getcomposer.org/">Composer</a> installed on your machine to use this library</del> <a href="https://getcomposer.org/">Composer</a> now is not required but recommended. Verify that composer is installed by typing this command</p>
 
-<pre><code>composer --version
-</code></pre>
+<div class="highlight highlight-bash"><pre>composer --version
+</pre></div>
 
 <p>Choose one of the following methods to install <strong>Wordpress XML-RPC PHP Client</strong></p>
 
@@ -63,40 +73,44 @@
 
 <p>Add this dependency into your <code>composer.json</code> file</p>
 
-<pre><code>"hieu-le/wordpress-xmlrpc-client":"~2.0"
-</code></pre>
+<div class="highlight highlight-json"><pre><span class="s2">"hieu-le/wordpress-xmlrpc-client"</span><span class="err">:</span><span class="s2">"~2.0"</span>
+</pre></div>
 
 <p>After that, run <code>composer update</code> to install this package.</p>
 
 <h3>
 <a name="your-project-does-not-use-composer" class="anchor" href="#your-project-does-not-use-composer"><span class="octicon octicon-link"></span></a>Your project does not use composer:</h3>
 
-<p>Clone or download the archive of this package from <a href="https://github.com/letrunghieu/Wordpress-xmlrpc-client/releases">github</a>. Copy the package directory into a location of your project. Open the command line terminal and do these command</p>
+<p>Clone or download the archive of this package from <a href="https://github.com/letrunghieu/Wordpress-xmlrpc-client/releases">github</a>. Include all files in the <code>src</code> directory into your project and start using <strong>Wordpress XML-RPC Client</strong>. You have to update the code of this library manually if using it without Composer.</p>
 
-<pre><code>cd library/installed/dir
-composer install
-</code></pre>
-
-<p>After the installation progress finished, there will be a file called <code>autoload.php</code> created inside the <code>vendor</code> sub folder of the library. You should include this file to use <strong>Wordpress XML-RPC PHP Client</strong>.</p>
+<p>Required PHP extension is <code>xmlrpc</code> extension. The <code>curl</code> extension is optional be recommended.</p>
 
 <h2>
 <a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h2>
 
-<p>All API call will be executed via an instance of the <code>WordpressClient</code> class. This is the way we initiate it:</p>
+<p>All API call will be executed via an instance of the <code>WordpressClient</code> class. Since version 2.4.0, there is no mandatory parameters in the contructor. <code>endPoint</code>, <code>username</code>, and <code>password</code> can be updated anytime by calling <code>setCredentials</code> method. The last parameter in previous version contructor (which is an instance of <code>\Illuminate\Log\Writer</code> class) is deprecated and will be removed in the next major release. Below is an example of using this library:</p>
 
 <div class="highlight highlight-php"><pre><span class="c1"># Your Wordpress website is at: http://wp-website.com</span>
 <span class="nv">$endpoint</span> <span class="o">=</span> <span class="s2">"http://wp-website.com/xmlrpc.php"</span><span class="p">;</span>
 
-<span class="c1"># The logger instance</span>
-<span class="nv">$wpLog</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">\Illuminate\Log\Writer</span><span class="p">(</span><span class="k">new</span> <span class="nx">Monolog\Logger</span><span class="p">(</span><span class="s1">'wp-xmlrpc'</span><span class="p">));</span>
-
-<span class="c1"># Save logs into file</span>
-<span class="nv">$wpLog</span><span class="o">-&gt;</span><span class="na">useFiles</span><span class="p">(</span><span class="s1">'path-to-your-log-file'</span><span class="p">);</span>
+<span class="c1"># The Monolog logger instance</span>
+<span class="nv">$wpLog</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Monolog\Logger</span><span class="p">(</span><span class="s1">'wp-xmlrpc'</span><span class="p">);</span>
 
 <span class="c1"># Create client instance</span>
-<span class="c1"># The logger instance is optional</span>
-<span class="nv">$wpClient</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">\HieuLe\WordpressXmlrpcClient\WordpressClient</span><span class="p">(</span><span class="nv">$endpoint</span><span class="p">,</span> <span class="s1">'username'</span><span class="p">,</span> <span class="s1">'password'</span><span class="p">,</span> <span class="nv">$wpLog</span><span class="p">);</span>
+<span class="nv">$wpClient</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">\HieuLe\WordpressXmlrpcClient\WordpressClient</span><span class="p">();</span>
+<span class="c1"># Log error</span>
+<span class="nv">$wpClient</span><span class="o">-&gt;</span><span class="na">onError</span><span class="p">(</span><span class="k">function</span><span class="p">(</span><span class="nv">$error</span><span class="p">,</span> <span class="nv">$event</span><span class="p">)</span> <span class="k">use</span> <span class="p">(</span><span class="nv">$wpLog</span><span class="p">){</span>
+    <span class="nv">$wpLog</span><span class="o">-&gt;</span><span class="na">addError</span><span class="p">(</span><span class="nv">$error</span><span class="p">,</span> <span class="nv">$event</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="c1"># Set the credentials for the next requests</span>
+<span class="nv">$wpClient</span><span class="o">-&gt;</span><span class="na">setCredentials</span><span class="p">(</span><span class="nv">$endpoint</span><span class="p">,</span> <span class="s1">'username'</span><span class="p">,</span> <span class="s1">'password'</span><span class="p">);</span>
+
 </pre></div>
+
+<p>If you have used logging feture of previous version of this library, you should update your code to use the new way of loggin as above, the Monolog instance can be replaced by any kinds of logging tool that you have.</p>
+
+<p>To use date time value, you must use an instance of <code>DateTime</code> class instead of a string.</p>
 
 <p>There will be 2 types of exception may be thrown from this library:</p>
 
@@ -108,6 +122,60 @@ composer install
 </ul><p>For API reference, visit <a href="http://codex.Wordpress.org/XML-RPC_WordPress_API">Wordpress documentation</a> or <a href="http://letrunghieu.github.io/wordpress-xmlrpc-client/api/index.html">Library API documentation</a></p>
 
 <h2>
+<a name="user-agent-since-240" class="anchor" href="#user-agent-since-240"><span class="octicon octicon-link"></span></a>User Agent (since 2.4.0)</h2>
+
+<p>The library use the default User Agent when contacting with Wordpress blogs. If you want to use onother one, pass your custom User Agent string into the <code>setUserAgent</code> method. If you passed a <em>falsy</em> value (<code>null</code>, <code>false</code>, ...) the default one will be used (thank <a href="https://github.com/WarrenMoore" class="user-mention">@WarrenMoore</a>)</p>
+
+<h2>
+<a name="callbacks-and-events-since-240" class="anchor" href="#callbacks-and-events-since-240"><span class="octicon octicon-link"></span></a>Callbacks and events (since 2.4.0)</h2>
+
+<p>The library allow developers to listen on two events <code>Sending</code> and <code>Error</code>. You can add new closure as a callback for each events by calling <code>on&lt;event&gt;</code> method with the closure as parameter (see the <code>onError</code> example above).</p>
+
+<h3>
+<a name="onsendingevent" class="anchor" href="#onsendingevent"><span class="octicon octicon-link"></span></a><code>onSending($event)</code>
+</h3>
+
+<p>This event is fired before each request is send to Wordpress blogs. <code>$event</code> is an array:</p>
+
+<ul>
+<li>
+<code>event</code>: the name of the event, here is <code>sending</code>
+</li>
+<li>
+<code>endpoint</code>: URL of the current endpoint</li>
+<li>
+<code>username</code>: current username</li>
+<li>
+<code>password</code>: current password</li>
+<li>
+<code>method</code>: current XML-RPC method</li>
+<li>
+<code>params</code>: parameters passed to the current method</li>
+<li>
+<code>request</code>: the body of the current request which will be sent</li>
+<li>
+<code>proxy</code>: current proxy config</li>
+<li>
+<code>auth</code>: current http auth config</li>
+</ul><h3>
+<a name="onerrorerrormessage-event" class="anchor" href="#onerrorerrormessage-event"><span class="octicon octicon-link"></span></a><code>onError($errorMessage, $event)</code>
+</h3>
+
+<p>This event is fired when the library run into errors, before any exception thrown. <code>$errorMessage</code> is a string. <code>$event</code> is an array:</p>
+
+<ul>
+<li>
+<code>event</code>: the name of the event, here is <code>sending</code>
+</li>
+<li>
+<code>endpoint</code>: URL of the current endpoint</li>
+<li>
+<code>request</code>: the body of the current request</li>
+<li>
+<code>proxy</code>: current proxy config</li>
+<li>
+<code>auth</code>: current http auth config</li>
+</ul><h2>
 <a name="unit-testing" class="anchor" href="#unit-testing"><span class="octicon octicon-link"></span></a>Unit testing</h2>
 
 <p>By default, the project use recorded data as the default data for test suite. However, if you want to test with your own Wordpress installation, there are available options inside the <code>./tests/xmlrpc.yml</code> file:</p>
