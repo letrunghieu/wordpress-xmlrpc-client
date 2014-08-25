@@ -811,8 +811,9 @@ class WordpressClient
     {
         if (!$this->_endPoint)
         {
-            throw new \Exception("Invalid endpoint " . json_encode(array('endpoint' => $this->_endPoint, 'username' => $this->_username, 'password' => $this->_password)));
-            
+            $this->_error = "Invalid endpoint " . json_encode(array('endpoint' => $this->_endPoint, 'username' => $this->_username, 'password' => $this->_password));
+            $this->_logError();
+            throw new \Exception($this->_error);
         }
         $this->_responseHeader = array();
         $this->_setXmlrpcType($params);

@@ -1510,19 +1510,56 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
         $user   = $this->client->getProfile();
         $this->assertSame('JD', $user['nickname']);
     }
-    
+
     public function testUserAgent()
     {
-        $xmlrpcClient = new HieuLe\WordpressXmlrpcClient\WordpressClient();
+        $xmlrpcClient     = new HieuLe\WordpressXmlrpcClient\WordpressClient();
         $defaultUserAgent = $xmlrpcClient->getDefaultUserAgent();
         $this->assertNotEmpty($xmlrpcClient->getUserAgent());
-        
+
         $cutomUserAgent = "XML-RPC client";
         $xmlrpcClient->setUserAgent($cutomUserAgent);
         $this->assertSame($cutomUserAgent, $xmlrpcClient->getUserAgent());
-        
+
         $xmlrpcClient->setUserAgent(false);
         $this->assertSame($defaultUserAgent, $xmlrpcClient->getUserAgent());
+    }
+
+    public function testErrorCallbacks()
+    {
+        $xmlrpcClient = new HieuLe\WordpressXmlrpcClient\WordpressClient();
+        $error        = array();
+        $xmlrpcClient->onError(function($e, $event) use (&$error) {
+            $error['e'] = $e;
+            $error['event'] = $event;
+        });
+        
+        try
+        {
+           $xmlrpcClient->getProfile();
+        }
+        catch (Exception $ex)
+        {
+            $this->assertArrayHasKey('e', $error);
+            $this->assertArrayHasKey('event', $error);
+            $this->assertArrayHasKey('endPoint', $error['event']);
+            return;
+        }
+        
+        $xmlrpcClient->onError(function($e, $event) use (&$error) {
+            $error['e'] = 1;
+        });
+        
+        try
+        {
+           $xmlrpcClient->getProfile();
+        }
+        catch (Exception $ex)
+        {
+            $this->assertSame(1, $error['e']);
+            return;
+        }
+        $this->fail('Error callbacks not called');
     }
 
 }
