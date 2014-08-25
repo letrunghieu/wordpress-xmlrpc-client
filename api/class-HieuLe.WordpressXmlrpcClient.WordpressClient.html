@@ -6,7 +6,7 @@
 
 	<title>Class HieuLe\WordpressXmlrpcClient\WordpressClient | Wordpress XML-RPC PHP Client</title>
 
-	<script type="text/javascript" src="resources/combined.js?955602237"></script>
+	<script type="text/javascript" src="resources/combined.js?3436703465"></script>
 	<script type="text/javascript" src="elementlist.js?2488814889"></script>
 	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?3505392360">
 
@@ -119,7 +119,7 @@
 				<b>Author:</b>
 				Hieu Le &lt;<a href="http://www.hieule.info">http://www.hieule.info</a>&gt;<br>
 				<b>Version:</b>
-				2.2.1<br>
+				2.4.0<br>
 		<b>Located at</b> WordpressClient.php<br>
 	</div>
 
@@ -138,17 +138,145 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#___construct">#</a>
-		<code>__construct( <span>string <var>$xmlrpcEndPoint</var></span>, <span>string <var>$username</var></span>, <span>string <var>$password</var></span>, <span>Illuminate\Log\Writer <var>$logger</var> = <span class="php-keyword1">null</span></span> )</code>
+		<code>__construct( <span>string <var>$xmlrpcEndPoint</var> = <span class="php-keyword1">null</span></span>, <span>string <var>$username</var> = <span class="php-keyword1">null</span></span>, <span>string <var>$password</var> = <span class="php-keyword1">null</span></span>, <span>Illuminate\Log\Writer <var>$logger</var> = <span class="php-keyword1">null</span></span> )</code>
 
 		<div class="description short">
 			
-<p>Create a new client with credentials</p>
+<p>Create a new client</p>
 
 		</div>
 
 		<div class="description detailed hidden">
 			
-<p>Create a new client with credentials</p>
+<p>Create a new client</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$xmlrpcEndPoint</var></dt>
+					<dd><code>string</code><br>$xmlrpcEndPoint The wordpress XML-RPC endpoint (optional)</dd>
+					<dt><var>$username</var></dt>
+					<dd><code>string</code><br>$username The client's username (optional)</dd>
+					<dt><var>$password</var></dt>
+					<dd><code>string</code><br>$password The client's password (optional)</dd>
+					<dt><var>$logger</var></dt>
+					<dd><code>Illuminate\Log\Writer</code><br>$logger deprecated. This variable will not be used since 2.4.0</dd>
+				</dl></div>
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="onError" id="_onError">
+
+		<td class="attributes"><code>
+			 public 
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_onError">#</a>
+		<code>onError( <span>Closure <var>$callback</var></span> )</code>
+
+		<div class="description short">
+			
+<p>Add a callback for <code>error</code> event</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Add a callback for <code>error</code> event</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$callback</var></dt>
+					<dd><code>Closure</code><br>$callback</dd>
+				</dl></div>
+
+
+
+				<h4>Since</h4>
+				<div class="list">
+						2.4.0<br>
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="onSending" id="_onSending">
+
+		<td class="attributes"><code>
+			 public 
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_onSending">#</a>
+		<code>onSending( <span>Closure <var>$callback</var></span> )</code>
+
+		<div class="description short">
+			
+<p>Add a callback for <code>sending</code> event</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Add a callback for <code>sending</code> event</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$callback</var></dt>
+					<dd><code>Closure</code><br>$callback</dd>
+				</dl></div>
+
+
+
+				<h4>Since</h4>
+				<div class="list">
+						2.4.0<br>
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="setCredentials" id="_setCredentials">
+
+		<td class="attributes"><code>
+			 public 
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_setCredentials">#</a>
+		<code>setCredentials( <span>string <var>$xmlrpcEndPoint</var></span>, <span>string <var>$username</var></span>, <span>string <var>$password</var></span> )</code>
+
+		<div class="description short">
+			
+<p>Set the endpoint, username and password for next requests</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Set the endpoint, username and password for next requests</p>
 
 
 
@@ -160,12 +288,138 @@
 					<dd><code>string</code><br>$username The client's username</dd>
 					<dt><var>$password</var></dt>
 					<dd><code>string</code><br>$password The client's password</dd>
-					<dt><var>$logger</var></dt>
-					<dd><code>Illuminate\Log\Writer</code><br>$logger</dd>
 				</dl></div>
 
 
 
+				<h4>Since</h4>
+				<div class="list">
+						2.4.0<br>
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getDefaultUserAgent" id="_getDefaultUserAgent">
+
+		<td class="attributes"><code>
+			 public 
+			string
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getDefaultUserAgent">#</a>
+		<code>getDefaultUserAgent( )</code>
+
+		<div class="description short">
+			
+<p>Get library default user agent</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Get library default user agent</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>string</code><br>
+				</div>
+
+
+				<h4>Since</h4>
+				<div class="list">
+						2.4.0<br>
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="setUserAgent" id="_setUserAgent">
+
+		<td class="attributes"><code>
+			 public 
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_setUserAgent">#</a>
+		<code>setUserAgent( <span>string <var>$userAgent</var></span> )</code>
+
+		<div class="description short">
+			
+<p>Set the user agent for next requests</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Set the user agent for next requests</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$userAgent</var></dt>
+					<dd><code>string</code><br>$userAgent custom user agent, give a falsy value to use library user agent</dd>
+				</dl></div>
+
+
+
+				<h4>Since</h4>
+				<div class="list">
+						2.4.0<br>
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getUserAgent" id="_getUserAgent">
+
+		<td class="attributes"><code>
+			 public 
+			string
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getUserAgent">#</a>
+		<code>getUserAgent( )</code>
+
+		<div class="description short">
+			
+<p>Get current user agent string</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Get current user agent string</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>string</code><br>
+				</div>
+
+
+				<h4>Since</h4>
+				<div class="list">
+						2.4.0<br>
+				</div>
 
 
 		</div>
@@ -446,9 +700,9 @@ class="php-keyword1"&gt;false&lt;/span&gt;</code> as parameter</p>
 				<h4>Parameters</h4>
 				<div class="list"><dl>
 					<dt><var>$postId</var></dt>
-					<dd><code>integer</code><br>$postId post id The id of selected post</dd>
+					<dd><code>integer</code><br>$postId the id of selected post</dd>
 					<dt><var>$fields</var></dt>
-					<dd><code>array</code><br>$fields Optional. List of field or meta-field names to include in response.</dd>
+					<dd><code>array</code><br>$fields (optional) list of field or meta-field names to include in response.</dd>
 				</dl></div>
 
 				<h4>Returns</h4>
@@ -494,9 +748,9 @@ class="php-keyword1"&gt;false&lt;/span&gt;</code> as parameter</p>
 				<h4>Parameters</h4>
 				<div class="list"><dl>
 					<dt><var>$filters</var></dt>
-					<dd><code>array</code><br>$filters Optional</dd>
+					<dd><code>array</code><br>$filters optional</dd>
 					<dt><var>$fields</var></dt>
-					<dd><code>array</code><br>$fields Optional</dd>
+					<dd><code>array</code><br>$fields optional</dd>
 				</dl></div>
 
 				<h4>Returns</h4>
@@ -688,7 +942,7 @@ class="php-keyword1"&gt;false&lt;/span&gt;</code> as parameter</p>
 					<dt><var>$postTypeName</var></dt>
 					<dd><code>string</code><br>$postTypeName the post type name</dd>
 					<dt><var>$fields</var></dt>
-					<dd><code>array</code><br>$fields Optional. List of field or meta-field names to include in response.</dd>
+					<dd><code>array</code><br>$fields (optional) list of field or meta-field names to include in response.</dd>
 				</dl></div>
 
 				<h4>Returns</h4>
@@ -1274,7 +1528,7 @@ class="php-keyword1"&gt;false&lt;/span&gt;</code> as parameter</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_uploadFile">#</a>
-		<code>uploadFile( <span>string <var>$name</var></span>, <span>string <var>$mime</var></span>, <span>string <var>$bits</var></span> )</code>
+		<code>uploadFile( <span>string <var>$name</var></span>, <span>string <var>$mime</var></span>, <span>string <var>$bits</var></span>, <span>boolean <var>$overwrite</var> = <span class="php-keyword1">null</span></span>, <span>integer <var>$postId</var> = <span class="php-keyword1">null</span></span> )</code>
 
 		<div class="description short">
 			
@@ -1291,11 +1545,15 @@ class="php-keyword1"&gt;false&lt;/span&gt;</code> as parameter</p>
 				<h4>Parameters</h4>
 				<div class="list"><dl>
 					<dt><var>$name</var></dt>
-					<dd><code>string</code><br>$name</dd>
+					<dd><code>string</code><br>$name file name</dd>
 					<dt><var>$mime</var></dt>
-					<dd><code>string</code><br>$mime</dd>
+					<dd><code>string</code><br>$mime file mime type</dd>
 					<dt><var>$bits</var></dt>
-					<dd><code>string</code><br>$bits Binary data (no encoded)</dd>
+					<dd><code>string</code><br>$bits binary data (no encoded)</dd>
+					<dt><var>$overwrite</var></dt>
+					<dd><code>boolean</code><br>$overwrite (optional)</dd>
+					<dt><var>$postId</var></dt>
+					<dd><code>integer</code><br>$postId (optional)</dd>
 				</dl></div>
 
 				<h4>Returns</h4>
@@ -1947,6 +2205,54 @@ href="http://codex.wordpress.org/XML-RPC_WordPress_API/Users#wp.editProfile">htt
 				</div>
 
 
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="callCustomMethod" id="_callCustomMethod">
+
+		<td class="attributes"><code>
+			 public 
+			mixed
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_callCustomMethod">#</a>
+		<code>callCustomMethod( <span>string <var>$method</var></span>, <span>array <var>$params</var></span> )</code>
+
+		<div class="description short">
+			
+<p>Call a custom XML-RPC method</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Call a custom XML-RPC method</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$method</var></dt>
+					<dd><code>string</code><br>$method the method name</dd>
+					<dt><var>$params</var></dt>
+					<dd><code>array</code><br>$params the parameters of this call</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>mixed</code><br>
+				</div>
+
+
+				<h4>Since</h4>
+				<div class="list">
+						2.3.0<br>
+				</div>
 
 
 		</div>
