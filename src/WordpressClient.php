@@ -1005,7 +1005,7 @@ class WordpressClient
         $callbacks = $this->_getCallback('error');
         $event = array(
             'event'    => 'error',
-            'endPoint' => $this->_endPoint,
+            'endpoint' => $this->_endPoint,
             'request'  => $this->_request,
             'proxy'    => $this->_proxyConfig,
             'auth'     => $this->_authConfig,

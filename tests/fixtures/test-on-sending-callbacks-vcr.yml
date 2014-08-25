@@ -1,0 +1,20 @@
+
+-
+    request:
+        method: POST
+        url: 'http://WP_DOMAIN/xmlrpc.php'
+        headers:
+            host: WP_DOMAIN
+            content-length: 286
+        body: "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<methodCall>\n<methodName>wp.getProfile</methodName>\n<params>\n <param>\n  <value>\n   <int>1</int>\n  </value>\n </param>\n <param>\n  <value>\n   <string/>\n  </value>\n </param>\n <param>\n  <value>\n   <string/>\n  </value>\n </param>\n</params>\n</methodCall>\n"
+    response:
+        status: 200
+        headers:
+            Date: 'Mon, 25 Aug 2014 03:29:00 GMT'
+            Server: 'Apache/2.4.9 (Win64) PHP/5.5.12'
+            X-Powered-By: PHP/5.5.12
+            Set-Cookie: '_icl_current_language=en; expires=Tue, 26-Aug-2014 03:29:01 GMT; Max-Age=86400; path=/'
+            Connection: close
+            Content-Length: '419'
+            Content-Type: 'text/xml; charset=UTF-8'
+        body: "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<methodResponse>\r\n  <fault>\r\n    <value>\r\n      <struct>\r\n        <member>\r\n          <name>faultCode</name>\r\n          <value><int>403</int></value>\r\n        </member>\r\n        <member>\r\n          <name>faultString</name>\r\n          <value><string>Incorrect username or password.</string></value>\r\n        </member>\r\n      </struct>\r\n    </value>\r\n  </fault>\r\n</methodResponse>\r\n"

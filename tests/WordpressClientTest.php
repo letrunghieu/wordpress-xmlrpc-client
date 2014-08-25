@@ -1542,7 +1542,7 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
         {
             $this->assertArrayHasKey('e', $error);
             $this->assertArrayHasKey('event', $error);
-            $this->assertArrayHasKey('endPoint', $error['event']);
+            $this->assertArrayHasKey('endpoint', $error['event']);
             return;
         }
         
@@ -1560,6 +1560,35 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
             return;
         }
         $this->fail('Error callbacks not called');
+    }
+    
+    /**
+     * @vcr test-on-sending-callbacks-vcr.yml
+     */
+    public function testOnSendingCallbacks()
+    {
+        $xmlrpcClient = new HieuLe\WordpressXmlrpcClient\WordpressClient(static::$_endpoint);
+        $log        = array();
+        $xmlrpcClient->onSending(function($event) use (&$log) {
+            $log[0] = $event;
+        });
+        
+        try
+        {
+           $xmlrpcClient->getProfile();
+        }
+        catch (Exception $ex)
+        {
+            $this->assertArrayHasKey('event', $log[0]);
+            $this->assertArrayHasKey('endpoint', $log[0]);
+            $this->assertArrayHasKey('username', $log[0]);
+            $this->assertArrayHasKey('password', $log[0]);
+            $this->assertArrayHasKey('method', $log[0]);
+            $this->assertArrayHasKey('params', $log[0]);
+            return;
+        }
+        
+        $this->fail('Sending callbacks not called');
     }
 
 }
