@@ -844,7 +844,7 @@ class WordpressClient
         {
             $body = $this->_requestWithFile();
         }
-        $response = xmlrpc_decode($body);
+        $response = xmlrpc_decode($body, 'UTF-8');
         if (is_array($response) && xmlrpc_is_fault($response))
         {
             $this->_error = ("xmlrpc: {$response['faultString']} ({$response['faultCode']})");
