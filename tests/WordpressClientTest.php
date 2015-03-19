@@ -1591,4 +1591,17 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
         $this->fail('Sending callbacks not called');
     }
 
+    /**
+     * @vcr posts/test-new-post-with-utf8-content-vcr.yml
+     */
+    public function testNewPostWithUtf8Content()
+    {
+        $postId = (int) $this->client->newPost('Đây là một tiêu đề ở định dạng UTF-8', 'Lorem Ipsum chỉ đơn giản là một đoạn văn bản giả, được dùng vào việc trình bày và dàn trang phục vụ cho in ấn');
+        $this->assertGreaterThan(0, $postId);
+
+        $post = $this->client->getPost($postId);
+        $this->assertSame('Đây là một tiêu đề ở định dạng UTF-8', $post['post_title']);
+        $this->assertSame('Lorem Ipsum chỉ đơn giản là một đoạn văn bản giả, được dùng vào việc trình bày và dàn trang phục vụ cho in ấn', $post['post_content']);
+    }
+
 }
