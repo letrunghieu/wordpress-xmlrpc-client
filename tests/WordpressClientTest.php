@@ -75,6 +75,21 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
         $client->getPosts();
     }
 
+    public function testSettingProtocolessEndpoint()
+    {
+        $client = new HieuLe\WordpressXmlrpcClient\WordpressClient('xxx.domain', '', '');
+        $this->assertEquals("http://xxx.domain", $client->getEndPoint());
+    }
+
+    public function testSettingWordpresComEndpoint()
+    {
+        $client = new HieuLe\WordpressXmlrpcClient\WordpressClient('xxx.wordpress.com', '', '');
+        $this->assertEquals("https://xxx.wordpress.com", $client->getEndPoint());
+
+        $client->setCredentials('http://yyy.wordpress.com', '', '');
+        $this->assertEquals("https://yyy.wordpress.com", $client->getEndPoint());
+    }
+
     #
     # Test posts API
 

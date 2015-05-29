@@ -48,7 +48,7 @@ After that, run `composer update` to install this package.
 
 Clone or download the archive of this package from [github](https://github.com/letrunghieu/Wordpress-xmlrpc-client/releases). Include all files in the `src` directory into your project and start using **Wordpress XML-RPC Client**. You have to update the code of this library manually if using it without Composer.
 
-Required PHP extension is `xmlrpc` extension. The `curl` extension is optional be recommended.
+Required PHP extension is `xmlrpc` extension. The `curl` extension is optional but recommended.
 
 
 ## Usage

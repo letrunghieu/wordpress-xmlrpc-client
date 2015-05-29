@@ -5,7 +5,7 @@ namespace HieuLe\WordpressXmlrpcClient;
 /**
  * A XML-RPC client that implement the {@link http://codex.wordpress.org/XML-RPC_WordPress_API Wordpress API}.
  * 
- * @version 2.4.0
+ * @version 2.4.2
  * 
  * @author Hieu Le <http://www.hieule.info>
  * 
@@ -78,9 +78,36 @@ class WordpressClient
      */
     function setCredentials($xmlrpcEndPoint, $username, $password)
     {
+        // prepend http protocol to the end point if needed
+        $scheme = parse_url($xmlrpcEndPoint, PHP_URL_SCHEME);
+        if (!$scheme)
+        {
+            $xmlrpcEndPoint = "http://{$xmlrpcEndPoint}";
+        }
+
+        // swith to https when working with wordpress.com blogs
+        $host = parse_url($xmlrpcEndPoint,  PHP_URL_HOST);
+        if (substr($host, -14) == '.wordpress.com')
+        {
+            $xmlrpcEndPoint = preg_replace('|http://|', 'https://', $xmlrpcEndPoint, 1);
+        }
+
+        // save information
         $this->_endPoint = $xmlrpcEndPoint;
         $this->_username = $username;
         $this->_password = $password;
+    }
+
+    /**
+     * Get the current endpoint URL
+     *
+     * @return string
+     *
+     * @since 2.4.2
+     */
+    function getEndPoint()
+    {
+        return $this->_endPoint;
     }
 
     /**
