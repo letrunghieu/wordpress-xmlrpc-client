@@ -9,7 +9,7 @@ Created by [Hieu Le](http://www.hieule.info)
 
 MIT licensed.
 
-Current version: 2.4.0
+Current version: 2.4.2
 
 
 ## Features
