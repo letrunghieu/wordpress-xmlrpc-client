@@ -25,7 +25,8 @@
 		"symfony/yaml": "2.*",
 		"php-vcr/php-vcr": "dev-master",
 		"php-vcr/phpunit-testlistener-vcr": "*",
-		"illuminate/support": "~4.0"
+		"illuminate/support": "~4.0",
+		"codeclimate/php-test-reporter": "dev-master"
 	},
 	"autoload": {
 		"psr-4": {
