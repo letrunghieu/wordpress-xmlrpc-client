@@ -863,7 +863,7 @@ class WordpressClient
         foreach ($callbacks as $callback) {
             $callback($event);
         }
-        $body = $this->_performRequest();
+        $body = $this->performRequest();
         $response = xmlrpc_decode($body, 'UTF-8');
         if (is_array($response) && xmlrpc_is_fault($response))
         {
@@ -897,7 +897,7 @@ class WordpressClient
         }
     }
 
-    protected function _performRequest()
+    protected function performRequest()
     {
         if (function_exists('curl_init'))
         {
