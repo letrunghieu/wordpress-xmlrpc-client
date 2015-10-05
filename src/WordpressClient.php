@@ -863,14 +863,7 @@ class WordpressClient
         foreach ($callbacks as $callback) {
             $callback($event);
         }
-        if (function_exists('curl_init'))
-        {
-            $body = $this->_requestWithCurl();
-        }
-        else
-        {
-            $body = $this->_requestWithFile();
-        }
+        $body = $this->performRequest();
         $response = xmlrpc_decode($body, 'UTF-8');
         if (is_array($response) && xmlrpc_is_fault($response))
         {
@@ -901,6 +894,18 @@ class WordpressClient
             {
                 $this->_setXmlrpcType($array[$key]);
             }
+        }
+    }
+
+    protected function performRequest()
+    {
+        if (function_exists('curl_init'))
+        {
+            return $this->_requestWithCurl();
+        }
+        else
+        {
+            return $this->_requestWithFile();
         }
     }
 
