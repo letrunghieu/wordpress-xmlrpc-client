@@ -1059,4 +1059,9 @@ class WordpressClient
         return $callbacks;
     }
 
+    protected function getRequest()
+    {
+        return $this->_request;
+    }
+
 }
