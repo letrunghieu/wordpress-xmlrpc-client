@@ -10,42 +10,42 @@
 class WordpressClientTest extends \PHPUnit_Framework_TestCase
 {
 
+    private static $_endpoint = 'http://WP_DOMAIN/xmlrpc.php';
+    private static $_adminLogin = 'WP_USER';
+    private static $_adminPassword = 'WP_PASSWORD';
+    private static $_guestLogin = 'WP_GUEST';
+    private static $_guestPassword = 'WP_PASSWORD';
     /**
      * The user with proper privilege
      *
      * @var \HieuLe\WordpressXmlrpcClient\WordpressClient
      */
     protected $client;
-
     /**
      * The user without proper privilege
-     * 
+     *
      * @var \HieuLe\WordpressXmlrpcClient\WordpressClient
      */
     protected $guestClient;
-    private static $_endpoint      = 'http://WP_DOMAIN/xmlrpc.php';
-    private static $_adminLogin    = 'WP_USER';
-    private static $_adminPassword = 'WP_PASSWORD';
-    private static $_guestLogin    = 'WP_GUEST';
-    private static $_guestPassword = 'WP_PASSWORD';
 
     public static function setUpBeforeClass()
     {
         $testConfig = \Symfony\Component\Yaml\Yaml::parse('tests/xmlrpc.yml');
-        if ($testConfig['endpoint'] && $testConfig['admin_login'] && $testConfig['admin_password'] && $testConfig['guest_login'] && $testConfig['guest_password'])
-        {
-            static::$_endpoint = $testConfig['endpoint'];
-            static::$_adminLogin = $testConfig['admin_login'];
+        if ($testConfig['endpoint'] && $testConfig['admin_login'] && $testConfig['admin_password'] && $testConfig['guest_login'] && $testConfig['guest_password']) {
+            static::$_endpoint      = $testConfig['endpoint'];
+            static::$_adminLogin    = $testConfig['admin_login'];
             static::$_adminPassword = $testConfig['admin_password'];
-            static::$_guestLogin = $testConfig['guest_login'];
+            static::$_guestLogin    = $testConfig['guest_login'];
             static::$_guestPassword = $testConfig['guest_password'];
         }
     }
 
     public function setUp()
     {
-        $this->client      = new HieuLe\WordpressXmlrpcClient\WordpressClient(static::$_endpoint, static::$_adminLogin, static::$_adminPassword);
-        $this->guestClient = new HieuLe\WordpressXmlrpcClient\WordpressClient(static::$_endpoint, static::$_guestLogin, static::$_guestPassword);
+        $this->client      = new HieuLe\WordpressXmlrpcClient\WordpressClient(static::$_endpoint, static::$_adminLogin,
+            static::$_adminPassword);
+        $this->guestClient = new HieuLe\WordpressXmlrpcClient\WordpressClient(static::$_endpoint, static::$_guestLogin,
+            static::$_guestPassword);
     }
 
     public function tearDown()
@@ -55,9 +55,9 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @vcr test-login-failed-vcr.yml
+     * @vcr                      test-login-failed-vcr.yml
      * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
-     * @expectedExceptionCode 403
+     * @expectedExceptionCode    403
      * @expectedExceptionMessage Incorrect username or password.
      */
     public function testLoginFailed()
@@ -95,7 +95,7 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
 
     #
 
-	/**
+    /**
      * @vcr posts/test-get-posts-with-default-config-vcr.yml
      */
     public function testGetPostsWithDefaultConfig()
@@ -134,7 +134,7 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetPostsWithFilters()
     {
-        $posts = $this->client->getPosts(array('number' => 5));
+        $posts = $this->client->getPosts(['number' => 5]);
         $this->assertLessThanOrEqual(5, count($posts));
         $this->assertGreaterThan(0, count($posts));
         $this->assertArrayHasKey('post_id', $posts[0]);
@@ -169,7 +169,7 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetPostsWithFields()
     {
-        $posts = $this->client->getPosts(array(), array('post_id', 'post_date'));
+        $posts = $this->client->getPosts([], ['post_id', 'post_date']);
         $this->assertGreaterThan(0, count($posts));
         $this->assertArrayHasKey('post_id', $posts[0]);
         $this->assertArrayNotHasKey('post_title', $posts[0]);
@@ -199,10 +199,10 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @vcr posts/test-get-posts-return-empty-vcr.yml
+     * @vcr                      posts/test-get-posts-return-empty-vcr.yml
      * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
-     * @expectedExceptionCode 401
-     * @expectedExceptionMessage Sorry, you are not allowed to edit posts in this post type
+     * @expectedExceptionCode    401
+     * @expectedExceptionMessage You are not allowed to edit posts in this post type
      */
     public function testGetPostReturnEmpty()
     {
@@ -214,7 +214,7 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetPostReturnOk()
     {
-        $posts = $this->client->getPosts(array('number' => 1));
+        $posts = $this->client->getPosts(['number' => 1]);
         $post  = $this->client->getPost($posts[0]['post_id']);
         $this->assertArrayHasKey('post_id', $post);
         $this->assertArrayHasKey('post_title', $post);
@@ -248,8 +248,8 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetPostWithFieldsReturnOk()
     {
-        $posts = $this->client->getPosts(array('number' => 1));
-        $post  = $this->client->getPost($posts[0]['post_id'], array('post_title', 'post_status'));
+        $posts = $this->client->getPosts(['number' => 1]);
+        $post  = $this->client->getPost($posts[0]['post_id'], ['post_title', 'post_status']);
         $this->assertArrayHasKey('post_id', $post);
         $this->assertArrayHasKey('post_title', $post);
         $this->assertArrayNotHasKey('post_date', $post);
@@ -278,20 +278,22 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @vcr posts/test-get-post-error-not-have-permission-vcr.yml
+     * @vcr                      posts/test-get-post-error-not-have-permission-vcr.yml
      * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
-     * @expectedExceptionCode 401
+     * @expectedExceptionCode    401
      * @expectedExceptionMessage Sorry, you cannot edit this post.
      */
     public function testGetPostErrorNotHavePermission()
     {
-        $post = $this->guestClient->getPost(219, array('post_title', 'post_status'));
+        $postId = $this->client->newPost('testGetPostErrorNotHavePermission', 'testGetPostErrorNotHavePermission',
+            ['comment_status' => 'open']);
+        $post   = $this->guestClient->getPost($postId, ['post_title', 'post_status']);
     }
 
     /**
-     * @vcr posts/test-get-post-error-invalid-post-id-vcr.yml
+     * @vcr                      posts/test-get-post-error-invalid-post-id-vcr.yml
      * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
-     * @expectedExceptionCode 404
+     * @expectedExceptionCode    404
      * @expectedExceptionMessage Invalid post ID.
      */
     public function testGetPostErrorInvalidPostId()
@@ -304,7 +306,7 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
      */
     public function testNewPostMinimalInfo()
     {
-        $postId = (int) $this->client->newPost('Lorem ipsum', 'This is a demo post');
+        $postId = (int)$this->client->newPost('Lorem ipsum', 'This is a demo post', ['comment_status' => 'open']);
         $this->assertGreaterThan(0, $postId);
 
         $post = $this->client->getPost($postId);
@@ -317,7 +319,12 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
     public function testNewPostWithAdvancedFields()
     {
         $postDate = new DateTime('20140101T00:00:00+07:00');
-        $postId   = (int) $this->client->newPost('Lorem ipsum advanced', 'This is a demo post', array('post_date' => $postDate, 'custom_fields' => array(array('key' => 'foo', 'value' => 'bar'))));
+        $postId   = (int)$this->client->newPost('Lorem ipsum advanced', 'This is a demo post',
+            [
+                'comment_status' => 'open',
+                'post_date'      => $postDate,
+                'custom_fields'  => [['key' => 'foo', 'value' => 'bar']],
+            ]);
         $this->assertGreaterThan(0, $postId);
 
         $post = $this->client->getPost($postId);
@@ -325,52 +332,51 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
         $this->assertGreaterThanOrEqual(1, count($post['custom_fields']));
         $this->assertSame($postDate->format('Ymd\TH:i:s'), $post['post_date']->scalar);
         $this->assertSame($postDate->getTimestamp(), $post['post_date_gmt']->timestamp);
-        $ok   = false;
-        foreach ($post['custom_fields'] as $field)
-        {
-            if ($field['key'] == 'foo' && $field['value'] == 'bar')
-            {
+        $ok = false;
+        foreach ($post['custom_fields'] as $field) {
+            if ($field['key'] == 'foo' && $field['value'] == 'bar') {
                 $ok = true;
                 break;
             }
         }
-        if (!$ok)
-        {
+        if (!$ok) {
             $this->fail('No custom fields');
         }
     }
 
     /**
-     * @vcr posts/test-new-post-no-privilege-vcr.yml
+     * @vcr                      posts/test-new-post-no-privilege-vcr.yml
      * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
-     * @expectedExceptionCode 401
+     * @expectedExceptionCode    401
      * @expectedExceptionMessage Sorry, you are not allowed to post on this site.
      */
     public function testNewPostNoPrivilege()
     {
-        $postId = $this->guestClient->newPost('', '');
+        $postId = $this->guestClient->newPost('testNewPostNoPrivilege', 'testNewPostNoPrivilege',
+            ['comment_status' => 'open']);
     }
 
     /**
-     * @vcr posts/test-new-post-invalid-term-vcr.yml
+     * @vcr                      posts/test-new-post-invalid-term-vcr.yml
      * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
-     * @expectedExceptionCode 403
+     * @expectedExceptionCode    403
      * @expectedExceptionMessage Invalid term ID
      */
     public function testNewPostInvalidTerm()
     {
-        $postId = $this->client->newPost('Foo title', '', array('terms' => array('category' => array(2000, 2001))));
+        $postId = $this->client->newPost('Foo title', '',
+            ['comment_status' => 'open', 'terms' => ['category' => [2000, 2001]]]);
     }
 
     /**
-     * @vcr posts/test-new-post-invalid-thumbnail-vcr.yml
+     * @vcr                      posts/test-new-post-invalid-thumbnail-vcr.yml
      * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
-     * @expectedExceptionCode 404
+     * @expectedExceptionCode    404
      * @expectedExceptionMessage Invalid attachment ID.
      */
     public function testNewPostInvalidThumbnail()
     {
-        $postId = $this->client->newPost('', '', array('post_thumbnail' => 9999));
+        $postId = $this->client->newPost('', '', ['comment_status' => 'open', 'post_thumbnail' => 9999]);
     }
 
     /**
@@ -378,8 +384,10 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
      */
     public function testEditPostTitleAndContent()
     {
-        $postId = $this->client->newPost('This is original title', 'This is original body');
-        $result = $this->client->editPost($postId, array('post_title' => 'Lorem Ipsum (edited)', 'post_content' => 'Muahahaha!'));
+        $postId = $this->client->newPost('This is original title', 'This is original body',
+            ['comment_status' => 'open']);
+        $result = $this->client->editPost($postId,
+            ['post_title' => 'Lorem Ipsum (edited)', 'post_content' => 'Muahahaha!']);
         $this->assertTrue($result);
 
         $post = $this->client->getPost($postId);
@@ -392,51 +400,52 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
      */
     public function testEditPostWithOtherInfoChange()
     {
-        $postId = $this->client->newPost('This is original title 2', 'This is original body 2');
-        $result = $this->client->editPost($postId, array(
+        $postId = $this->client->newPost('This is original title 2', 'This is original body 2',
+            ['comment_status' => 'open']);
+        $result = $this->client->editPost($postId, [
             'post_title'    => 'Lorem Ipsum (edited)',
             'post_content'  => 'Muahahaha!',
-            'custom_fields' => array(array('key' => 'foo', 'value' => 'bar'))));
+            'custom_fields' => [['key' => 'foo', 'value' => 'bar']],
+        ]);
         $this->assertTrue($result);
 
         $post = $this->client->getPost($postId);
         $this->assertSame('Lorem Ipsum (edited)', $post['post_title']);
         $this->assertSame('Muahahaha!', $post['post_content']);
-        $ok   = false;
-        foreach ($post['custom_fields'] as $field)
-        {
-            if ($field['key'] == 'foo' && $field['value'] == 'bar')
-            {
+        $ok = false;
+        foreach ($post['custom_fields'] as $field) {
+            if ($field['key'] == 'foo' && $field['value'] == 'bar') {
                 $ok = true;
                 break;
             }
         }
-        if (!$ok)
-        {
+        if (!$ok) {
             $this->fail('No custom fields');
         }
     }
 
     /**
-     * @vcr posts/test-edit-post-with-invalid-id-vcr.yml
+     * @vcr                      posts/test-edit-post-with-invalid-id-vcr.yml
      * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
-     * @expectedExceptionCode 404
+     * @expectedExceptionCode    404
      * @expectedExceptionMessage Invalid post ID.
      */
     public function testEditPostWithInvalidId()
     {
-        $result = $this->client->editPost(-1, array('post_title' => 'Lorem Ipsum (edited)', 'post_content' => 'Muahahaha!'));
+        $result = $this->client->editPost(-1, ['post_title' => 'Lorem Ipsum (edited)', 'post_content' => 'Muahahaha!']);
     }
 
     /**
-     * @vcr posts/test-edit-post-no-privilege-vcr.yml
+     * @vcr                      posts/test-edit-post-no-privilege-vcr.yml
      * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
-     * @expectedExceptionCode 401
+     * @expectedExceptionCode    401
      * @expectedExceptionMessage Sorry, you are not allowed to edit this post.
      */
     public function testEditPostNoPrivilege()
     {
-        $result = $this->guestClient->editPost(233, array());
+        $postId = $this->client->newPost('testEditPostNoPrivilege', 'testEditPostNoPrivilege',
+            ['comment_status' => 'open']);
+        $result = $this->guestClient->editPost($postId, []);
     }
 
     /**
@@ -444,17 +453,17 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
      */
     public function testDeletePost()
     {
-        $postId = $this->client->newPost('Created to delete', '');
+        $postId = $this->client->newPost('Created to delete', '', ['comment_status' => 'open']);
         $result = $this->client->deletePost($postId);
         $this->assertTrue($result);
-        $post   = $this->client->getPost($postId);
+        $post = $this->client->getPost($postId);
         $this->assertSame('trash', $post['post_status']);
     }
 
     /**
-     * @vcr posts/test-delete-post-with-invalid-id-vcr.yml
+     * @vcr                      posts/test-delete-post-with-invalid-id-vcr.yml
      * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
-     * @expectedExceptionCode 404
+     * @expectedExceptionCode    404
      * @expectedExceptionMessage Invalid post ID.
      */
     public function testDeletePostWithInvalidId()
@@ -463,14 +472,16 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @vcr posts/test-delete-post-no-privilege-vcr.yml
+     * @vcr                      posts/test-delete-post-no-privilege-vcr.yml
      * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
-     * @expectedExceptionCode 401
-     * @expectedExceptionMessage Sorry, you are not allowed to delete this post.
+     * @expectedExceptionCode    401
+     * @expectedExceptionMessage Sorry, you do not have the right to delete this post.
      */
     public function testDeletePostNoPrivilege()
     {
-        $result = $this->guestClient->deletePost(234);
+        $postId = $this->client->newPost('testDeletePostNoPrivilege', 'testDeletePostNoPrivilege',
+            ['comment_status' => 'open']);
+        $result = $this->guestClient->deletePost($postId);
     }
 
     /**
@@ -484,9 +495,9 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @vcr posts/test-get-post-type-no-privilege-vcr.yml
+     * @vcr                      posts/test-get-post-type-no-privilege-vcr.yml
      * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
-     * @expectedExceptionCode 401
+     * @expectedExceptionCode    401
      * @expectedExceptionMessage Sorry, you are not allowed to edit this post type.
      */
     public function testGetPostTypeNoPrivilege()
@@ -495,9 +506,9 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @vcr posts/test-get-post-type-invalid-name-vcr.yml
+     * @vcr                      posts/test-get-post-type-invalid-name-vcr.yml
      * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
-     * @expectedExceptionCode 403
+     * @expectedExceptionCode    403
      * @expectedExceptionMessage Invalid post type
      */
     public function testGetPostTypeInvalidName()
@@ -536,9 +547,9 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @vcr posts/test-get-post-formats-no-privilege-vcr.yml
+     * @vcr                      posts/test-get-post-formats-no-privilege-vcr.yml
      * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
-     * @expectedExceptionCode 403
+     * @expectedExceptionCode    403
      * @expectedExceptionMessage You are not allowed access to details about this site.
      */
     public function testGetPostFormatsNoPrivilege()
@@ -558,9 +569,9 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @vcr posts/test-get-post-status-list-no-privilege-vcr.yml
+     * @vcr                      posts/test-get-post-status-list-no-privilege-vcr.yml
      * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
-     * @expectedExceptionCode 403
+     * @expectedExceptionCode    403
      * @expectedExceptionMessage You are not allowed access to details about this site.
      */
     public function testGetPostStatusListNoPrivilege()
@@ -572,8 +583,8 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
     # Test taxonomies API
 
     #
-	
-	/**
+
+    /**
      * @vcr taxonomies/test-get-taxonomy-vcr.yml
      */
     public function testGetTaxonomy()
@@ -591,9 +602,9 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @vcr taxonomies/test-get-taxonomy-no-privilege-vcr.yml
+     * @vcr                      taxonomies/test-get-taxonomy-no-privilege-vcr.yml
      * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
-     * @expectedExceptionCode 401
+     * @expectedExceptionCode    401
      * @expectedExceptionMessage You are not allowed to assign terms in this taxonomy.
      */
     public function testGetTaxonomyNoPrivilege()
@@ -602,9 +613,9 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @vcr taxonomies/test-get-taxonomy-invalid-name-vcr.yml
+     * @vcr                      taxonomies/test-get-taxonomy-invalid-name-vcr.yml
      * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
-     * @expectedExceptionCode 403
+     * @expectedExceptionCode    403
      * @expectedExceptionMessage Invalid taxonomy
      */
     public function testGetTaxonomyInvalidName()
@@ -658,9 +669,9 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @vcr taxonomies/test-get-terms-no-privilege-vcr.yml
+     * @vcr                      taxonomies/test-get-terms-no-privilege-vcr.yml
      * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
-     * @expectedExceptionCode 401
+     * @expectedExceptionCode    401
      * @expectedExceptionMessage You are not allowed to assign terms in this taxonomy.
      */
     public function testGetTermsNoPrivilege()
@@ -669,9 +680,9 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @vcr taxonomies/test-get-terms-invalid-taxonomy-name-vcr.yml
+     * @vcr                      taxonomies/test-get-terms-invalid-taxonomy-name-vcr.yml
      * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
-     * @expectedExceptionCode 403
+     * @expectedExceptionCode    403
      * @expectedExceptionMessage Invalid taxonomy
      */
     public function testGetTermsInvalidTaxonomyName()
@@ -684,7 +695,7 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetTerm()
     {
-        $terms = $this->client->getTerms('category', array('number' => 1));
+        $terms = $this->client->getTerms('category', ['number' => 1]);
         $term  = $this->client->getTerm($terms[0]['term_id'], 'category');
         $this->assertArrayHasKey('term_id', $term);
         $this->assertArrayHasKey('name', $term);
@@ -698,9 +709,9 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @vcr taxonomies/test-get-term-no-privilege-vcr.yml
+     * @vcr                      taxonomies/test-get-term-no-privilege-vcr.yml
      * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
-     * @expectedExceptionCode 401
+     * @expectedExceptionCode    401
      * @expectedExceptionMessage You are not allowed to assign terms in this taxonomy.
      */
     public function testGetTermNoPrivilege()
@@ -709,9 +720,9 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @vcr taxonomies/test-get-term-invalid-taxonomy-name-vcr.yml
+     * @vcr                      taxonomies/test-get-term-invalid-taxonomy-name-vcr.yml
      * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
-     * @expectedExceptionCode 403
+     * @expectedExceptionCode    403
      * @expectedExceptionMessage Invalid taxonomy
      */
     public function testGetTermInvalidTaxonomyName()
@@ -720,9 +731,9 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @vcr taxonomies/test-get-term-invalid-term-id-vcr.yml
+     * @vcr                      taxonomies/test-get-term-invalid-term-id-vcr.yml
      * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
-     * @expectedExceptionCode 404
+     * @expectedExceptionCode    404
      * @expectedExceptionMessage Invalid term ID
      */
     public function testGetTermInvalidTermId()
@@ -735,7 +746,7 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
      */
     public function testNewTerm()
     {
-        $termId = (int) $this->client->newTerm('Category Lorem Ipsum', 'category');
+        $termId = (int)$this->client->newTerm('Category Lorem Ipsum', 'category');
         $this->assertGreaterThan(0, $termId);
 
         $term = $this->client->getTerm($termId, 'category');
@@ -747,7 +758,7 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
      */
     public function testNewTermWithMoreInfo()
     {
-        $termId = (int) $this->client->newTerm('Category Lorem', 'category', 'cat-lorem', 'Lorem Ipsum');
+        $termId = (int)$this->client->newTerm('Category Lorem', 'category', 'cat-lorem', 'Lorem Ipsum');
         $this->assertGreaterThan(0, $termId);
 
         $term = $this->client->getTerm($termId, 'category');
@@ -757,9 +768,9 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @vcr taxonomies/test-new-term-no-privilege-vcr.yml
+     * @vcr                      taxonomies/test-new-term-no-privilege-vcr.yml
      * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
-     * @expectedExceptionCode 401
+     * @expectedExceptionCode    401
      * @expectedExceptionMessage You are not allowed to create terms in this taxonomy.
      */
     public function testNewTermNoPrivilege()
@@ -768,9 +779,9 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @vcr taxonomies/test-new-term-invalid-taxonomy-name-vcr.yml
+     * @vcr                      taxonomies/test-new-term-invalid-taxonomy-name-vcr.yml
      * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
-     * @expectedExceptionCode 403
+     * @expectedExceptionCode    403
      * @expectedExceptionMessage Invalid taxonomy
      */
     public function testNewTermInvalidTaxonomyName()
@@ -779,9 +790,9 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @vcr taxonomies/test-new-term-empty-name-vcr.yml
+     * @vcr                      taxonomies/test-new-term-empty-name-vcr.yml
      * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
-     * @expectedExceptionCode 403
+     * @expectedExceptionCode    403
      * @expectedExceptionMessage The term name cannot be empty.
      */
     public function testNewTermEmptyName()
@@ -790,9 +801,9 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @vcr taxonomies/test-new-term-no-hierachical-vcr.yml
+     * @vcr                      taxonomies/test-new-term-no-hierachical-vcr.yml
      * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
-     * @expectedExceptionCode 403
+     * @expectedExceptionCode    403
      * @expectedExceptionMessage This taxonomy is not hierarchical.
      */
     public function testNewTermNoHierachical()
@@ -802,9 +813,9 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @vcr taxonomies/test-new-term-invalid-parent-vcr.yml
+     * @vcr                      taxonomies/test-new-term-invalid-parent-vcr.yml
      * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
-     * @expectedExceptionCode 403
+     * @expectedExceptionCode    403
      * @expectedExceptionMessage Parent term does not exist.
      */
     public function testNewTermInvalidParent()
@@ -818,8 +829,8 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
     public function testEditTerm()
     {
         $termId = $this->client->newTerm('Created to delete', 'category');
-        $this->assertGreaterThan(0, (int) $termId);
-        $result = $this->client->EditTerm($termId, 'category', array('name' => 'Category Lorem 2',));
+        $this->assertGreaterThan(0, (int)$termId);
+        $result = $this->client->EditTerm($termId, 'category', ['name' => 'Category Lorem 2',]);
         $this->assertTrue($result);
 
         $term = $this->client->getTerm($termId, 'category');
@@ -827,22 +838,22 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @vcr taxonomies/test-edit-term-no-privilege-vcr.yml
+     * @vcr                      taxonomies/test-edit-term-no-privilege-vcr.yml
      * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
-     * @expectedExceptionCode 401
+     * @expectedExceptionCode    401
      * @expectedExceptionMessage You are not allowed to edit terms in this taxonomy.
      */
     public function testEditTermNoPrivilege()
     {
-        $terms  = $this->client->getTerms('category', array('number' => 1));
+        $terms = $this->client->getTerms('category', ['number' => 1]);
         $this->assertNotEmpty($terms);
         $result = $this->guestClient->EditTerm($terms[0]['term_id'], 'category');
     }
 
     /**
-     * @vcr taxonomies/test-edit-term-invalid-taxonomy-name-vcr.yml
+     * @vcr                      taxonomies/test-edit-term-invalid-taxonomy-name-vcr.yml
      * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
-     * @expectedExceptionCode 403
+     * @expectedExceptionCode    403
      * @expectedExceptionMessage Invalid taxonomy
      */
     public function testEditTermInvalidTaxonomyName()
@@ -851,35 +862,35 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @vcr taxonomies/test-edit-term-empty-name-vcr.yml
+     * @vcr                      taxonomies/test-edit-term-empty-name-vcr.yml
      * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
-     * @expectedExceptionCode 403
+     * @expectedExceptionCode    403
      * @expectedExceptionMessage The term name cannot be empty.
      */
     public function testEditTermEmptyName()
     {
-        $terms  = $this->client->getTerms('category', array('number' => 1));
+        $terms = $this->client->getTerms('category', ['number' => 1]);
         $this->assertNotEmpty($terms);
-        $result = $this->client->EditTerm($terms[0]['term_id'], 'category', array('name' => ''));
+        $result = $this->client->EditTerm($terms[0]['term_id'], 'category', ['name' => '']);
     }
 
     /**
-     * @vcr taxonomies/test-edit-term-invalid-parent-vcr.yml
+     * @vcr                      taxonomies/test-edit-term-invalid-parent-vcr.yml
      * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
-     * @expectedExceptionCode 403
+     * @expectedExceptionCode    403
      * @expectedExceptionMessage Parent term does not exist.
      */
     public function testEditTermInvalidParent()
     {
-        $terms  = $this->client->getTerms('category', array('number' => 1));
+        $terms = $this->client->getTerms('category', ['number' => 1]);
         $this->assertNotEmpty($terms);
-        $result = $this->client->EditTerm($terms[0]['term_id'], 'category', array('parent' => 999));
+        $result = $this->client->EditTerm($terms[0]['term_id'], 'category', ['parent' => 999]);
     }
 
     /**
-     * @vcr taxonomies/test-edit-term-not-exist-vcr.yml
+     * @vcr                      taxonomies/test-edit-term-not-exist-vcr.yml
      * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
-     * @expectedExceptionCode 404
+     * @expectedExceptionCode    404
      * @expectedExceptionMessage Invalid term ID
      */
     public function testEditTermNotExist()
@@ -898,22 +909,22 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @vcr taxonomies/test-delete-term-no-privilege-vcr.yml
+     * @vcr                      taxonomies/test-delete-term-no-privilege-vcr.yml
      * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
-     * @expectedExceptionCode 401
+     * @expectedExceptionCode    401
      * @expectedExceptionMessage You are not allowed to delete terms in this taxonomy.
      */
     public function testDeleteTermNoPrivilege()
     {
-        $terms  = $this->client->getTerms('category', array('number' => 1));
+        $terms = $this->client->getTerms('category', ['number' => 1]);
         $this->assertNotEmpty($terms);
         $termId = $this->guestClient->DeleteTerm($terms[0]['term_id'], 'category');
     }
 
     /**
-     * @vcr taxonomies/test-delete-term-invalid-taxonomy-name-vcr.yml
+     * @vcr                      taxonomies/test-delete-term-invalid-taxonomy-name-vcr.yml
      * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
-     * @expectedExceptionCode 403
+     * @expectedExceptionCode    403
      * @expectedExceptionMessage Invalid taxonomy
      */
     public function testDeleteTermInvalidTaxonomyName()
@@ -922,9 +933,9 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @vcr taxonomies/test-delete-term-not-exist-vcr.yml
+     * @vcr                      taxonomies/test-delete-term-not-exist-vcr.yml
      * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
-     * @expectedExceptionCode 404
+     * @expectedExceptionCode    404
      * @expectedExceptionMessage Invalid term ID
      */
     public function testDeleteTermNotExist()
@@ -936,8 +947,8 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
     # Test media API
 
     #
-	
-	/**
+
+    /**
      * @vcr media/test-upload-file-vcr.yml
      */
     public function testUploadFile()
@@ -952,9 +963,9 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @vcr media/test-upload-file-no-privilege-vcr.yml
+     * @vcr                      media/test-upload-file-no-privilege-vcr.yml
      * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
-     * @expectedExceptionCode 401
+     * @expectedExceptionCode    401
      * @expectedExceptionMessage You do not have permission to upload files.
      */
     public function testUploadFileNoPrivilege()
@@ -963,9 +974,9 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @vcr media/test-upload-file-error-vcr.yml
+     * @vcr                      media/test-upload-file-error-vcr.yml
      * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
-     * @expectedExceptionCode 500
+     * @expectedExceptionCode    500
      * @expectedExceptionMessage Could not write file Foo (Invalid file type)
      */
     public function testUploadFileError()
@@ -994,9 +1005,9 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @vcr media/test-get-media-item-no-privilege-vcr.yml
+     * @vcr                      media/test-get-media-item-no-privilege-vcr.yml
      * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
-     * @expectedExceptionCode 403
+     * @expectedExceptionCode    403
      * @expectedExceptionMessage You do not have permission to upload files.
      */
     public function testGetMediaItemNoPrivilege()
@@ -1005,9 +1016,9 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @vcr media/test-get-media-item-no-exist-vcr.yml
+     * @vcr                      media/test-get-media-item-no-exist-vcr.yml
      * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
-     * @expectedExceptionCode 404
+     * @expectedExceptionCode    404
      * @expectedExceptionMessage Invalid attachment ID.
      */
     public function testGetMediaItemNoExist()
@@ -1041,7 +1052,7 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
      */
     public function testUploadFileWithAttachment()
     {
-        $post    = $this->client->newPost('Attachment post', '');
+        $post    = $this->client->newPost('Attachment post', '', ['comment_status' => 'open']);
         $content = file_get_contents("tests/image.jpg");
         $mime    = mime_content_type("tests/image.jpg");
         $file    = $this->client->uploadFile('baz image.jpg', $mime, $content, null, $post);
@@ -1059,14 +1070,14 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetMediaLibraryWithFilter()
     {
-        $medias = $this->client->getMediaLibrary(array('number' => 5));
+        $medias = $this->client->getMediaLibrary(['number' => 5]);
         $this->assertLessThanOrEqual(5, count($medias));
     }
 
     /**
-     * @vcr media/test-get-media-library-no-privilege-vcr.yml
+     * @vcr                      media/test-get-media-library-no-privilege-vcr.yml
      * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
-     * @expectedException 401
+     * @expectedException        401
      * @expectedExceptionMessage You do not have permission to upload files.
      */
     public function testGetMediaLibraryNoPrivilege()
@@ -1078,8 +1089,8 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
     # Test option API
 
     #
-	
-	/**
+
+    /**
      * @vcr options/test-get-options-vcr.yml
      */
     public function testGetOptions()
@@ -1096,7 +1107,7 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetOptionsWithFilter()
     {
-        $options = $this->client->getOptions(array('thumbnail_size_w', 'thumbnail_size_h'));
+        $options = $this->client->getOptions(['thumbnail_size_w', 'thumbnail_size_h']);
         $this->assertArrayHasKey('desc', head($options));
         $this->assertArrayHasKey('readonly', head($options));
         $this->assertArrayHasKey('value', head($options));
@@ -1109,46 +1120,46 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetOptions()
     {
-        $result = $this->client->setOptions(array('thumbnail_size_w' => 1000));
+        $result = $this->client->setOptions(['thumbnail_size_w' => 1000]);
         $this->assertSame(1000, $result['thumbnail_size_w']['value']);
     }
 
     /**
-     * @vcr options/test-set-options-no-privilege-vcr.yml
+     * @vcr                      options/test-set-options-no-privilege-vcr.yml
      * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
-     * @expectedExceptionCode 403
+     * @expectedExceptionCode    403
      * @expectedExceptionMessage You are not allowed to update options.
      */
     public function testSetOptionsNoPrivilege()
     {
-        $result = $this->guestClient->setOptions(array('thumbnail_size_w' => 1000));
+        $result = $this->guestClient->setOptions(['thumbnail_size_w' => 1000]);
     }
 
     #
     # Test comments API
 
     #
-	
-	/**
+
+    /**
      * @vcr comments/test-new-comment-vcr.yml
      */
     public function testNewComment()
     {
-        $posts     = $this->client->getPosts(array('number' => 1));
+        $posts = $this->client->getPosts(['number' => 1]);
         $this->assertNotEmpty($posts);
-        $commentId = $this->client->newComment($posts[0]['post_id'], array('content' => 'Lorem ipsum 123'));
-        $this->assertGreaterThan(0, (int) $commentId);
+        $commentId = $this->client->newComment($posts[0]['post_id'], ['content' => 'Lorem ipsum 123']);
+        $this->assertGreaterThan(0, (int)$commentId);
     }
 
     /**
-     * @vcr comments/test-new-conmment-no-post-exist-vcr.yml
+     * @vcr                      comments/test-new-conmment-no-post-exist-vcr.yml
      * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
-     * @expectedExceptionCode 404
+     * @expectedExceptionCode    404
      * @expectedExceptionMessage Invalid post ID.
      */
     public function testNewCommentNoPostExist()
     {
-        $commentId = $this->client->newComment(1000, array('content' => 'First comment'));
+        $commentId = $this->client->newComment(1000, ['content' => 'First comment']);
     }
 
     /**
@@ -1156,9 +1167,9 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetCommentCount()
     {
-        $posts     = $this->client->getPosts(array('number' => 1));
+        $posts = $this->client->getPosts(['number' => 1]);
         $this->assertNotEmpty($posts);
-        $commentId = $this->client->newComment($posts[0]['post_id'], array('content' => 'Lorem ipsum 123 abc'));
+        $commentId = $this->client->newComment($posts[0]['post_id'], ['content' => 'Lorem ipsum 123 abc']);
         $count     = $this->client->getCommentCount($posts[0]['post_id']);
         $this->assertArrayHasKey('approved', $count);
         $this->assertArrayHasKey('awaiting_moderation', $count);
@@ -1167,14 +1178,14 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @vcr comments/test-get-comment-count-no-privilege-vcr.yml
+     * @vcr                      comments/test-get-comment-count-no-privilege-vcr.yml
      * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
-     * @expectedExceptionCode 403
-     * @expectedExceptionMessage You are not allowed access to details about comments.
+     * @expectedExceptionCode    403
+     * @expectedExceptionMessage You are not allowed access to details of this post
      */
     public function testGetCommentCountNoPrivilege()
     {
-        $posts = $this->client->getPosts(array('number' => 1));
+        $posts = $this->client->getPosts(['number' => 1]);
         $this->assertNotEmpty($posts);
         $count = $this->guestClient->getCommentCount(1);
     }
@@ -1184,9 +1195,9 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetComment()
     {
-        $posts     = $this->client->getPosts(array('number' => 1));
+        $posts = $this->client->getPosts(['number' => 1]);
         $this->assertNotEmpty($posts);
-        $commentId = $this->client->newComment($posts[0]['post_id'], array('content' => 'Defacto 456'));
+        $commentId = $this->client->newComment($posts[0]['post_id'], ['content' => 'Defacto 456']);
         $comment   = $this->client->getComment($commentId);
         $this->assertArrayHasKey('comment_id', $comment);
         $this->assertArrayHasKey('parent', $comment);
@@ -1205,10 +1216,10 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @vcr comments/test-get-comment-no-privilege-vcr.yml
+     * @vcr                      comments/test-get-comment-no-privilege-vcr.yml
      * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
-     * @expectedExceptionCode 403
-     * @expectedExceptionMessage You are not allowed to moderate comments on this site.
+     * @expectedExceptionCode    403
+     * @expectedExceptionMessage You are not allowed to moderate or edit this comment
      */
     public function testGetCommentNoPrivilege()
     {
@@ -1216,9 +1227,9 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @vcr comments/test-get-comment-not-exist-vcr.yml
+     * @vcr                      comments/test-get-comment-not-exist-vcr.yml
      * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
-     * @expectedExceptionCode 404
+     * @expectedExceptionCode    404
      * @expectedExceptionMessage Invalid comment ID.
      */
     public function testGetCommentNotExist()
@@ -1231,9 +1242,9 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetCommentsNoFilter()
     {
-        $posts     = $this->client->getPosts(array('number' => 1));
+        $posts = $this->client->getPosts(['number' => 1]);
         $this->assertNotEmpty($posts);
-        $commentId = $this->client->newComment($posts[0]['post_id'], array('content' => 'Defacto 456 xyz!!!'));
+        $commentId = $this->client->newComment($posts[0]['post_id'], ['content' => 'Defacto 456 xyz!!!']);
         $comments  = $this->client->getComments();
         $this->assertGreaterThan(0, count($comments));
         $this->assertArrayHasKey('comment_id', $comments[0]);
@@ -1253,10 +1264,10 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @vcr comments/test-get-commnents-no-privilege-vcr.yml
+     * @vcr                      comments/test-get-commnents-no-privilege-vcr.yml
      * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
-     * @expectedExceptionCode 401
-     * @expectedExceptionMessage Sorry, you cannot edit comments.
+     * @expectedExceptionCode    401
+     * @expectedExceptionMessage Invalid comment status
      */
     public function testGetCommentsNoPrivilege()
     {
@@ -1268,36 +1279,36 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
      */
     public function testEditComment()
     {
-        $posts     = $this->client->getPosts(array('number' => 1));
+        $posts = $this->client->getPosts(['number' => 1]);
         $this->assertNotEmpty($posts);
-        $commentId = $this->client->newComment($posts[0]['post_id'], array('content' => 'A comment to be edit'));
-        $this->assertGreaterThan(0, (int) $commentId);
-        $result    = $this->client->editComment($commentId, array('content' => 'I have editted this comment!'));
+        $commentId = $this->client->newComment($posts[0]['post_id'], ['content' => 'A comment to be edit']);
+        $this->assertGreaterThan(0, (int)$commentId);
+        $result = $this->client->editComment($commentId, ['content' => 'I have editted this comment!']);
         $this->assertTrue($result);
-        $comment   = $this->client->getComment($commentId);
+        $comment = $this->client->getComment($commentId);
         $this->assertSame('I have editted this comment!', $comment['content']);
     }
 
     /**
-     * @vcr comments/test-edit-comment-not-exist-vcr.yml
+     * @vcr                      comments/test-edit-comment-not-exist-vcr.yml
      * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
-     * @expectedExceptionCode 404
+     * @expectedExceptionCode    404
      * @expectedExceptionMessage Invalid comment ID.
      */
     public function testEditCommentNotExist()
     {
-        $result = $this->client->editComment(-1, array('content' => 'I have editted this comment!'));
+        $result = $this->client->editComment(-1, ['content' => 'I have editted this comment!']);
     }
 
     /**
-     * @vcr comments/test-edit-comment-no-privilege-vcr.yml
+     * @vcr                      comments/test-edit-comment-no-privilege-vcr.yml
      * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
-     * @expectedExceptionCode 403
-     * @expectedExceptionMessage You are not allowed to moderate comments on this site.
+     * @expectedExceptionCode    403
+     * @expectedExceptionMessage You are not allowed to moderate or edit this comment
      */
     public function testEditCommentNoPrivilege()
     {
-        $result = $this->guestClient->editComment(1, array('content' => 'I have editted this comment!'));
+        $result = $this->guestClient->editComment(1, ['content' => 'I have editted this comment!']);
     }
 
     /**
@@ -1305,20 +1316,20 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
      */
     public function testDeleteComment()
     {
-        $posts     = $this->client->getPosts(array('number' => 1));
+        $posts = $this->client->getPosts(['number' => 1]);
         $this->assertNotEmpty($posts);
-        $commentId = $this->client->newComment($posts[0]['post_id'], array('content' => 'A comment to be edit'));
-        $this->assertGreaterThan(0, (int) $commentId);
-        $result    = $this->client->deleteComment($commentId);
+        $commentId = $this->client->newComment($posts[0]['post_id'], ['content' => 'A comment to be edit']);
+        $this->assertGreaterThan(0, (int)$commentId);
+        $result = $this->client->deleteComment($commentId);
         $this->assertTrue($result);
-        $comment   = $this->client->getComment($commentId);
+        $comment = $this->client->getComment($commentId);
         $this->assertSame('trash', $comment['status']);
     }
 
     /**
-     * @vcr comments/test-delete-comment-not-exist-vcr.yml
+     * @vcr                      comments/test-delete-comment-not-exist-vcr.yml
      * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
-     * @expectedExceptionCode 404
+     * @expectedExceptionCode    404
      * @expectedExceptionMessage Invalid comment ID.
      */
     public function testDeleteCommentNotExist()
@@ -1327,10 +1338,10 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @vcr comments/test-delete-comment-no-privilege-vcr.yml
+     * @vcr                      comments/test-delete-comment-no-privilege-vcr.yml
      * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
-     * @expectedExceptionCode 403
-     * @expectedExceptionMessage You are not allowed to moderate comments on this site.
+     * @expectedExceptionCode    403
+     * @expectedExceptionMessage You are not allowed to moderate or edit this comment
      */
     public function testDeleteCommentNoPrivilege()
     {
@@ -1350,8 +1361,8 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
     # Test user API
 
     #
-	
-	/**
+
+    /**
      * @vcr users/test-get-profile-vcr.yml
      */
     public function testGetProfile()
@@ -1370,7 +1381,7 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('registered', $user);
         $this->assertArrayHasKey('roles', $user);
 
-        $user = $this->client->getProfile(array('user_id', 'email'));
+        $user = $this->client->getProfile(['user_id', 'email']);
         $this->assertArrayHasKey('user_id', $user);
         $this->assertArrayNotHasKey('username', $user);
         $this->assertArrayNotHasKey('first_name', $user);
@@ -1400,10 +1411,10 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @vcr users/test-get-user-no-privilege-vcr.yml
+     * @vcr                      users/test-get-user-no-privilege-vcr.yml
      * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
-     * @expectedExceptionCode 401
-     * @expectedExceptionMessage Sorry, you cannot edit users.
+     * @expectedExceptionCode    401
+     * @expectedExceptionMessage Sorry, you cannot edit users
      */
     public function testGetUserNoPrivilege()
     {
@@ -1412,9 +1423,9 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @vcr users/test-get-user-not-exist-vcr.yml
+     * @vcr                      users/test-get-user-not-exist-vcr.yml
      * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
-     * @expectedExceptionCode 404
+     * @expectedExceptionCode    404
      * @expectedExceptionMessage Invalid user ID
      */
     public function testGetUserNotExist()
@@ -1442,7 +1453,7 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('registered', $user);
         $this->assertArrayHasKey('roles', $user);
 
-        $user = $this->client->getUser($profile['user_id'], array('user_id', 'email'));
+        $user = $this->client->getUser($profile['user_id'], ['user_id', 'email']);
         $this->assertArrayHasKey('user_id', $user);
         $this->assertArrayNotHasKey('username', $user);
         $this->assertArrayNotHasKey('first_name', $user);
@@ -1458,10 +1469,10 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @vcr users/test-get-users-no-privilege-vcr.yml
+     * @vcr                      users/test-get-users-no-privilege-vcr.yml
      * @expectedException \HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
-     * @expectedExceptionCode 401
-     * @expectedExceptionMessage Sorry, you cannot list users.
+     * @expectedExceptionCode    401
+     * @expectedExceptionMessage You are not allowed to browse users
      */
     public function testGetUsersNoPrivilege()
     {
@@ -1488,7 +1499,7 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('registered', $users[0]);
         $this->assertArrayHasKey('roles', $users[0]);
 
-        $users = $this->client->getUsers(array(), array('user_id', 'email'));
+        $users = $this->client->getUsers([], ['user_id', 'email']);
         $this->assertGreaterThan(0, count($users));
         $this->assertArrayHasKey('user_id', $users[0]);
         $this->assertArrayNotHasKey('username', $users[0]);
@@ -1505,14 +1516,14 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @vcr users/test-get-users-invalid-role-vcr.yml
+     * @vcr                      users/test-get-users-invalid-role-vcr.yml
      * @expectedException HieuLe\WordpressXmlrpcClient\Exception\XmlrpcException
-     * @expectedExceptionCode 403
+     * @expectedExceptionCode    403
      * @expectedExceptionMessage The role specified is not valid
      */
     public function testGetUsersInvalidRole()
     {
-        $users = $this->client->getUsers(array('role' => 'foo'));
+        $users = $this->client->getUsers(['role' => 'foo']);
     }
 
     /**
@@ -1520,9 +1531,9 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
      */
     public function testEditProfile()
     {
-        $result = $this->client->editProfile(array('nickname' => 'JD'));
+        $result = $this->client->editProfile(['nickname' => 'JD']);
         $this->assertTrue($result);
-        $user   = $this->client->getProfile();
+        $user = $this->client->getProfile();
         $this->assertSame('JD', $user['nickname']);
     }
 
@@ -1543,66 +1554,60 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
     public function testErrorCallbacks()
     {
         $xmlrpcClient = new HieuLe\WordpressXmlrpcClient\WordpressClient();
-        $error        = array();
-        $xmlrpcClient->onError(function($e, $event) use (&$error) {
-            $error['e'] = $e;
+        $error        = [];
+        $xmlrpcClient->onError(function ($e, $event) use (&$error) {
+            $error['e']     = $e;
             $error['event'] = $event;
         });
-        
-        try
-        {
-           $xmlrpcClient->getProfile();
-        }
-        catch (Exception $ex)
-        {
+
+        try {
+            $xmlrpcClient->getProfile();
+        } catch (Exception $ex) {
             $this->assertArrayHasKey('e', $error);
             $this->assertArrayHasKey('event', $error);
             $this->assertArrayHasKey('endpoint', $error['event']);
+
             return;
         }
-        
-        $xmlrpcClient->onError(function($e, $event) use (&$error) {
+
+        $xmlrpcClient->onError(function ($e, $event) use (&$error) {
             $error['e'] = 1;
         });
-        
-        try
-        {
-           $xmlrpcClient->getProfile();
-        }
-        catch (Exception $ex)
-        {
+
+        try {
+            $xmlrpcClient->getProfile();
+        } catch (Exception $ex) {
             $this->assertSame(1, $error['e']);
+
             return;
         }
         $this->fail('Error callbacks not called');
     }
-    
+
     /**
      * @vcr test-on-sending-callbacks-vcr.yml
      */
     public function testOnSendingCallbacks()
     {
         $xmlrpcClient = new HieuLe\WordpressXmlrpcClient\WordpressClient(static::$_endpoint);
-        $log        = array();
-        $xmlrpcClient->onSending(function($event) use (&$log) {
+        $log          = [];
+        $xmlrpcClient->onSending(function ($event) use (&$log) {
             $log[0] = $event;
         });
-        
-        try
-        {
-           $xmlrpcClient->getProfile();
-        }
-        catch (Exception $ex)
-        {
+
+        try {
+            $xmlrpcClient->getProfile();
+        } catch (Exception $ex) {
             $this->assertArrayHasKey('event', $log[0]);
             $this->assertArrayHasKey('endpoint', $log[0]);
             $this->assertArrayHasKey('username', $log[0]);
             $this->assertArrayHasKey('password', $log[0]);
             $this->assertArrayHasKey('method', $log[0]);
             $this->assertArrayHasKey('params', $log[0]);
+
             return;
         }
-        
+
         $this->fail('Sending callbacks not called');
     }
 
@@ -1611,12 +1616,15 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
      */
     public function testNewPostWithUtf8Content()
     {
-        $postId = (int) $this->client->newPost('Đây là một tiêu đề ở định dạng UTF-8', 'Lorem Ipsum chỉ đơn giản là một đoạn văn bản giả, được dùng vào việc trình bày và dàn trang phục vụ cho in ấn');
+        $postId = (int)$this->client->newPost('Đây là một tiêu đề ở định dạng UTF-8',
+            'Lorem Ipsum chỉ đơn giản là một đoạn văn bản giả, được dùng vào việc trình bày và dàn trang phục vụ cho in ấn',
+            ['comment_status' => 'open']);
         $this->assertGreaterThan(0, $postId);
 
         $post = $this->client->getPost($postId);
         $this->assertSame('Đây là một tiêu đề ở định dạng UTF-8', $post['post_title']);
-        $this->assertSame('Lorem Ipsum chỉ đơn giản là một đoạn văn bản giả, được dùng vào việc trình bày và dàn trang phục vụ cho in ấn', $post['post_content']);
+        $this->assertSame('Lorem Ipsum chỉ đơn giản là một đoạn văn bản giả, được dùng vào việc trình bày và dàn trang phục vụ cho in ấn',
+            $post['post_content']);
     }
 
 }

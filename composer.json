@@ -10,12 +10,6 @@
 			"homepage": "http://www.hieule.info"
 		}
 	],
-	"repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/letrunghieu/php-vcr.git"
-        }
-    ],
 	"require": {
 		"php": ">=5.3.0",
 		"ext-xmlrpc": "*"
@@ -23,7 +17,7 @@
 	"require-dev": {
 		"phpunit/phpunit": "*",
 		"symfony/yaml": "2.*",
-		"php-vcr/php-vcr": "dev-master",
+		"php-vcr/php-vcr": "^1.0",
 		"php-vcr/phpunit-testlistener-vcr": "*",
 		"illuminate/support": "~4.0",
 		"codeclimate/php-test-reporter": "dev-master"

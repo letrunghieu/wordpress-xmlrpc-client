@@ -4,17 +4,18 @@
         method: POST
         url: 'http://WP_DOMAIN/xmlrpc.php'
         headers:
-            host: WP_DOMAIN
-            content-length: 286
+            Host: WP_DOMAIN
         body: "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<methodCall>\n<methodName>wp.getProfile</methodName>\n<params>\n <param>\n  <value>\n   <int>1</int>\n  </value>\n </param>\n <param>\n  <value>\n   <string/>\n  </value>\n </param>\n <param>\n  <value>\n   <string/>\n  </value>\n </param>\n</params>\n</methodCall>\n"
     response:
-        status: 200
+        status:
+            http_version: '1.1'
+            code: '200'
+            message: OK
         headers:
-            Date: 'Mon, 25 Aug 2014 03:29:00 GMT'
-            Server: 'Apache/2.4.9 (Win64) PHP/5.5.12'
-            X-Powered-By: PHP/5.5.12
-            Set-Cookie: '_icl_current_language=en; expires=Tue, 26-Aug-2014 03:29:01 GMT; Max-Age=86400; path=/'
-            Connection: close
-            Content-Length: '419'
             Content-Type: 'text/xml; charset=UTF-8'
-        body: "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<methodResponse>\r\n  <fault>\r\n    <value>\r\n      <struct>\r\n        <member>\r\n          <name>faultCode</name>\r\n          <value><int>403</int></value>\r\n        </member>\r\n        <member>\r\n          <name>faultString</name>\r\n          <value><string>Incorrect username or password.</string></value>\r\n        </member>\r\n      </struct>\r\n    </value>\r\n  </fault>\r\n</methodResponse>\r\n"
+            Server: Microsoft-IIS/7.5
+            X-Powered-By: 'PHP/7.0.0, ASP.NET'
+            Date: 'Tue, 02 Feb 2016 09:21:44 GMT'
+            Connection: close
+            Content-Length: '403'
+        body: "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<methodResponse>\n  <fault>\n    <value>\n      <struct>\n        <member>\n          <name>faultCode</name>\n          <value><int>403</int></value>\n        </member>\n        <member>\n          <name>faultString</name>\n          <value><string>Incorrect username or password.</string></value>\n        </member>\n      </struct>\n    </value>\n  </fault>\n</methodResponse>\n"

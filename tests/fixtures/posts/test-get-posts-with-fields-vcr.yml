@@ -4,17 +4,18 @@
         method: POST
         url: 'http://WP_DOMAIN/xmlrpc.php'
         headers:
-            host: WP_DOMAIN
-            content-length: 597
+            Host: WP_DOMAIN
         body: "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<methodCall>\n<methodName>wp.getPosts</methodName>\n<params>\n <param>\n  <value>\n   <int>1</int>\n  </value>\n </param>\n <param>\n  <value>\n   <string>WP_USER</string>\n  </value>\n </param>\n <param>\n  <value>\n   <string>WP_PASSWORD</string>\n  </value>\n </param>\n <param>\n  <value>\n   <array>\n    <data/>\n   </array>\n  </value>\n </param>\n <param>\n  <value>\n   <array>\n    <data>\n     <value>\n      <string>post_id</string>\n     </value>\n     <value>\n      <string>post_date</string>\n     </value>\n    </data>\n   </array>\n  </value>\n </param>\n</params>\n</methodCall>\n"
     response:
-        status: 200
+        status:
+            http_version: '1.1'
+            code: '200'
+            message: OK
         headers:
-            Date: 'Fri, 18 Apr 2014 02:43:02 GMT'
-            Server: 'Apache/2.4.2 (Win64) OpenSSL/1.0.1c PHP/5.4.3'
-            X-Powered-By: PHP/5.4.3
-            Set-Cookie: '_icl_current_language=en; expires=Sat, 19-Apr-2014 02:43:03 GMT; path=/'
-            Connection: close
-            Content-Length: '2407'
             Content-Type: 'text/xml; charset=UTF-8'
-        body: "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<methodResponse>\n  <params>\n    <param>\n      <value>\n      <array><data>\n  <value><struct>\n  <member><name>post_id</name><value><string>253</string></value></member>\n  <member><name>post_date</name><value><dateTime.iso8601>20140418T02:41:52</dateTime.iso8601></value></member>\n</struct></value>\n  <value><struct>\n  <member><name>post_id</name><value><string>251</string></value></member>\n  <member><name>post_date</name><value><dateTime.iso8601>20140418T02:34:13</dateTime.iso8601></value></member>\n</struct></value>\n  <value><struct>\n  <member><name>post_id</name><value><string>250</string></value></member>\n  <member><name>post_date</name><value><dateTime.iso8601>20140418T02:34:04</dateTime.iso8601></value></member>\n</struct></value>\n  <value><struct>\n  <member><name>post_id</name><value><string>247</string></value></member>\n  <member><name>post_date</name><value><dateTime.iso8601>20140418T02:33:51</dateTime.iso8601></value></member>\n</struct></value>\n  <value><struct>\n  <member><name>post_id</name><value><string>246</string></value></member>\n  <member><name>post_date</name><value><dateTime.iso8601>20140418T02:33:45</dateTime.iso8601></value></member>\n</struct></value>\n  <value><struct>\n  <member><name>post_id</name><value><string>241</string></value></member>\n  <member><name>post_date</name><value><dateTime.iso8601>20140416T03:56:13</dateTime.iso8601></value></member>\n</struct></value>\n  <value><struct>\n  <member><name>post_id</name><value><string>240</string></value></member>\n  <member><name>post_date</name><value><dateTime.iso8601>20140416T03:56:06</dateTime.iso8601></value></member>\n</struct></value>\n  <value><struct>\n  <member><name>post_id</name><value><string>239</string></value></member>\n  <member><name>post_date</name><value><dateTime.iso8601>20140416T03:55:59</dateTime.iso8601></value></member>\n</struct></value>\n  <value><struct>\n  <member><name>post_id</name><value><string>238</string></value></member>\n  <member><name>post_date</name><value><dateTime.iso8601>20140415T08:26:25</dateTime.iso8601></value></member>\n</struct></value>\n  <value><struct>\n  <member><name>post_id</name><value><string>237</string></value></member>\n  <member><name>post_date</name><value><dateTime.iso8601>20140415T08:25:18</dateTime.iso8601></value></member>\n</struct></value>\n</data></array>\n      </value>\n    </param>\n  </params>\n</methodResponse>\n"
+            Server: Microsoft-IIS/7.5
+            X-Powered-By: 'PHP/7.0.0, ASP.NET'
+            Date: 'Tue, 02 Feb 2016 09:20:37 GMT'
+            Connection: close
+            Content-Length: '407'
+        body: "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<methodResponse>\n  <params>\n    <param>\n      <value>\n      <array><data>\n  <value><struct>\n  <member><name>post_id</name><value><string>1</string></value></member>\n  <member><name>post_date</name><value><dateTime.iso8601>20160202T08:35:48</dateTime.iso8601></value></member>\n</struct></value>\n</data></array>\n      </value>\n    </param>\n  </params>\n</methodResponse>\n"
