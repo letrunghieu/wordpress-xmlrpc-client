@@ -399,7 +399,7 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
     public function testNewPostInvalidTerm()
     {
         $postId = $this->client->newPost('Foo title', '',
-            ['comment_status' => 'open', 'terms' => ['category' => array(2000, 2001)]]);
+            array('comment_status' => 'open', 'terms' => array('category' => array(2000, 2001))));
     }
 
     /**
