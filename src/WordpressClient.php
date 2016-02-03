@@ -1067,7 +1067,7 @@ class WordpressClient
             'auth'     => $this->_authConfig,
         );
         foreach ($callbacks as $callback) {
-            $callback($this->_error, $event);
+            call_user_func($callback, $this->_error, $event);
         }
     }
 
