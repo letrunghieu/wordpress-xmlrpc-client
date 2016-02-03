@@ -134,7 +134,7 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetPostsWithFilters()
     {
-        $posts = $this->client->getPosts(['number' => 5]);
+        $posts = $this->client->getPosts(array('number' => 5));
         $this->assertLessThanOrEqual(5, count($posts));
         $this->assertGreaterThan(0, count($posts));
         $this->assertArrayHasKey('post_id', $posts[0]);
@@ -169,7 +169,7 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetPostsWithFields()
     {
-        $posts = $this->client->getPosts([], ['post_id', 'post_date']);
+        $posts = $this->client->getPosts(array(), array('post_id', 'post_date'));
         $this->assertGreaterThan(0, count($posts));
         $this->assertArrayHasKey('post_id', $posts[0]);
         $this->assertArrayNotHasKey('post_title', $posts[0]);
@@ -214,7 +214,7 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetPostReturnOk()
     {
-        $posts = $this->client->getPosts(['number' => 1]);
+        $posts = $this->client->getPosts(array('number' => 1));
         $post  = $this->client->getPost($posts[0]['post_id']);
         $this->assertArrayHasKey('post_id', $post);
         $this->assertArrayHasKey('post_title', $post);
@@ -248,8 +248,8 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetPostWithFieldsReturnOk()
     {
-        $posts = $this->client->getPosts(['number' => 1]);
-        $post  = $this->client->getPost($posts[0]['post_id'], ['post_title', 'post_status']);
+        $posts = $this->client->getPosts(array('number' => 1));
+        $post  = $this->client->getPost($posts[0]['post_id'], array('post_title', 'post_status'));
         $this->assertArrayHasKey('post_id', $post);
         $this->assertArrayHasKey('post_title', $post);
         $this->assertArrayNotHasKey('post_date', $post);
@@ -286,8 +286,8 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
     public function testGetPostErrorNotHavePermission()
     {
         $postId = $this->client->newPost('testGetPostErrorNotHavePermission', 'testGetPostErrorNotHavePermission',
-            ['comment_status' => 'open']);
-        $post   = $this->guestClient->getPost($postId, ['post_title', 'post_status']);
+            array('comment_status' => 'open'));
+        $post   = $this->guestClient->getPost($postId, array('post_title', 'post_status'));
     }
 
     /**
@@ -306,7 +306,7 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
      */
     public function testNewPostMinimalInfo()
     {
-        $postId = (int)$this->client->newPost('Lorem ipsum', 'This is a demo post', ['comment_status' => 'open']);
+        $postId = (int)$this->client->newPost('Lorem ipsum', 'This is a demo post', array('comment_status' => 'open'));
         $this->assertGreaterThan(0, $postId);
 
         $post = $this->client->getPost($postId);
@@ -318,13 +318,47 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
      */
     public function testNewPostWithAdvancedFields()
     {
+        if (version_compare(PHP_VERSION, '7.0.0', '>=')) {
+            $this->markTestSkipped('This test case is not compatible with PHP 7.0');
+        }
         $postDate = new DateTime('20140101T00:00:00+07:00');
         $postId   = (int)$this->client->newPost('Lorem ipsum advanced', 'This is a demo post',
-            [
+            array(
                 'comment_status' => 'open',
                 'post_date'      => $postDate,
-                'custom_fields'  => [['key' => 'foo', 'value' => 'bar']],
-            ]);
+                'custom_fields'  => array(array('key' => 'foo', 'value' => 'bar')),
+            ));
+        $this->assertGreaterThan(0, $postId);
+
+        $post = $this->client->getPost($postId);
+        $this->assertSame('Lorem ipsum advanced', $post['post_title']);
+        $this->assertGreaterThanOrEqual(1, count($post['custom_fields']));
+        $this->assertSame($postDate->format('Ymd\TH:i:s'), $post['post_date']->scalar);
+        $this->assertSame($postDate->getTimestamp(), $post['post_date_gmt']->timestamp);
+        $ok = false;
+        foreach ($post['custom_fields'] as $field) {
+            if ($field['key'] == 'foo' && $field['value'] == 'bar') {
+                $ok = true;
+                break;
+            }
+        }
+        if (!$ok) {
+            $this->fail('No custom fields');
+        }
+    }
+
+    /**
+     * @vcr posts/test-new-post-with-advanced-fields-vcr.yml
+     */
+    public function testNewPostWithAdvancedFieldsExplicity()
+    {
+        $postDate = new DateTime('20140101T00:00:00+07:00');
+        $postId   = (int)$this->client->newPost('Lorem ipsum advanced', 'This is a demo post',
+            array(
+                'comment_status' => 'open',
+                'post_date'      => $this->client->createXMLRPCDateTime($postDate),
+                'custom_fields'  => array(array('key' => 'foo', 'value' => 'bar')),
+            ));
         $this->assertGreaterThan(0, $postId);
 
         $post = $this->client->getPost($postId);
@@ -353,7 +387,7 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
     public function testNewPostNoPrivilege()
     {
         $postId = $this->guestClient->newPost('testNewPostNoPrivilege', 'testNewPostNoPrivilege',
-            ['comment_status' => 'open']);
+            array('comment_status' => 'open'));
     }
 
     /**
@@ -365,7 +399,7 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
     public function testNewPostInvalidTerm()
     {
         $postId = $this->client->newPost('Foo title', '',
-            ['comment_status' => 'open', 'terms' => ['category' => [2000, 2001]]]);
+            ['comment_status' => 'open', 'terms' => ['category' => array(2000, 2001)]]);
     }
 
     /**
@@ -376,7 +410,7 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
      */
     public function testNewPostInvalidThumbnail()
     {
-        $postId = $this->client->newPost('', '', ['comment_status' => 'open', 'post_thumbnail' => 9999]);
+        $postId = $this->client->newPost('', '', array('comment_status' => 'open', 'post_thumbnail' => 9999));
     }
 
     /**
@@ -385,9 +419,9 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
     public function testEditPostTitleAndContent()
     {
         $postId = $this->client->newPost('This is original title', 'This is original body',
-            ['comment_status' => 'open']);
+            array('comment_status' => 'open'));
         $result = $this->client->editPost($postId,
-            ['post_title' => 'Lorem Ipsum (edited)', 'post_content' => 'Muahahaha!']);
+            array('post_title' => 'Lorem Ipsum (edited)', 'post_content' => 'Muahahaha!'));
         $this->assertTrue($result);
 
         $post = $this->client->getPost($postId);
@@ -401,12 +435,12 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
     public function testEditPostWithOtherInfoChange()
     {
         $postId = $this->client->newPost('This is original title 2', 'This is original body 2',
-            ['comment_status' => 'open']);
-        $result = $this->client->editPost($postId, [
+            array('comment_status' => 'open'));
+        $result = $this->client->editPost($postId, array(
             'post_title'    => 'Lorem Ipsum (edited)',
             'post_content'  => 'Muahahaha!',
-            'custom_fields' => [['key' => 'foo', 'value' => 'bar']],
-        ]);
+            'custom_fields' => array(array('key' => 'foo', 'value' => 'bar')),
+        ));
         $this->assertTrue($result);
 
         $post = $this->client->getPost($postId);
@@ -432,7 +466,8 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
      */
     public function testEditPostWithInvalidId()
     {
-        $result = $this->client->editPost(-1, ['post_title' => 'Lorem Ipsum (edited)', 'post_content' => 'Muahahaha!']);
+        $result = $this->client->editPost(-1,
+            array('post_title' => 'Lorem Ipsum (edited)', 'post_content' => 'Muahahaha!'));
     }
 
     /**
@@ -444,8 +479,8 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
     public function testEditPostNoPrivilege()
     {
         $postId = $this->client->newPost('testEditPostNoPrivilege', 'testEditPostNoPrivilege',
-            ['comment_status' => 'open']);
-        $result = $this->guestClient->editPost($postId, []);
+            array('comment_status' => 'open'));
+        $result = $this->guestClient->editPost($postId, array());
     }
 
     /**
@@ -453,7 +488,7 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
      */
     public function testDeletePost()
     {
-        $postId = $this->client->newPost('Created to delete', '', ['comment_status' => 'open']);
+        $postId = $this->client->newPost('Created to delete', '', array('comment_status' => 'open'));
         $result = $this->client->deletePost($postId);
         $this->assertTrue($result);
         $post = $this->client->getPost($postId);
@@ -480,7 +515,7 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
     public function testDeletePostNoPrivilege()
     {
         $postId = $this->client->newPost('testDeletePostNoPrivilege', 'testDeletePostNoPrivilege',
-            ['comment_status' => 'open']);
+            array('comment_status' => 'open'));
         $result = $this->guestClient->deletePost($postId);
     }
 
@@ -695,7 +730,7 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetTerm()
     {
-        $terms = $this->client->getTerms('category', ['number' => 1]);
+        $terms = $this->client->getTerms('category', array('number' => 1));
         $term  = $this->client->getTerm($terms[0]['term_id'], 'category');
         $this->assertArrayHasKey('term_id', $term);
         $this->assertArrayHasKey('name', $term);
@@ -830,7 +865,7 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
     {
         $termId = $this->client->newTerm('Created to delete', 'category');
         $this->assertGreaterThan(0, (int)$termId);
-        $result = $this->client->EditTerm($termId, 'category', ['name' => 'Category Lorem 2',]);
+        $result = $this->client->EditTerm($termId, 'category', array('name' => 'Category Lorem 2',));
         $this->assertTrue($result);
 
         $term = $this->client->getTerm($termId, 'category');
@@ -845,7 +880,7 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
      */
     public function testEditTermNoPrivilege()
     {
-        $terms = $this->client->getTerms('category', ['number' => 1]);
+        $terms = $this->client->getTerms('category', array('number' => 1));
         $this->assertNotEmpty($terms);
         $result = $this->guestClient->EditTerm($terms[0]['term_id'], 'category');
     }
@@ -869,9 +904,9 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
      */
     public function testEditTermEmptyName()
     {
-        $terms = $this->client->getTerms('category', ['number' => 1]);
+        $terms = $this->client->getTerms('category', array('number' => 1));
         $this->assertNotEmpty($terms);
-        $result = $this->client->EditTerm($terms[0]['term_id'], 'category', ['name' => '']);
+        $result = $this->client->EditTerm($terms[0]['term_id'], 'category', array('name' => ''));
     }
 
     /**
@@ -882,9 +917,9 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
      */
     public function testEditTermInvalidParent()
     {
-        $terms = $this->client->getTerms('category', ['number' => 1]);
+        $terms = $this->client->getTerms('category', array('number' => 1));
         $this->assertNotEmpty($terms);
-        $result = $this->client->EditTerm($terms[0]['term_id'], 'category', ['parent' => 999]);
+        $result = $this->client->EditTerm($terms[0]['term_id'], 'category', array('parent' => 999));
     }
 
     /**
@@ -916,7 +951,7 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
      */
     public function testDeleteTermNoPrivilege()
     {
-        $terms = $this->client->getTerms('category', ['number' => 1]);
+        $terms = $this->client->getTerms('category', array('number' => 1));
         $this->assertNotEmpty($terms);
         $termId = $this->guestClient->DeleteTerm($terms[0]['term_id'], 'category');
     }
@@ -1052,7 +1087,7 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
      */
     public function testUploadFileWithAttachment()
     {
-        $post    = $this->client->newPost('Attachment post', '', ['comment_status' => 'open']);
+        $post    = $this->client->newPost('Attachment post', '', array('comment_status' => 'open'));
         $content = file_get_contents("tests/image.jpg");
         $mime    = mime_content_type("tests/image.jpg");
         $file    = $this->client->uploadFile('baz image.jpg', $mime, $content, null, $post);
@@ -1070,7 +1105,7 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetMediaLibraryWithFilter()
     {
-        $medias = $this->client->getMediaLibrary(['number' => 5]);
+        $medias = $this->client->getMediaLibrary(array('number' => 5));
         $this->assertLessThanOrEqual(5, count($medias));
     }
 
@@ -1107,7 +1142,7 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetOptionsWithFilter()
     {
-        $options = $this->client->getOptions(['thumbnail_size_w', 'thumbnail_size_h']);
+        $options = $this->client->getOptions(array('thumbnail_size_w', 'thumbnail_size_h'));
         $this->assertArrayHasKey('desc', head($options));
         $this->assertArrayHasKey('readonly', head($options));
         $this->assertArrayHasKey('value', head($options));
@@ -1120,7 +1155,7 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetOptions()
     {
-        $result = $this->client->setOptions(['thumbnail_size_w' => 1000]);
+        $result = $this->client->setOptions(array('thumbnail_size_w' => 1000));
         $this->assertSame(1000, $result['thumbnail_size_w']['value']);
     }
 
@@ -1132,7 +1167,7 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetOptionsNoPrivilege()
     {
-        $result = $this->guestClient->setOptions(['thumbnail_size_w' => 1000]);
+        $result = $this->guestClient->setOptions(array('thumbnail_size_w' => 1000));
     }
 
     #
@@ -1145,9 +1180,9 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
      */
     public function testNewComment()
     {
-        $posts = $this->client->getPosts(['number' => 1]);
+        $posts = $this->client->getPosts(array('number' => 1));
         $this->assertNotEmpty($posts);
-        $commentId = $this->client->newComment($posts[0]['post_id'], ['content' => 'Lorem ipsum 123']);
+        $commentId = $this->client->newComment($posts[0]['post_id'], array('content' => 'Lorem ipsum 123'));
         $this->assertGreaterThan(0, (int)$commentId);
     }
 
@@ -1159,7 +1194,7 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
      */
     public function testNewCommentNoPostExist()
     {
-        $commentId = $this->client->newComment(1000, ['content' => 'First comment']);
+        $commentId = $this->client->newComment(1000, array('content' => 'First comment'));
     }
 
     /**
@@ -1167,9 +1202,9 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetCommentCount()
     {
-        $posts = $this->client->getPosts(['number' => 1]);
+        $posts = $this->client->getPosts(array('number' => 1));
         $this->assertNotEmpty($posts);
-        $commentId = $this->client->newComment($posts[0]['post_id'], ['content' => 'Lorem ipsum 123 abc']);
+        $commentId = $this->client->newComment($posts[0]['post_id'], array('content' => 'Lorem ipsum 123 abc'));
         $count     = $this->client->getCommentCount($posts[0]['post_id']);
         $this->assertArrayHasKey('approved', $count);
         $this->assertArrayHasKey('awaiting_moderation', $count);
@@ -1185,7 +1220,7 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetCommentCountNoPrivilege()
     {
-        $posts = $this->client->getPosts(['number' => 1]);
+        $posts = $this->client->getPosts(array('number' => 1));
         $this->assertNotEmpty($posts);
         $count = $this->guestClient->getCommentCount(1);
     }
@@ -1195,9 +1230,9 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetComment()
     {
-        $posts = $this->client->getPosts(['number' => 1]);
+        $posts = $this->client->getPosts(array('number' => 1));
         $this->assertNotEmpty($posts);
-        $commentId = $this->client->newComment($posts[0]['post_id'], ['content' => 'Defacto 456']);
+        $commentId = $this->client->newComment($posts[0]['post_id'], array('content' => 'Defacto 456'));
         $comment   = $this->client->getComment($commentId);
         $this->assertArrayHasKey('comment_id', $comment);
         $this->assertArrayHasKey('parent', $comment);
@@ -1242,9 +1277,9 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetCommentsNoFilter()
     {
-        $posts = $this->client->getPosts(['number' => 1]);
+        $posts = $this->client->getPosts(array('number' => 1));
         $this->assertNotEmpty($posts);
-        $commentId = $this->client->newComment($posts[0]['post_id'], ['content' => 'Defacto 456 xyz!!!']);
+        $commentId = $this->client->newComment($posts[0]['post_id'], array('content' => 'Defacto 456 xyz!!!'));
         $comments  = $this->client->getComments();
         $this->assertGreaterThan(0, count($comments));
         $this->assertArrayHasKey('comment_id', $comments[0]);
@@ -1279,11 +1314,11 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
      */
     public function testEditComment()
     {
-        $posts = $this->client->getPosts(['number' => 1]);
+        $posts = $this->client->getPosts(array('number' => 1));
         $this->assertNotEmpty($posts);
-        $commentId = $this->client->newComment($posts[0]['post_id'], ['content' => 'A comment to be edit']);
+        $commentId = $this->client->newComment($posts[0]['post_id'], array('content' => 'A comment to be edit'));
         $this->assertGreaterThan(0, (int)$commentId);
-        $result = $this->client->editComment($commentId, ['content' => 'I have editted this comment!']);
+        $result = $this->client->editComment($commentId, array('content' => 'I have editted this comment!'));
         $this->assertTrue($result);
         $comment = $this->client->getComment($commentId);
         $this->assertSame('I have editted this comment!', $comment['content']);
@@ -1297,7 +1332,7 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
      */
     public function testEditCommentNotExist()
     {
-        $result = $this->client->editComment(-1, ['content' => 'I have editted this comment!']);
+        $result = $this->client->editComment(-1, array('content' => 'I have editted this comment!'));
     }
 
     /**
@@ -1308,7 +1343,7 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
      */
     public function testEditCommentNoPrivilege()
     {
-        $result = $this->guestClient->editComment(1, ['content' => 'I have editted this comment!']);
+        $result = $this->guestClient->editComment(1, array('content' => 'I have editted this comment!'));
     }
 
     /**
@@ -1316,9 +1351,9 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
      */
     public function testDeleteComment()
     {
-        $posts = $this->client->getPosts(['number' => 1]);
+        $posts = $this->client->getPosts(array('number' => 1));
         $this->assertNotEmpty($posts);
-        $commentId = $this->client->newComment($posts[0]['post_id'], ['content' => 'A comment to be edit']);
+        $commentId = $this->client->newComment($posts[0]['post_id'], array('content' => 'A comment to be edit'));
         $this->assertGreaterThan(0, (int)$commentId);
         $result = $this->client->deleteComment($commentId);
         $this->assertTrue($result);
@@ -1381,7 +1416,7 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('registered', $user);
         $this->assertArrayHasKey('roles', $user);
 
-        $user = $this->client->getProfile(['user_id', 'email']);
+        $user = $this->client->getProfile(array('user_id', 'email'));
         $this->assertArrayHasKey('user_id', $user);
         $this->assertArrayNotHasKey('username', $user);
         $this->assertArrayNotHasKey('first_name', $user);
@@ -1453,7 +1488,7 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('registered', $user);
         $this->assertArrayHasKey('roles', $user);
 
-        $user = $this->client->getUser($profile['user_id'], ['user_id', 'email']);
+        $user = $this->client->getUser($profile['user_id'], array('user_id', 'email'));
         $this->assertArrayHasKey('user_id', $user);
         $this->assertArrayNotHasKey('username', $user);
         $this->assertArrayNotHasKey('first_name', $user);
@@ -1499,7 +1534,7 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('registered', $users[0]);
         $this->assertArrayHasKey('roles', $users[0]);
 
-        $users = $this->client->getUsers([], ['user_id', 'email']);
+        $users = $this->client->getUsers(array(), array('user_id', 'email'));
         $this->assertGreaterThan(0, count($users));
         $this->assertArrayHasKey('user_id', $users[0]);
         $this->assertArrayNotHasKey('username', $users[0]);
@@ -1523,7 +1558,7 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetUsersInvalidRole()
     {
-        $users = $this->client->getUsers(['role' => 'foo']);
+        $users = $this->client->getUsers(array('role' => 'foo'));
     }
 
     /**
@@ -1531,7 +1566,7 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
      */
     public function testEditProfile()
     {
-        $result = $this->client->editProfile(['nickname' => 'JD']);
+        $result = $this->client->editProfile(array('nickname' => 'JD'));
         $this->assertTrue($result);
         $user = $this->client->getProfile();
         $this->assertSame('JD', $user['nickname']);
@@ -1554,7 +1589,7 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
     public function testErrorCallbacks()
     {
         $xmlrpcClient = new HieuLe\WordpressXmlrpcClient\WordpressClient();
-        $error        = [];
+        $error        = array();
         $xmlrpcClient->onError(function ($e, $event) use (&$error) {
             $error['e']     = $e;
             $error['event'] = $event;
@@ -1590,7 +1625,7 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
     public function testOnSendingCallbacks()
     {
         $xmlrpcClient = new HieuLe\WordpressXmlrpcClient\WordpressClient(static::$_endpoint);
-        $log          = [];
+        $log          = array();
         $xmlrpcClient->onSending(function ($event) use (&$log) {
             $log[0] = $event;
         });
@@ -1618,7 +1653,7 @@ class WordpressClientTest extends \PHPUnit_Framework_TestCase
     {
         $postId = (int)$this->client->newPost('Đây là một tiêu đề ở định dạng UTF-8',
             'Lorem Ipsum chỉ đơn giản là một đoạn văn bản giả, được dùng vào việc trình bày và dàn trang phục vụ cho in ấn',
-            ['comment_status' => 'open']);
+            array('comment_status' => 'open'));
         $this->assertGreaterThan(0, $postId);
 
         $post = $this->client->getPost($postId);
