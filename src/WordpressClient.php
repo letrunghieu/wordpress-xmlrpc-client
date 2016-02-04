@@ -5,7 +5,7 @@ namespace HieuLe\WordpressXmlrpcClient;
 /**
  * A XML-RPC client that implement the {@link http://codex.wordpress.org/XML-RPC_WordPress_API Wordpress API}.
  *
- * @version 2.4.2
+ * @version 2.5.0
  *
  * @author  Hieu Le <http://www.hieule.info>
  *
@@ -14,15 +14,15 @@ namespace HieuLe\WordpressXmlrpcClient;
 class WordpressClient
 {
 
-    private $_username;
-    private $_password;
-    private $_endPoint;
-    private $_request;
-    private $_responseHeader = array();
-    private $_error;
-    private $_proxyConfig = false;
-    private $_authConfig = false;
-    private $_userAgent;
+    private $username;
+    private $password;
+    private $endPoint;
+    private $request;
+    private $responseHeader = array();
+    private $error;
+    private $proxyConfig = false;
+    private $authConfig = false;
+    private $userAgent;
 
     /**
      * Event custom callbacks
@@ -40,7 +40,7 @@ class WordpressClient
     public function __construct($xmlrpcEndPoint = null, $username = null, $password = null, $logger = null)
     {
         $this->setCredentials($xmlrpcEndPoint, $username, $password);
-        $this->_userAgent = $this->getDefaultUserAgent();
+        $this->userAgent = $this->getDefaultUserAgent();
     }
 
     /**
@@ -91,9 +91,9 @@ class WordpressClient
         }
 
         // save information
-        $this->_endPoint = $xmlrpcEndPoint;
-        $this->_username = $username;
-        $this->_password = $password;
+        $this->endPoint = $xmlrpcEndPoint;
+        $this->username = $username;
+        $this->password = $password;
     }
 
     /**
@@ -105,7 +105,7 @@ class WordpressClient
      */
     function getEndPoint()
     {
-        return $this->_endPoint;
+        return $this->endPoint;
     }
 
     /**
@@ -132,7 +132,7 @@ class WordpressClient
      */
     function getUserAgent()
     {
-        return $this->_userAgent;
+        return $this->userAgent;
     }
 
     /**
@@ -145,9 +145,9 @@ class WordpressClient
     function setUserAgent($userAgent)
     {
         if ($userAgent) {
-            $this->_userAgent = $userAgent;
+            $this->userAgent = $userAgent;
         } else {
-            $this->_userAgent = $this->getDefaultUserAgent();
+            $this->userAgent = $this->getDefaultUserAgent();
         }
     }
 
@@ -160,7 +160,7 @@ class WordpressClient
      */
     function getErrorMessage()
     {
-        return $this->_error;
+        return $this->error;
     }
 
     /**
@@ -183,7 +183,7 @@ class WordpressClient
     function setProxy($proxyConfig)
     {
         if ($proxyConfig === false || is_array($proxyConfig)) {
-            $this->_proxyConfig = $proxyConfig;
+            $this->proxyConfig = $proxyConfig;
         } else {
             throw new \InvalidArgumentException(__METHOD__ . " only accept boolean 'false' or an array as parameter.");
         }
@@ -197,7 +197,7 @@ class WordpressClient
      */
     function getProxy()
     {
-        return $this->_proxyConfig;
+        return $this->proxyConfig;
     }
 
     /**
@@ -218,7 +218,7 @@ class WordpressClient
     function setAuth($authConfig)
     {
         if ($authConfig === false || is_array($authConfig)) {
-            $this->_authConfig = $authConfig;
+            $this->authConfig = $authConfig;
         } else {
             throw new \InvalidArgumentException(__METHOD__ . " only accept boolean 'false' or an array as parameter.");
         }
@@ -232,7 +232,7 @@ class WordpressClient
      */
     function getAuth()
     {
-        return $this->_authConfig;
+        return $this->authConfig;
     }
 
     /**
@@ -247,12 +247,12 @@ class WordpressClient
     function getPost($postId, array $fields = array())
     {
         if (empty($fields)) {
-            $params = array(1, $this->_username, $this->_password, $postId);
+            $params = array(1, $this->username, $this->password, $postId);
         } else {
-            $params = array(1, $this->_username, $this->_password, $postId, $fields);
+            $params = array(1, $this->username, $this->password, $postId, $fields);
         }
 
-        return $this->_sendRequest('wp.getPost', $params);
+        return $this->sendRequest('wp.getPost', $params);
     }
 
     /**
@@ -266,12 +266,12 @@ class WordpressClient
      */
     function getPosts(array $filters = array(), array $fields = array())
     {
-        $params = array(1, $this->_username, $this->_password, $filters);
+        $params = array(1, $this->username, $this->password, $filters);
         if (!empty($fields)) {
             $params[] = $fields;
         }
 
-        return $this->_sendRequest('wp.getPosts', $params);
+        return $this->sendRequest('wp.getPosts', $params);
     }
 
     /**
@@ -297,9 +297,9 @@ class WordpressClient
         $content['post_title']   = $title;
         $content['post_content'] = $body;
 
-        $params = array(1, $this->_username, $this->_password, $content);
+        $params = array(1, $this->username, $this->password, $content);
 
-        return $this->_sendRequest('wp.newPost', $params);
+        return $this->sendRequest('wp.newPost', $params);
     }
 
     /**
@@ -318,9 +318,9 @@ class WordpressClient
      */
     function editPost($postId, array $content)
     {
-        $params = array(1, $this->_username, $this->_password, $postId, $content);
+        $params = array(1, $this->username, $this->password, $postId, $content);
 
-        return $this->_sendRequest('wp.editPost', $params);
+        return $this->sendRequest('wp.editPost', $params);
     }
 
     /**
@@ -334,9 +334,9 @@ class WordpressClient
      */
     function deletePost($postId)
     {
-        $params = array(1, $this->_username, $this->_password, $postId);
+        $params = array(1, $this->username, $this->password, $postId);
 
-        return $this->_sendRequest('wp.deletePost', $params);
+        return $this->sendRequest('wp.deletePost', $params);
     }
 
     /**
@@ -351,9 +351,9 @@ class WordpressClient
      */
     function getPostType($postTypeName, array $fields = array())
     {
-        $params = array(1, $this->_username, $this->_password, $postTypeName, $fields);
+        $params = array(1, $this->username, $this->password, $postTypeName, $fields);
 
-        return $this->_sendRequest('wp.getPostType', $params);
+        return $this->sendRequest('wp.getPostType', $params);
     }
 
     /**
@@ -368,9 +368,9 @@ class WordpressClient
      */
     function getPostTypes(array $filter = array(), array $fields = array())
     {
-        $params = array(1, $this->_username, $this->_password, $filter, $fields);
+        $params = array(1, $this->username, $this->password, $filter, $fields);
 
-        return $this->_sendRequest('wp.getPostTypes', $params);
+        return $this->sendRequest('wp.getPostTypes', $params);
     }
 
     /**
@@ -382,9 +382,9 @@ class WordpressClient
      */
     function getPostFormats()
     {
-        $params = array(1, $this->_username, $this->_password);
+        $params = array(1, $this->username, $this->password);
 
-        return $this->_sendRequest('wp.getPostFormats', $params);
+        return $this->sendRequest('wp.getPostFormats', $params);
     }
 
     /**
@@ -396,9 +396,9 @@ class WordpressClient
      */
     function getPostStatusList()
     {
-        $params = array(1, $this->_username, $this->_password);
+        $params = array(1, $this->username, $this->password);
 
-        return $this->_sendRequest('wp.getPostStatusList', $params);
+        return $this->sendRequest('wp.getPostStatusList', $params);
     }
 
     /**
@@ -412,9 +412,9 @@ class WordpressClient
      */
     function getTaxonomy($taxonomy)
     {
-        $params = array(1, $this->_username, $this->_password, $taxonomy);
+        $params = array(1, $this->username, $this->password, $taxonomy);
 
-        return $this->_sendRequest('wp.getTaxonomy', $params);
+        return $this->sendRequest('wp.getTaxonomy', $params);
     }
 
     /**
@@ -426,9 +426,9 @@ class WordpressClient
      */
     function getTaxonomies()
     {
-        $params = array(1, $this->_username, $this->_password);
+        $params = array(1, $this->username, $this->password);
 
-        return $this->_sendRequest('wp.getTaxonomies', $params);
+        return $this->sendRequest('wp.getTaxonomies', $params);
     }
 
     /**
@@ -443,9 +443,9 @@ class WordpressClient
      */
     function getTerm($termId, $taxonomy)
     {
-        $params = array(1, $this->_username, $this->_password, $taxonomy, $termId);
+        $params = array(1, $this->username, $this->password, $taxonomy, $termId);
 
-        return $this->_sendRequest('wp.getTerm', $params);
+        return $this->sendRequest('wp.getTerm', $params);
     }
 
     /**
@@ -460,9 +460,9 @@ class WordpressClient
      */
     function getTerms($taxonomy, array $filter = array())
     {
-        $params = array(1, $this->_username, $this->_password, $taxonomy, $filter);
+        $params = array(1, $this->username, $this->password, $taxonomy, $filter);
 
-        return $this->_sendRequest('wp.getTerms', $params);
+        return $this->sendRequest('wp.getTerms', $params);
     }
 
     /**
@@ -493,9 +493,9 @@ class WordpressClient
         if ($parentId) {
             $content['parent'] = $parentId;
         }
-        $params = array(1, $this->_username, $this->_password, $content);
+        $params = array(1, $this->username, $this->password, $content);
 
-        return $this->_sendRequest('wp.newTerm', $params);
+        return $this->sendRequest('wp.newTerm', $params);
     }
 
     /**
@@ -512,9 +512,9 @@ class WordpressClient
     function editTerm($termId, $taxonomy, array $content = array())
     {
         $content['taxonomy'] = $taxonomy;
-        $params              = array(1, $this->_username, $this->_password, $termId, $content);
+        $params              = array(1, $this->username, $this->password, $termId, $content);
 
-        return $this->_sendRequest('wp.editTerm', $params);
+        return $this->sendRequest('wp.editTerm', $params);
     }
 
     /**
@@ -529,9 +529,9 @@ class WordpressClient
      */
     function deleteTerm($termId, $taxonomy)
     {
-        $params = array(1, $this->_username, $this->_password, $taxonomy, $termId);
+        $params = array(1, $this->username, $this->password, $taxonomy, $termId);
 
-        return $this->_sendRequest('wp.deleteTerm', $params);
+        return $this->sendRequest('wp.deleteTerm', $params);
     }
 
     /**
@@ -545,9 +545,9 @@ class WordpressClient
      */
     function getMediaItem($itemId)
     {
-        $params = array(1, $this->_username, $this->_password, $itemId);
+        $params = array(1, $this->username, $this->password, $itemId);
 
-        return $this->_sendRequest('wp.getMediaItem', $params);
+        return $this->sendRequest('wp.getMediaItem', $params);
     }
 
     /**
@@ -561,9 +561,9 @@ class WordpressClient
      */
     function getMediaLibrary(array $filter = array())
     {
-        $params = array(1, $this->_username, $this->_password, $filter);
+        $params = array(1, $this->username, $this->password, $filter);
 
-        return $this->_sendRequest('wp.getMediaLibrary', $params);
+        return $this->sendRequest('wp.getMediaLibrary', $params);
     }
 
     /**
@@ -593,9 +593,9 @@ class WordpressClient
         if ($postId !== null) {
             $struct['post_id'] = (int)$postId;
         }
-        $params = array(1, $this->_username, $this->_password, $struct);
+        $params = array(1, $this->username, $this->password, $struct);
 
-        return $this->_sendRequest('wp.uploadFile', $params);
+        return $this->sendRequest('wp.uploadFile', $params);
     }
 
     /**
@@ -609,9 +609,9 @@ class WordpressClient
      */
     function getCommentCount($postId)
     {
-        $params = array(1, $this->_username, $this->_password, $postId);
+        $params = array(1, $this->username, $this->password, $postId);
 
-        return $this->_sendRequest('wp.getCommentCount', $params);
+        return $this->sendRequest('wp.getCommentCount', $params);
     }
 
     /**
@@ -625,9 +625,9 @@ class WordpressClient
      */
     function getComment($commentId)
     {
-        $params = array(1, $this->_username, $this->_password, $commentId);
+        $params = array(1, $this->username, $this->password, $commentId);
 
-        return $this->_sendRequest('wp.getComment', $params);
+        return $this->sendRequest('wp.getComment', $params);
     }
 
     /**
@@ -641,9 +641,9 @@ class WordpressClient
      */
     function getComments(array $filter = array())
     {
-        $params = array(1, $this->_username, $this->_password, $filter);
+        $params = array(1, $this->username, $this->password, $filter);
 
-        return $this->_sendRequest('wp.getComments', $params);
+        return $this->sendRequest('wp.getComments', $params);
     }
 
     /**
@@ -658,9 +658,9 @@ class WordpressClient
      */
     function newComment($post_id, array $comment)
     {
-        $params = array(1, $this->_username, $this->_password, $post_id, $comment);
+        $params = array(1, $this->username, $this->password, $post_id, $comment);
 
-        return $this->_sendRequest('wp.newComment', $params);
+        return $this->sendRequest('wp.newComment', $params);
     }
 
     /**
@@ -675,9 +675,9 @@ class WordpressClient
      */
     function editComment($commentId, array $comment)
     {
-        $params = array(1, $this->_username, $this->_password, $commentId, $comment);
+        $params = array(1, $this->username, $this->password, $commentId, $comment);
 
-        return $this->_sendRequest('wp.editComment', $params);
+        return $this->sendRequest('wp.editComment', $params);
     }
 
     /**
@@ -691,9 +691,9 @@ class WordpressClient
      */
     function deleteComment($commentId)
     {
-        $params = array(1, $this->_username, $this->_password, $commentId);
+        $params = array(1, $this->username, $this->password, $commentId);
 
-        return $this->_sendRequest('wp.deleteComment', $params);
+        return $this->sendRequest('wp.deleteComment', $params);
     }
 
     /**
@@ -705,9 +705,9 @@ class WordpressClient
      */
     function getCommentStatusList()
     {
-        $params = array(1, $this->_username, $this->_password);
+        $params = array(1, $this->username, $this->password);
 
-        return $this->_sendRequest('wp.getCommentStatusList', $params);
+        return $this->sendRequest('wp.getCommentStatusList', $params);
     }
 
     /**
@@ -722,12 +722,12 @@ class WordpressClient
     function getOptions(array $options = array())
     {
         if (empty($options)) {
-            $params = array(1, $this->_username, $this->_password);
+            $params = array(1, $this->username, $this->password);
         } else {
-            $params = array(1, $this->_username, $this->_password, $options);
+            $params = array(1, $this->username, $this->password, $options);
         }
 
-        return $this->_sendRequest('wp.getOptions', $params);
+        return $this->sendRequest('wp.getOptions', $params);
     }
 
     /**
@@ -741,9 +741,9 @@ class WordpressClient
      */
     function setOptions(array $options)
     {
-        $params = array(1, $this->_username, $this->_password, $options);
+        $params = array(1, $this->username, $this->password, $options);
 
-        return $this->_sendRequest('wp.setOptions', $params);
+        return $this->sendRequest('wp.setOptions', $params);
     }
 
     /**
@@ -755,9 +755,9 @@ class WordpressClient
      */
     function getUsersBlogs()
     {
-        $params = array($this->_username, $this->_password);
+        $params = array($this->username, $this->password);
 
-        return $this->_sendRequest('wp.getUsersBlogs', $params);
+        return $this->sendRequest('wp.getUsersBlogs', $params);
     }
 
     /**
@@ -772,12 +772,12 @@ class WordpressClient
      */
     function getUser($userId, array $fields = array())
     {
-        $params = array(1, $this->_username, $this->_password, $userId);
+        $params = array(1, $this->username, $this->password, $userId);
         if (!empty($fields)) {
             $params[] = $fields;
         }
 
-        return $this->_sendRequest('wp.getUser', $params);
+        return $this->sendRequest('wp.getUser', $params);
     }
 
     /**
@@ -792,12 +792,12 @@ class WordpressClient
      */
     function getUsers(array $filters = array(), array $fields = array())
     {
-        $params = array(1, $this->_username, $this->_password, $filters);
+        $params = array(1, $this->username, $this->password, $filters);
         if (!empty($fields)) {
             $params[] = $fields;
         }
 
-        return $this->_sendRequest('wp.getUsers', $params);
+        return $this->sendRequest('wp.getUsers', $params);
     }
 
     /**
@@ -811,12 +811,12 @@ class WordpressClient
      */
     function getProfile(array $fields = array())
     {
-        $params = array(1, $this->_username, $this->_password);
+        $params = array(1, $this->username, $this->password);
         if (!empty($fields)) {
             $params[] = $fields;
         }
 
-        return $this->_sendRequest('wp.getProfile', $params);
+        return $this->sendRequest('wp.getProfile', $params);
     }
 
     /**
@@ -830,9 +830,9 @@ class WordpressClient
      */
     function editProfile(array $content)
     {
-        $params = array(1, $this->_username, $this->_password, $content);
+        $params = array(1, $this->username, $this->password, $content);
 
-        return $this->_sendRequest('wp.editProfile', $params);
+        return $this->sendRequest('wp.editProfile', $params);
     }
 
     /**
@@ -847,7 +847,7 @@ class WordpressClient
      */
     public function callCustomMethod($method, $params)
     {
-        return $this->_sendRequest($method, $params);
+        return $this->sendRequest($method, $params);
     }
 
     /**
@@ -868,60 +868,60 @@ class WordpressClient
     protected function performRequest()
     {
         if (function_exists('curl_init')) {
-            return $this->_requestWithCurl();
+            return $this->requestWithCurl();
         } else {
-            return $this->_requestWithFile();
+            return $this->requestWithFile();
         }
     }
 
     protected function getRequest()
     {
-        return $this->_request;
+        return $this->request;
     }
 
-    private function _sendRequest($method, $params)
+    private function sendRequest($method, $params)
     {
-        if (!$this->_endPoint) {
-            $this->_error = "Invalid endpoint " . json_encode(array(
-                    'endpoint' => $this->_endPoint,
-                    'username' => $this->_username,
-                    'password' => $this->_password,
+        if (!$this->endPoint) {
+            $this->error = "Invalid endpoint " . json_encode(array(
+                    'endpoint' => $this->endPoint,
+                    'username' => $this->username,
+                    'password' => $this->password,
                 ));
-            $this->_logError();
-            throw new \Exception($this->_error);
+            $this->logError();
+            throw new \Exception($this->error);
         }
-        $this->_responseHeader = array();
+        $this->responseHeader = array();
 
         // This block is used for compatibility with the older version of this package, which run on PHP < 7.0.
         // Since the 2.5.0 version, the datetime must be set explicitly by using the `createXMLRPCDateTime` method.
         if (version_compare(PHP_VERSION, '7.0.0', '<')) {
-            $this->_setXmlrpcType($params);
+            $this->setXmlrpcType($params);
         }
 
-        $this->_request = xmlrpc_encode_request($method, $params,
+        $this->request = xmlrpc_encode_request($method, $params,
             array('encoding' => 'UTF-8', 'escaping' => 'markup', 'version' => 'xmlrpc'));
-        $body           = "";
+        $body          = "";
         // Call sending event callbacks
-        $callbacks = $this->_getCallback('sending');
+        $callbacks = $this->getCallback('sending');
         $event     = array(
             'event'    => 'sending',
-            'endpoint' => $this->_endPoint,
-            'username' => $this->_username,
-            'password' => $this->_password,
+            'endpoint' => $this->endPoint,
+            'username' => $this->username,
+            'password' => $this->password,
             'method'   => $method,
             'params'   => $params,
-            'request'  => $this->_request,
-            'proxy'    => $this->_proxyConfig,
-            'auth'     => $this->_authConfig,
+            'request'  => $this->request,
+            'proxy'    => $this->proxyConfig,
+            'auth'     => $this->authConfig,
         );
         foreach ($callbacks as $callback) {
-            $callback($event);
+            call_user_func($callback, $event);
         }
         $body     = $this->performRequest();
         $response = xmlrpc_decode($body, 'UTF-8');
         if (is_array($response) && xmlrpc_is_fault($response)) {
-            $this->_error = ("xmlrpc: {$response['faultString']} ({$response['faultCode']})");
-            $this->_logError();
+            $this->error = ("xmlrpc: {$response['faultString']} ({$response['faultCode']})");
+            $this->logError();
             throw new Exception\XmlrpcException($response['faultString'], $response['faultCode']);
         }
 
@@ -935,66 +935,66 @@ class WordpressClient
      *
      * @since 2.2
      */
-    private function _setXmlrpcType(&$array)
+    private function setXmlrpcType(&$array)
     {
         foreach ($array as $key => $element) {
             if (is_a($element, '\DateTime')) {
                 $array[$key] = $element->format("Ymd\TH:i:sO");
                 xmlrpc_set_type($array[$key], 'datetime');
             } elseif (is_array($element)) {
-                $this->_setXmlrpcType($array[$key]);
+                $this->setXmlrpcType($array[$key]);
             }
         }
     }
 
-    private function _requestWithCurl()
+    private function requestWithCurl()
     {
-        $ch = curl_init($this->_endPoint);
+        $ch = curl_init($this->endPoint);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $this->_request);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $this->request);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
-        curl_setopt($ch, CURLOPT_USERAGENT, $this->_userAgent);
-        if ($this->_proxyConfig != false) {
-            if (isset($this->_proxyConfig['proxy_ip'])) {
-                curl_setopt($ch, CURLOPT_PROXY, $this->_proxyConfig['proxy_ip']);
+        curl_setopt($ch, CURLOPT_USERAGENT, $this->userAgent);
+        if ($this->proxyConfig != false) {
+            if (isset($this->proxyConfig['proxy_ip'])) {
+                curl_setopt($ch, CURLOPT_PROXY, $this->proxyConfig['proxy_ip']);
             }
-            if (isset($this->_proxyConfig['proxy_port'])) {
-                curl_setopt($ch, CURLOPT_PROXYPORT, $this->_proxyConfig['proxy_port']);
+            if (isset($this->proxyConfig['proxy_port'])) {
+                curl_setopt($ch, CURLOPT_PROXYPORT, $this->proxyConfig['proxy_port']);
             }
-            if (isset($this->_proxyConfig['proxy_user']) && isset($this->_proxyConfig['proxy_pass'])) {
+            if (isset($this->proxyConfig['proxy_user']) && isset($this->proxyConfig['proxy_pass'])) {
                 curl_setopt($ch, CURLOPT_PROXYUSERPWD,
-                    "{$this->_proxyConfig['proxy_user']}:{$this->_proxyConfig['proxy_pass']}");
+                    "{$this->proxyConfig['proxy_user']}:{$this->proxyConfig['proxy_pass']}");
             }
-            if (isset($this->_proxyConfig['proxy_mode'])) {
-                curl_setopt($ch, CURLOPT_PROXYAUTH, $this->_proxyConfig['proxy_mode']);
+            if (isset($this->proxyConfig['proxy_mode'])) {
+                curl_setopt($ch, CURLOPT_PROXYAUTH, $this->proxyConfig['proxy_mode']);
             }
         }
-        if ($this->_authConfig) {
-            if (isset($this->_authConfig['auth_user']) && isset($this->_authConfig['auth_pass'])) {
+        if ($this->authConfig) {
+            if (isset($this->authConfig['auth_user']) && isset($this->authConfig['auth_pass'])) {
                 curl_setopt($ch, CURLOPT_USERPWD,
-                    "{$this->_authConfig['auth_user']}:{$this->_authConfig['auth_pass']}");
+                    "{$this->authConfig['auth_user']}:{$this->authConfig['auth_pass']}");
                 curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
             }
-            if (isset($this->_authConfig['auth_mode'])) {
-                curl_setopt($ch, CURLOPT_HTTPAUTH, $this->_authConfig['auth_mode']);
+            if (isset($this->authConfig['auth_mode'])) {
+                curl_setopt($ch, CURLOPT_HTTPAUTH, $this->authConfig['auth_mode']);
             }
         }
         $response = curl_exec($ch);
         if (curl_errno($ch)) {
-            $message      = curl_error($ch);
-            $code         = curl_errno($ch);
-            $this->_error = "curl: {$message} ({$code})";
-            $this->_logError();
+            $message     = curl_error($ch);
+            $code        = curl_errno($ch);
+            $this->error = "curl: {$message} ({$code})";
+            $this->logError();
             curl_close($ch);
             throw new Exception\NetworkException($message, $code);
         }
         $httpStatusCode = (int)curl_getinfo($ch, CURLINFO_HTTP_CODE);
         if ($httpStatusCode >= 400) {
-            $message      = $response;
-            $code         = $httpStatusCode;
-            $this->_error = "http: {$message} ({$code})";
-            $this->_logError();
+            $message     = $response;
+            $code        = $httpStatusCode;
+            $this->error = "http: {$message} ({$code})";
+            $this->logError();
             curl_close($ch);
             throw new Exception\NetworkException($message, $code);
         }
@@ -1003,75 +1003,75 @@ class WordpressClient
         return $response;
     }
 
-    private function _requestWithFile()
+    private function requestWithFile()
     {
         $contextOptions = array(
             'http' => array(
                 'method'     => "POST",
-                'user_agent' => $this->_userAgent,
+                'user_agent' => $this->userAgent,
                 'header'     => "Content-Type: text/xml\r\n",
-                'content'    => $this->_request,
+                'content'    => $this->request,
             ),
         );
 
-        if ($this->_proxyConfig != false) {
-            if (isset($this->_proxyConfig['proxy_ip']) && isset($this->_proxyConfig['proxy_port'])) {
-                $contextOptions['http']['proxy']           = "tcp://{$this->_proxyConfig['proxy_ip']}:{$this->_proxyConfig['proxy_port']}";
+        if ($this->proxyConfig != false) {
+            if (isset($this->proxyConfig['proxy_ip']) && isset($this->proxyConfig['proxy_port'])) {
+                $contextOptions['http']['proxy']           = "tcp://{$this->proxyConfig['proxy_ip']}:{$this->proxyConfig['proxy_port']}";
                 $contextOptions['http']['request_fulluri'] = true;
             }
-            if (isset($this->_proxyConfig['proxy_user']) && isset($this->_proxyConfig['proxy_pass'])) {
-                $auth = base64_encode("{$this->_proxyConfig['proxy_user']}:{$this->_proxyConfig['proxy_pass']}");
+            if (isset($this->proxyConfig['proxy_user']) && isset($this->proxyConfig['proxy_pass'])) {
+                $auth = base64_encode("{$this->proxyConfig['proxy_user']}:{$this->proxyConfig['proxy_pass']}");
                 $contextOptions['http']['header'] .= "Proxy-Authorization: Basic {$auth}\r\n";
             }
-            if (isset($this->_proxyConfig['proxy_mode'])) {
+            if (isset($this->proxyConfig['proxy_mode'])) {
                 throw new \InvalidArgumentException('Cannot use NTLM proxy authorization without cURL extension');
             }
         }
-        if ($this->_authConfig) {
-            if (isset($this->_authConfig['auth_user']) && isset($this->_authConfig['auth_pass'])) {
-                $auth = base64_encode("{$this->_authConfig['auth_user']}:{$this->_authConfig['auth_pass']}");
+        if ($this->authConfig) {
+            if (isset($this->authConfig['auth_user']) && isset($this->authConfig['auth_pass'])) {
+                $auth = base64_encode("{$this->authConfig['auth_user']}:{$this->authConfig['auth_pass']}");
                 $contextOptions['http']['header'] .= "Authorization: Basic {$auth}\r\n";
             }
-            if (isset($this->_authConfig['auth_mode'])) {
+            if (isset($this->authConfig['auth_mode'])) {
                 throw new \InvalidArgumentException('Cannot use other authentication method without cURL extension');
             }
         }
         $context              = stream_context_create($contextOptions);
         $http_response_header = array();
         try {
-            $file = @file_get_contents($this->_endPoint, false, $context);
+            $file = @file_get_contents($this->endPoint, false, $context);
             if ($file === false) {
-                $error        = error_get_last();
-                $error        = $error ? trim($error['message']) : "error";
-                $this->_error = "file_get_contents: {$error}";
-                $this->_logError();
+                $error       = error_get_last();
+                $error       = $error ? trim($error['message']) : "error";
+                $this->error = "file_get_contents: {$error}";
+                $this->logError();
                 throw new Exception\NetworkException($error, 127);
             }
         } catch (\Exception $ex) {
-            $this->_error = ("file_get_contents: {$ex->getMessage()} ({$ex->getCode()})");
-            $this->_logError();
+            $this->error = ("file_get_contents: {$ex->getMessage()} ({$ex->getCode()})");
+            $this->logError();
             throw new Exception\NetworkException($ex->getMessage(), $ex->getCode());
         }
 
         return $file;
     }
 
-    private function _logError()
+    private function logError()
     {
-        $callbacks = $this->_getCallback('error');
+        $callbacks = $this->getCallback('error');
         $event     = array(
             'event'    => 'error',
-            'endpoint' => $this->_endPoint,
-            'request'  => $this->_request,
-            'proxy'    => $this->_proxyConfig,
-            'auth'     => $this->_authConfig,
+            'endpoint' => $this->endPoint,
+            'request'  => $this->request,
+            'proxy'    => $this->proxyConfig,
+            'auth'     => $this->authConfig,
         );
         foreach ($callbacks as $callback) {
-            call_user_func($callback, $this->_error, $event);
+            call_user_func($callback, $this->error, $event);
         }
     }
 
-    private function _getCallback($name)
+    private function getCallback($name)
     {
         $callbacks = array();
         if (isset($this->_callbacks[$name]) && is_array($this->_callbacks[$name])) {
