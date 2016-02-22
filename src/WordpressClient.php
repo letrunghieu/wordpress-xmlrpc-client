@@ -14,8 +14,8 @@ namespace HieuLe\WordpressXmlrpcClient;
 class WordpressClient
 {
 
-    private $username;
-    private $password;
+    protected $username;
+    protected $password;
     private $endPoint;
     private $request;
     private $responseHeader = array();
@@ -879,7 +879,7 @@ class WordpressClient
         return $this->request;
     }
 
-    private function sendRequest($method, $params)
+    protected function sendRequest($method, $params)
     {
         if (!$this->endPoint) {
             $this->error = "Invalid endpoint " . json_encode(array(
