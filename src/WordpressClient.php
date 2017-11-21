@@ -5,7 +5,7 @@ namespace HieuLe\WordpressXmlrpcClient;
 /**
  * A XML-RPC client that implement the {@link http://codex.wordpress.org/XML-RPC_WordPress_API Wordpress API}.
  *
- * @version 2.5.0
+ * @version 2.5.1
  *
  * @author  Hieu Le <http://www.hieule.info>
  *
@@ -74,6 +74,7 @@ class WordpressClient
      * @param string $xmlrpcEndPoint The wordpress XML-RPC endpoint
      * @param string $username       The client's username
      * @param string $password       The client's password
+     * @param int $blogId            The blog ID for WP multisite installs
      *
      * @since 2.4.0
      */
