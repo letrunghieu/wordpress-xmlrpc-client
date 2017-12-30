@@ -282,12 +282,13 @@ class WordpressClient
      * @param array   $categorieIds the list of category ids
      * @param integer $thumbnailId  the thumbnail id
      * @param array   $content      the content array, see more at wordpress documentation
+     * @param integer $blogId       the blog id, see more at wordpress documentation
      *
      * @return integer the new post id
      *
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.newPost
      */
-    function newPost($title, $body, array $content = array())
+    function newPost($title, $body, array $content = array(), $blogId = 1)
     {
         $default                 = array(
             'post_type'   => 'post',
@@ -297,7 +298,7 @@ class WordpressClient
         $content['post_title']   = $title;
         $content['post_content'] = $body;
 
-        $params = array(1, $this->username, $this->password, $content);
+        $params = array($blogId, $this->username, $this->password, $content);
 
         return $this->sendRequest('wp.newPost', $params);
     }
