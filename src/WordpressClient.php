@@ -279,8 +279,6 @@ class WordpressClient
      *
      * @param string  $title        the post title
      * @param string  $body         the post body
-     * @param array   $categorieIds the list of category ids
-     * @param integer $thumbnailId  the thumbnail id
      * @param array   $content      the content array, see more at wordpress documentation
      * @param integer $blogId       the blog id, see more at wordpress documentation
      *
@@ -307,11 +305,7 @@ class WordpressClient
      * Edit an existing post of any registered post type.
      *
      * @param integer $postId       the id of selected post
-     * @param string  $title        the new title
-     * @param string  $body         the new body
-     * @param array   $categorieIds the new list of category ids
-     * @param integer $thumbnailId  the new thumbnail id
-     * @param array   $content      the advanced array
+     * @param array   $content      the content array, see more at wordpress documentation
      *
      * @return boolean
      *
