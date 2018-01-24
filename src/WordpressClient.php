@@ -46,7 +46,7 @@ class WordpressClient
     /**
      * Add a callback for `error` event
      *
-     * @param Closure $callback
+     * @param \Closure $callback
      *
      * @since 2.4.0
      */
@@ -58,7 +58,7 @@ class WordpressClient
     /**
      * Add a callback for `sending` event
      *
-     * @param Closure $callback
+     * @param \Closure $callback
      *
      * @since 2.4.0
      */
