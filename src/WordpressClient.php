@@ -264,9 +264,9 @@ class WordpressClient
      * @return array array of struct
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.getPosts
      */
-    function getPosts(array $filters = array(), array $fields = array())
+    function getPosts(array $filters = array(), array $fields = array(), $blogId = 1)
     {
-        $params = array(1, $this->username, $this->password, $filters);
+        $params = array($blogId, $this->username, $this->password, $filters);
         if (!empty($fields)) {
             $params[] = $fields;
         }
@@ -311,9 +311,9 @@ class WordpressClient
      *
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.editPost
      */
-    function editPost($postId, array $content)
+    function editPost($postId, array $content, $blogId = 1)
     {
-        $params = array(1, $this->username, $this->password, $postId, $content);
+        $params = array($blogId, $this->username, $this->password, $postId, $content);
 
         return $this->sendRequest('wp.editPost', $params);
     }
@@ -327,9 +327,9 @@ class WordpressClient
      *
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.deletePost
      */
-    function deletePost($postId)
+    function deletePost($postId, $blogId = 1)
     {
-        $params = array(1, $this->username, $this->password, $postId);
+        $params = array($blogId, $this->username, $this->password, $postId);
 
         return $this->sendRequest('wp.deletePost', $params);
     }
@@ -344,9 +344,9 @@ class WordpressClient
      *
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.getPostType
      */
-    function getPostType($postTypeName, array $fields = array())
+    function getPostType($postTypeName, array $fields = array(), $blogId = 1)
     {
-        $params = array(1, $this->username, $this->password, $postTypeName, $fields);
+        $params = array($blogId, $this->username, $this->password, $postTypeName, $fields);
 
         return $this->sendRequest('wp.getPostType', $params);
     }
@@ -361,9 +361,9 @@ class WordpressClient
      *
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.getPostTypes
      */
-    function getPostTypes(array $filter = array(), array $fields = array())
+    function getPostTypes(array $filter = array(), array $fields = array(), $blogId = 1)
     {
-        $params = array(1, $this->username, $this->password, $filter, $fields);
+        $params = array($blogId, $this->username, $this->password, $filter, $fields);
 
         return $this->sendRequest('wp.getPostTypes', $params);
     }
@@ -375,9 +375,9 @@ class WordpressClient
      *
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.getPostFormats
      */
-    function getPostFormats()
+    function getPostFormats($blogId = 1)
     {
-        $params = array(1, $this->username, $this->password);
+        $params = array($blogId, $this->username, $this->password);
 
         return $this->sendRequest('wp.getPostFormats', $params);
     }
@@ -389,9 +389,9 @@ class WordpressClient
      *
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.getPostStatusList
      */
-    function getPostStatusList()
+    function getPostStatusList($blogId = 1)
     {
-        $params = array(1, $this->username, $this->password);
+        $params = array($blogId, $this->username, $this->password);
 
         return $this->sendRequest('wp.getPostStatusList', $params);
     }
@@ -405,9 +405,9 @@ class WordpressClient
      *
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Taxonomies#wp.getTaxonomy
      */
-    function getTaxonomy($taxonomy)
+    function getTaxonomy($taxonomy, $blogId = 1)
     {
-        $params = array(1, $this->username, $this->password, $taxonomy);
+        $params = array($blogId, $this->username, $this->password, $taxonomy);
 
         return $this->sendRequest('wp.getTaxonomy', $params);
     }
@@ -419,9 +419,9 @@ class WordpressClient
      *
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Taxonomies#wp.getTaxonomies
      */
-    function getTaxonomies()
+    function getTaxonomies($blogId = 1)
     {
-        $params = array(1, $this->username, $this->password);
+        $params = array($blogId, $this->username, $this->password);
 
         return $this->sendRequest('wp.getTaxonomies', $params);
     }
@@ -436,9 +436,9 @@ class WordpressClient
      *
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Taxonomies#wp.getTerm
      */
-    function getTerm($termId, $taxonomy)
+    function getTerm($termId, $taxonomy, $blogId = 1)
     {
-        $params = array(1, $this->username, $this->password, $taxonomy, $termId);
+        $params = array($blogId, $this->username, $this->password, $taxonomy, $termId);
 
         return $this->sendRequest('wp.getTerm', $params);
     }
@@ -453,9 +453,9 @@ class WordpressClient
      *
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Taxonomies#wp.getTerms
      */
-    function getTerms($taxonomy, array $filter = array())
+    function getTerms($taxonomy, array $filter = array(), $blogId = 1)
     {
-        $params = array(1, $this->username, $this->password, $taxonomy, $filter);
+        $params = array($blogId, $this->username, $this->password, $taxonomy, $filter);
 
         return $this->sendRequest('wp.getTerms', $params);
     }
@@ -473,7 +473,7 @@ class WordpressClient
      *
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Taxonomies#wp.newTerm
      */
-    function newTerm($name, $taxomony, $slug = null, $description = null, $parentId = null)
+    function newTerm($name, $taxomony, $slug = null, $description = null, $parentId = null, $blogId = 1)
     {
         $content = array(
             'name'     => $name,
@@ -488,7 +488,7 @@ class WordpressClient
         if ($parentId) {
             $content['parent'] = $parentId;
         }
-        $params = array(1, $this->username, $this->password, $content);
+        $params = array($blogId, $this->username, $this->password, $content);
 
         return $this->sendRequest('wp.newTerm', $params);
     }
@@ -522,9 +522,9 @@ class WordpressClient
      *
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Taxonomies#wp.deleteTerm
      */
-    function deleteTerm($termId, $taxonomy)
+    function deleteTerm($termId, $taxonomy, $blogId = 1)
     {
-        $params = array(1, $this->username, $this->password, $taxonomy, $termId);
+        $params = array($blogId, $this->username, $this->password, $taxonomy, $termId);
 
         return $this->sendRequest('wp.deleteTerm', $params);
     }
@@ -538,9 +538,9 @@ class WordpressClient
      *
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Media#wp.getMediaItem
      */
-    function getMediaItem($itemId)
+    function getMediaItem($itemId, $blogId = 1)
     {
-        $params = array(1, $this->username, $this->password, $itemId);
+        $params = array($blogId, $this->username, $this->password, $itemId);
 
         return $this->sendRequest('wp.getMediaItem', $params);
     }
@@ -554,9 +554,9 @@ class WordpressClient
      *
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Media#wp.getMediaLibrary
      */
-    function getMediaLibrary(array $filter = array())
+    function getMediaLibrary(array $filter = array(), $blogId = 1)
     {
-        $params = array(1, $this->username, $this->password, $filter);
+        $params = array($blogId, $this->username, $this->password, $filter);
 
         return $this->sendRequest('wp.getMediaLibrary', $params);
     }
@@ -574,7 +574,7 @@ class WordpressClient
      *
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Media#wp.uploadFile
      */
-    function uploadFile($name, $mime, $bits, $overwrite = null, $postId = null)
+    function uploadFile($name, $mime, $bits, $overwrite = null, $postId = null, $blogId = 1)
     {
         xmlrpc_set_type($bits, 'base64');
         $struct = array(
@@ -588,7 +588,7 @@ class WordpressClient
         if ($postId !== null) {
             $struct['post_id'] = (int)$postId;
         }
-        $params = array(1, $this->username, $this->password, $struct);
+        $params = array($blogId, $this->username, $this->password, $struct);
 
         return $this->sendRequest('wp.uploadFile', $params);
     }
@@ -602,9 +602,9 @@ class WordpressClient
      *
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Comments#wp.getCommentCount
      */
-    function getCommentCount($postId)
+    function getCommentCount($postId, $blogId = 1)
     {
-        $params = array(1, $this->username, $this->password, $postId);
+        $params = array($blogId, $this->username, $this->password, $postId);
 
         return $this->sendRequest('wp.getCommentCount', $params);
     }
@@ -618,9 +618,9 @@ class WordpressClient
      *
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Comments#wp.getComment
      */
-    function getComment($commentId)
+    function getComment($commentId, $blogId = 1)
     {
-        $params = array(1, $this->username, $this->password, $commentId);
+        $params = array($blogId, $this->username, $this->password, $commentId);
 
         return $this->sendRequest('wp.getComment', $params);
     }
@@ -634,9 +634,9 @@ class WordpressClient
      *
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Comments#wp.getComments
      */
-    function getComments(array $filter = array())
+    function getComments(array $filter = array(), $blogId = 1)
     {
-        $params = array(1, $this->username, $this->password, $filter);
+        $params = array($blogId, $this->username, $this->password, $filter);
 
         return $this->sendRequest('wp.getComments', $params);
     }
@@ -651,9 +651,9 @@ class WordpressClient
      *
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Comments#wp.newComment
      */
-    function newComment($post_id, array $comment)
+    function newComment($post_id, array $comment, $blogId = 1)
     {
-        $params = array(1, $this->username, $this->password, $post_id, $comment);
+        $params = array($blogId, $this->username, $this->password, $post_id, $comment);
 
         return $this->sendRequest('wp.newComment', $params);
     }
@@ -668,9 +668,9 @@ class WordpressClient
      *
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Comments#wp.editComment
      */
-    function editComment($commentId, array $comment)
+    function editComment($commentId, array $comment, $blogId = 1)
     {
-        $params = array(1, $this->username, $this->password, $commentId, $comment);
+        $params = array($blogId, $this->username, $this->password, $commentId, $comment);
 
         return $this->sendRequest('wp.editComment', $params);
     }
@@ -684,9 +684,9 @@ class WordpressClient
      *
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Comments#wp.deleteComment
      */
-    function deleteComment($commentId)
+    function deleteComment($commentId, $blogId = 1)
     {
-        $params = array(1, $this->username, $this->password, $commentId);
+        $params = array($blogId, $this->username, $this->password, $commentId);
 
         return $this->sendRequest('wp.deleteComment', $params);
     }
@@ -698,9 +698,9 @@ class WordpressClient
      *
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Comments#wp.getCommentStatusList
      */
-    function getCommentStatusList()
+    function getCommentStatusList($blogId = 1)
     {
-        $params = array(1, $this->username, $this->password);
+        $params = array($blogId, $this->username, $this->password);
 
         return $this->sendRequest('wp.getCommentStatusList', $params);
     }
@@ -714,12 +714,12 @@ class WordpressClient
      *
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Options#wp.getOptions
      */
-    function getOptions(array $options = array())
+    function getOptions(array $options = array(), $blogId = 1)
     {
         if (empty($options)) {
-            $params = array(1, $this->username, $this->password);
+            $params = array($blogId, $this->username, $this->password);
         } else {
-            $params = array(1, $this->username, $this->password, $options);
+            $params = array($blogId, $this->username, $this->password, $options);
         }
 
         return $this->sendRequest('wp.getOptions', $params);
@@ -734,9 +734,9 @@ class WordpressClient
      *
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Options#wp.setOptions
      */
-    function setOptions(array $options)
+    function setOptions(array $options, $blogId = 1)
     {
-        $params = array(1, $this->username, $this->password, $options);
+        $params = array($blogId, $this->username, $this->password, $options);
 
         return $this->sendRequest('wp.setOptions', $params);
     }
@@ -765,9 +765,9 @@ class WordpressClient
      *
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Users#wp.getUser
      */
-    function getUser($userId, array $fields = array())
+    function getUser($userId, array $fields = array(), $blogId = 1)
     {
-        $params = array(1, $this->username, $this->password, $userId);
+        $params = array($blogId, $this->username, $this->password, $userId);
         if (!empty($fields)) {
             $params[] = $fields;
         }
@@ -785,9 +785,9 @@ class WordpressClient
      *
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Users#wp.getUsers
      */
-    function getUsers(array $filters = array(), array $fields = array())
+    function getUsers(array $filters = array(), array $fields = array(), $blogId = 1)
     {
-        $params = array(1, $this->username, $this->password, $filters);
+        $params = array($blogId, $this->username, $this->password, $filters);
         if (!empty($fields)) {
             $params[] = $fields;
         }
@@ -804,9 +804,9 @@ class WordpressClient
      *
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Users#wp.getProfile
      */
-    function getProfile(array $fields = array())
+    function getProfile(array $fields = array(), $blogId = 1)
     {
-        $params = array(1, $this->username, $this->password);
+        $params = array($blogId, $this->username, $this->password);
         if (!empty($fields)) {
             $params[] = $fields;
         }
@@ -823,9 +823,9 @@ class WordpressClient
      *
      * http://codex.wordpress.org/XML-RPC_WordPress_API/Users#wp.editProfile
      */
-    function editProfile(array $content)
+    function editProfile(array $content, $blogId = 1)
     {
-        $params = array(1, $this->username, $this->password, $content);
+        $params = array($blogId, $this->username, $this->password, $content);
 
         return $this->sendRequest('wp.editProfile', $params);
     }
