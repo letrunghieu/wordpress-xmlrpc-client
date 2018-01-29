@@ -258,8 +258,9 @@ class WordpressClient
     /**
      * Retrieve list of posts of any registered post type.
      *
-     * @param array $filters optional
-     * @param array $fields  optional
+     * @param array   $filters      optional
+     * @param array   $fields       optional
+     * @param integer $blogId       the blog id, see more at wordpress documentation
      *
      * @return array array of struct
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.getPosts
@@ -306,6 +307,7 @@ class WordpressClient
      *
      * @param integer $postId       the id of selected post
      * @param array   $content      the content array, see more at wordpress documentation
+     * @param integer $blogId       the blog id, see more at wordpress documentation
      *
      * @return boolean
      *
@@ -321,7 +323,8 @@ class WordpressClient
     /**
      * Delete an existing post of any registered post type.
      *
-     * @param integer $postId the id of selected post
+     * @param integer $postId       the id of selected post
+     * @param integer $blogId       the blog id, see more at wordpress documentation
      *
      * @return boolean
      *
@@ -337,8 +340,9 @@ class WordpressClient
     /**
      * Retrieve a registered post type.
      *
-     * @param string $postTypeName the post type name
-     * @param array  $fields       (optional) list of field or meta-field names to include in response.
+     * @param string  $postTypeName the post type name
+     * @param array   $fields       (optional) list of field or meta-field names to include in response.
+     * @param integer $blogId       the blog id, see more at wordpress documentation
      *
      * @return array
      *
@@ -354,8 +358,9 @@ class WordpressClient
     /**
      * Retrieve list of registered post types.
      *
-     * @param array $filter
-     * @param array $fields
+     * @param array   $filter
+     * @param array   $fields
+     * @param integer $blogId       the blog id, see more at wordpress documentation
      *
      * @return array    list of struct
      *
@@ -371,6 +376,8 @@ class WordpressClient
     /**
      * Retrieve list of post formats.
      *
+     * @param integer $blogId       the blog id, see more at wordpress documentation
+     *
      * @return array
      *
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.getPostFormats
@@ -384,6 +391,8 @@ class WordpressClient
 
     /**
      * Retrieve list of supported values for post_status field on posts.
+     *
+     * @param integer $blogId       the blog id, see more at wordpress documentation
      *
      * @return array    list of supported post status
      *
@@ -399,7 +408,8 @@ class WordpressClient
     /**
      * Retrieve information about a taxonomy.
      *
-     * @param string $taxonomy the name of the selected taxonomy
+     * @param string  $taxonomy     the name of the selected taxonomy
+     * @param integer $blogId       the blog id, see more at wordpress documentation
      *
      * @return array    taxonomy information
      *
@@ -414,6 +424,8 @@ class WordpressClient
 
     /**
      * Retrieve a list of taxonomies.
+     *
+     * @param integer $blogId       the blog id, see more at wordpress documentation
      *
      * @return array array of taxonomy struct
      *
@@ -431,6 +443,7 @@ class WordpressClient
      *
      * @param integer $termId
      * @param string  $taxonomy
+     * @param integer $blogId       the blog id, see more at wordpress documentation
      *
      * @return array
      *
@@ -446,8 +459,9 @@ class WordpressClient
     /**
      * Retrieve list of terms in a taxonomy.
      *
-     * @param string $taxonomy
-     * @param array  $filter
+     * @param string  $taxonomy
+     * @param array   $filter
+     * @param integer $blogId       the blog id, see more at wordpress documentation
      *
      * @return array
      *
@@ -468,6 +482,7 @@ class WordpressClient
      * @param string  $slug
      * @param string  $description
      * @param integer $parentId
+     * @param integer $blogId       the blog id, see more at wordpress documentation
      *
      * @return integer new term id
      *
@@ -517,6 +532,7 @@ class WordpressClient
      *
      * @param integer $termId
      * @param string  $taxonomy
+     * @param integer $blogId       the blog id, see more at wordpress documentation
      *
      * @return boolean
      *
@@ -533,6 +549,7 @@ class WordpressClient
      * Retrieve a media item (i.e, attachment).
      *
      * @param integer $itemId
+     * @param integer $blogId       the blog id, see more at wordpress documentation
      *
      * @return array
      *
@@ -548,7 +565,8 @@ class WordpressClient
     /**
      * Retrieve list of media items.
      *
-     * @param array $filter
+     * @param array   $filter
+     * @param integer $blogId       the blog id, see more at wordpress documentation
      *
      * @return array
      *
@@ -564,11 +582,12 @@ class WordpressClient
     /**
      * Upload a media file.
      *
-     * @param string  $name      file name
-     * @param string  $mime      file mime type
-     * @param string  $bits      binary data (no encoded)
-     * @param boolean $overwrite (optional)
-     * @param int     $postId    (optional)
+     * @param string  $name         file name
+     * @param string  $mime         file mime type
+     * @param string  $bits         binary data (no encoded)
+     * @param boolean $overwrite    (optional)
+     * @param int     $postId       (optional)
+     * @param integer $blogId       the blog id, see more at wordpress documentation
      *
      * @return array
      *
@@ -597,6 +616,7 @@ class WordpressClient
      * Retrieve comment count for a specific post.
      *
      * @param integer $postId
+     * @param integer $blogId       the blog id, see more at wordpress documentation
      *
      * @return integer
      *
@@ -613,6 +633,7 @@ class WordpressClient
      * Retrieve a comment.
      *
      * @param integer $commentId
+     * @param integer $blogId       the blog id, see more at wordpress documentation
      *
      * @return array
      *
@@ -628,7 +649,8 @@ class WordpressClient
     /**
      * Retrieve list of comments.
      *
-     * @param array $filter
+     * @param array   $filter
+     * @param integer $blogId       the blog id, see more at wordpress documentation
      *
      * @return array
      *
@@ -646,6 +668,7 @@ class WordpressClient
      *
      * @param integer $post_id
      * @param array   $comment
+     * @param integer $blogId       the blog id, see more at wordpress documentation
      *
      * @return integer new comment_id
      *
@@ -663,6 +686,7 @@ class WordpressClient
      *
      * @param integer $commentId
      * @param array   $comment
+     * @param integer $blogId       the blog id, see more at wordpress documentation
      *
      * @return boolean
      *
@@ -679,6 +703,7 @@ class WordpressClient
      * Remove an existing comment.
      *
      * @param integer $commentId
+     * @param integer $blogId       the blog id, see more at wordpress documentation
      *
      * @return boolean
      *
@@ -693,6 +718,8 @@ class WordpressClient
 
     /**
      * Retrieve list of comment statuses.
+     *
+     * @param integer $blogId       the blog id, see more at wordpress documentation
      *
      * @return array
      *
@@ -709,6 +736,7 @@ class WordpressClient
      * Retrieve blog options.
      *
      * @param array $options
+     * @param integer $blogId       the blog id, see more at wordpress documentation
      *
      * @return array
      *
@@ -728,7 +756,8 @@ class WordpressClient
     /**
      * Edit blog options.
      *
-     * @param array $options
+     * @param array   $options
+     * @param integer $blogId       the blog id, see more at wordpress documentation
      *
      * @return array
      *
@@ -760,6 +789,7 @@ class WordpressClient
      *
      * @param integer $userId
      * @param array   $fields Optional. List of field or meta-field names to include in response.
+     * @param integer $blogId       the blog id, see more at wordpress documentation
      *
      * @return array
      *
@@ -778,8 +808,9 @@ class WordpressClient
     /**
      * Retrieve list of users.
      *
-     * @param array $filters
-     * @param array $fields
+     * @param array   $filters
+     * @param array   $fields
+     * @param integer $blogId       the blog id, see more at wordpress documentation
      *
      * @return array
      *
@@ -798,7 +829,8 @@ class WordpressClient
     /**
      * Retrieve profile of the requesting user.
      *
-     * @param array $fields
+     * @param array   $fields
+     * @param integer $blogId       the blog id, see more at wordpress documentation
      *
      * @return array
      *
@@ -817,7 +849,8 @@ class WordpressClient
     /**
      * Edit profile of the requesting user.
      *
-     * @param array $content
+     * @param array   $content
+     * @param integer $blogId       the blog id, see more at wordpress documentation
      *
      * @return boolean
      *
