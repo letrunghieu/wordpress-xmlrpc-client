@@ -5,7 +5,7 @@ namespace HieuLe\WordpressXmlrpcClient;
 /**
  * A XML-RPC client that implement the {@link http://codex.wordpress.org/XML-RPC_WordPress_API Wordpress API}.
  *
- * @version 2.5.0
+ * @version 1.0
  *
  * @author  Hieu Le <http://www.hieule.info>
  *
@@ -258,15 +258,16 @@ class WordpressClient
     /**
      * Retrieve list of posts of any registered post type.
      *
-     * @param array $filters optional
-     * @param array $fields  optional
+     * @param array   $filters      optional
+     * @param array   $fields       optional
+     * @param integer $blogId       the blog id, see more at wordpress documentation
      *
      * @return array array of struct
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.getPosts
      */
-    function getPosts(array $filters = array(), array $fields = array())
+    function getPosts(array $filters = array(), array $fields = array(), $blogId = 1)
     {
-        $params = array(1, $this->username, $this->password, $filters);
+        $params = array($blogId, $this->username, $this->password, $filters);
         if (!empty($fields)) {
             $params[] = $fields;
         }
@@ -279,15 +280,14 @@ class WordpressClient
      *
      * @param string  $title        the post title
      * @param string  $body         the post body
-     * @param array   $categorieIds the list of category ids
-     * @param integer $thumbnailId  the thumbnail id
      * @param array   $content      the content array, see more at wordpress documentation
+     * @param integer $blogId       the blog id, see more at wordpress documentation
      *
      * @return integer the new post id
      *
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.newPost
      */
-    function newPost($title, $body, array $content = array())
+    function newPost($title, $body, array $content = array(), $blogId = 1)
     {
         $default                 = array(
             'post_type'   => 'post',
@@ -297,7 +297,7 @@ class WordpressClient
         $content['post_title']   = $title;
         $content['post_content'] = $body;
 
-        $params = array(1, $this->username, $this->password, $content);
+        $params = array($blogId, $this->username, $this->password, $content);
 
         return $this->sendRequest('wp.newPost', $params);
     }
@@ -306,19 +306,16 @@ class WordpressClient
      * Edit an existing post of any registered post type.
      *
      * @param integer $postId       the id of selected post
-     * @param string  $title        the new title
-     * @param string  $body         the new body
-     * @param array   $categorieIds the new list of category ids
-     * @param integer $thumbnailId  the new thumbnail id
-     * @param array   $content      the advanced array
+     * @param array   $content      the content array, see more at wordpress documentation
+     * @param integer $blogId       the blog id, see more at wordpress documentation
      *
      * @return boolean
      *
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.editPost
      */
-    function editPost($postId, array $content)
+    function editPost($postId, array $content, $blogId = 1)
     {
-        $params = array(1, $this->username, $this->password, $postId, $content);
+        $params = array($blogId, $this->username, $this->password, $postId, $content);
 
         return $this->sendRequest('wp.editPost', $params);
     }
@@ -326,15 +323,16 @@ class WordpressClient
     /**
      * Delete an existing post of any registered post type.
      *
-     * @param integer $postId the id of selected post
+     * @param integer $postId       the id of selected post
+     * @param integer $blogId       the blog id, see more at wordpress documentation
      *
      * @return boolean
      *
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.deletePost
      */
-    function deletePost($postId)
+    function deletePost($postId, $blogId = 1)
     {
-        $params = array(1, $this->username, $this->password, $postId);
+        $params = array($blogId, $this->username, $this->password, $postId);
 
         return $this->sendRequest('wp.deletePost', $params);
     }
@@ -342,16 +340,17 @@ class WordpressClient
     /**
      * Retrieve a registered post type.
      *
-     * @param string $postTypeName the post type name
-     * @param array  $fields       (optional) list of field or meta-field names to include in response.
+     * @param string  $postTypeName the post type name
+     * @param array   $fields       (optional) list of field or meta-field names to include in response.
+     * @param integer $blogId       the blog id, see more at wordpress documentation
      *
      * @return array
      *
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.getPostType
      */
-    function getPostType($postTypeName, array $fields = array())
+    function getPostType($postTypeName, array $fields = array(), $blogId = 1)
     {
-        $params = array(1, $this->username, $this->password, $postTypeName, $fields);
+        $params = array($blogId, $this->username, $this->password, $postTypeName, $fields);
 
         return $this->sendRequest('wp.getPostType', $params);
     }
@@ -359,16 +358,17 @@ class WordpressClient
     /**
      * Retrieve list of registered post types.
      *
-     * @param array $filter
-     * @param array $fields
+     * @param array   $filter
+     * @param array   $fields
+     * @param integer $blogId       the blog id, see more at wordpress documentation
      *
      * @return array    list of struct
      *
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.getPostTypes
      */
-    function getPostTypes(array $filter = array(), array $fields = array())
+    function getPostTypes(array $filter = array(), array $fields = array(), $blogId = 1)
     {
-        $params = array(1, $this->username, $this->password, $filter, $fields);
+        $params = array($blogId, $this->username, $this->password, $filter, $fields);
 
         return $this->sendRequest('wp.getPostTypes', $params);
     }
@@ -376,13 +376,15 @@ class WordpressClient
     /**
      * Retrieve list of post formats.
      *
+     * @param integer $blogId       the blog id, see more at wordpress documentation
+     *
      * @return array
      *
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.getPostFormats
      */
-    function getPostFormats()
+    function getPostFormats($blogId = 1)
     {
-        $params = array(1, $this->username, $this->password);
+        $params = array($blogId, $this->username, $this->password);
 
         return $this->sendRequest('wp.getPostFormats', $params);
     }
@@ -390,13 +392,15 @@ class WordpressClient
     /**
      * Retrieve list of supported values for post_status field on posts.
      *
+     * @param integer $blogId       the blog id, see more at wordpress documentation
+     *
      * @return array    list of supported post status
      *
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Posts#wp.getPostStatusList
      */
-    function getPostStatusList()
+    function getPostStatusList($blogId = 1)
     {
-        $params = array(1, $this->username, $this->password);
+        $params = array($blogId, $this->username, $this->password);
 
         return $this->sendRequest('wp.getPostStatusList', $params);
     }
@@ -404,15 +408,16 @@ class WordpressClient
     /**
      * Retrieve information about a taxonomy.
      *
-     * @param string $taxonomy the name of the selected taxonomy
+     * @param string  $taxonomy     the name of the selected taxonomy
+     * @param integer $blogId       the blog id, see more at wordpress documentation
      *
      * @return array    taxonomy information
      *
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Taxonomies#wp.getTaxonomy
      */
-    function getTaxonomy($taxonomy)
+    function getTaxonomy($taxonomy, $blogId = 1)
     {
-        $params = array(1, $this->username, $this->password, $taxonomy);
+        $params = array($blogId, $this->username, $this->password, $taxonomy);
 
         return $this->sendRequest('wp.getTaxonomy', $params);
     }
@@ -420,13 +425,15 @@ class WordpressClient
     /**
      * Retrieve a list of taxonomies.
      *
+     * @param integer $blogId       the blog id, see more at wordpress documentation
+     *
      * @return array array of taxonomy struct
      *
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Taxonomies#wp.getTaxonomies
      */
-    function getTaxonomies()
+    function getTaxonomies($blogId = 1)
     {
-        $params = array(1, $this->username, $this->password);
+        $params = array($blogId, $this->username, $this->password);
 
         return $this->sendRequest('wp.getTaxonomies', $params);
     }
@@ -436,14 +443,15 @@ class WordpressClient
      *
      * @param integer $termId
      * @param string  $taxonomy
+     * @param integer $blogId       the blog id, see more at wordpress documentation
      *
      * @return array
      *
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Taxonomies#wp.getTerm
      */
-    function getTerm($termId, $taxonomy)
+    function getTerm($termId, $taxonomy, $blogId = 1)
     {
-        $params = array(1, $this->username, $this->password, $taxonomy, $termId);
+        $params = array($blogId, $this->username, $this->password, $taxonomy, $termId);
 
         return $this->sendRequest('wp.getTerm', $params);
     }
@@ -451,16 +459,17 @@ class WordpressClient
     /**
      * Retrieve list of terms in a taxonomy.
      *
-     * @param string $taxonomy
-     * @param array  $filter
+     * @param string  $taxonomy
+     * @param array   $filter
+     * @param integer $blogId       the blog id, see more at wordpress documentation
      *
      * @return array
      *
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Taxonomies#wp.getTerms
      */
-    function getTerms($taxonomy, array $filter = array())
+    function getTerms($taxonomy, array $filter = array(), $blogId = 1)
     {
-        $params = array(1, $this->username, $this->password, $taxonomy, $filter);
+        $params = array($blogId, $this->username, $this->password, $taxonomy, $filter);
 
         return $this->sendRequest('wp.getTerms', $params);
     }
@@ -473,12 +482,13 @@ class WordpressClient
      * @param string  $slug
      * @param string  $description
      * @param integer $parentId
+     * @param integer $blogId       the blog id, see more at wordpress documentation
      *
      * @return integer new term id
      *
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Taxonomies#wp.newTerm
      */
-    function newTerm($name, $taxomony, $slug = null, $description = null, $parentId = null)
+    function newTerm($name, $taxomony, $slug = null, $description = null, $parentId = null, $blogId = 1)
     {
         $content = array(
             'name'     => $name,
@@ -493,7 +503,7 @@ class WordpressClient
         if ($parentId) {
             $content['parent'] = $parentId;
         }
-        $params = array(1, $this->username, $this->password, $content);
+        $params = array($blogId, $this->username, $this->password, $content);
 
         return $this->sendRequest('wp.newTerm', $params);
     }
@@ -522,14 +532,15 @@ class WordpressClient
      *
      * @param integer $termId
      * @param string  $taxonomy
+     * @param integer $blogId       the blog id, see more at wordpress documentation
      *
      * @return boolean
      *
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Taxonomies#wp.deleteTerm
      */
-    function deleteTerm($termId, $taxonomy)
+    function deleteTerm($termId, $taxonomy, $blogId = 1)
     {
-        $params = array(1, $this->username, $this->password, $taxonomy, $termId);
+        $params = array($blogId, $this->username, $this->password, $taxonomy, $termId);
 
         return $this->sendRequest('wp.deleteTerm', $params);
     }
@@ -538,14 +549,15 @@ class WordpressClient
      * Retrieve a media item (i.e, attachment).
      *
      * @param integer $itemId
+     * @param integer $blogId       the blog id, see more at wordpress documentation
      *
      * @return array
      *
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Media#wp.getMediaItem
      */
-    function getMediaItem($itemId)
+    function getMediaItem($itemId, $blogId = 1)
     {
-        $params = array(1, $this->username, $this->password, $itemId);
+        $params = array($blogId, $this->username, $this->password, $itemId);
 
         return $this->sendRequest('wp.getMediaItem', $params);
     }
@@ -553,15 +565,16 @@ class WordpressClient
     /**
      * Retrieve list of media items.
      *
-     * @param array $filter
+     * @param array   $filter
+     * @param integer $blogId       the blog id, see more at wordpress documentation
      *
      * @return array
      *
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Media#wp.getMediaLibrary
      */
-    function getMediaLibrary(array $filter = array())
+    function getMediaLibrary(array $filter = array(), $blogId = 1)
     {
-        $params = array(1, $this->username, $this->password, $filter);
+        $params = array($blogId, $this->username, $this->password, $filter);
 
         return $this->sendRequest('wp.getMediaLibrary', $params);
     }
@@ -569,17 +582,18 @@ class WordpressClient
     /**
      * Upload a media file.
      *
-     * @param string  $name      file name
-     * @param string  $mime      file mime type
-     * @param string  $bits      binary data (no encoded)
-     * @param boolean $overwrite (optional)
-     * @param int     $postId    (optional)
+     * @param string  $name         file name
+     * @param string  $mime         file mime type
+     * @param string  $bits         binary data (no encoded)
+     * @param boolean $overwrite    (optional)
+     * @param int     $postId       (optional)
+     * @param integer $blogId       the blog id, see more at wordpress documentation
      *
      * @return array
      *
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Media#wp.uploadFile
      */
-    function uploadFile($name, $mime, $bits, $overwrite = null, $postId = null)
+    function uploadFile($name, $mime, $bits, $overwrite = null, $postId = null, $blogId = 1)
     {
         xmlrpc_set_type($bits, 'base64');
         $struct = array(
@@ -593,7 +607,7 @@ class WordpressClient
         if ($postId !== null) {
             $struct['post_id'] = (int)$postId;
         }
-        $params = array(1, $this->username, $this->password, $struct);
+        $params = array($blogId, $this->username, $this->password, $struct);
 
         return $this->sendRequest('wp.uploadFile', $params);
     }
@@ -602,14 +616,15 @@ class WordpressClient
      * Retrieve comment count for a specific post.
      *
      * @param integer $postId
+     * @param integer $blogId       the blog id, see more at wordpress documentation
      *
      * @return integer
      *
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Comments#wp.getCommentCount
      */
-    function getCommentCount($postId)
+    function getCommentCount($postId, $blogId = 1)
     {
-        $params = array(1, $this->username, $this->password, $postId);
+        $params = array($blogId, $this->username, $this->password, $postId);
 
         return $this->sendRequest('wp.getCommentCount', $params);
     }
@@ -618,14 +633,15 @@ class WordpressClient
      * Retrieve a comment.
      *
      * @param integer $commentId
+     * @param integer $blogId       the blog id, see more at wordpress documentation
      *
      * @return array
      *
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Comments#wp.getComment
      */
-    function getComment($commentId)
+    function getComment($commentId, $blogId = 1)
     {
-        $params = array(1, $this->username, $this->password, $commentId);
+        $params = array($blogId, $this->username, $this->password, $commentId);
 
         return $this->sendRequest('wp.getComment', $params);
     }
@@ -633,15 +649,16 @@ class WordpressClient
     /**
      * Retrieve list of comments.
      *
-     * @param array $filter
+     * @param array   $filter
+     * @param integer $blogId       the blog id, see more at wordpress documentation
      *
      * @return array
      *
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Comments#wp.getComments
      */
-    function getComments(array $filter = array())
+    function getComments(array $filter = array(), $blogId = 1)
     {
-        $params = array(1, $this->username, $this->password, $filter);
+        $params = array($blogId, $this->username, $this->password, $filter);
 
         return $this->sendRequest('wp.getComments', $params);
     }
@@ -651,14 +668,15 @@ class WordpressClient
      *
      * @param integer $post_id
      * @param array   $comment
+     * @param integer $blogId       the blog id, see more at wordpress documentation
      *
      * @return integer new comment_id
      *
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Comments#wp.newComment
      */
-    function newComment($post_id, array $comment)
+    function newComment($post_id, array $comment, $blogId = 1)
     {
-        $params = array(1, $this->username, $this->password, $post_id, $comment);
+        $params = array($blogId, $this->username, $this->password, $post_id, $comment);
 
         return $this->sendRequest('wp.newComment', $params);
     }
@@ -668,14 +686,15 @@ class WordpressClient
      *
      * @param integer $commentId
      * @param array   $comment
+     * @param integer $blogId       the blog id, see more at wordpress documentation
      *
      * @return boolean
      *
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Comments#wp.editComment
      */
-    function editComment($commentId, array $comment)
+    function editComment($commentId, array $comment, $blogId = 1)
     {
-        $params = array(1, $this->username, $this->password, $commentId, $comment);
+        $params = array($blogId, $this->username, $this->password, $commentId, $comment);
 
         return $this->sendRequest('wp.editComment', $params);
     }
@@ -684,14 +703,15 @@ class WordpressClient
      * Remove an existing comment.
      *
      * @param integer $commentId
+     * @param integer $blogId       the blog id, see more at wordpress documentation
      *
      * @return boolean
      *
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Comments#wp.deleteComment
      */
-    function deleteComment($commentId)
+    function deleteComment($commentId, $blogId = 1)
     {
-        $params = array(1, $this->username, $this->password, $commentId);
+        $params = array($blogId, $this->username, $this->password, $commentId);
 
         return $this->sendRequest('wp.deleteComment', $params);
     }
@@ -699,13 +719,15 @@ class WordpressClient
     /**
      * Retrieve list of comment statuses.
      *
+     * @param integer $blogId       the blog id, see more at wordpress documentation
+     *
      * @return array
      *
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Comments#wp.getCommentStatusList
      */
-    function getCommentStatusList()
+    function getCommentStatusList($blogId = 1)
     {
-        $params = array(1, $this->username, $this->password);
+        $params = array($blogId, $this->username, $this->password);
 
         return $this->sendRequest('wp.getCommentStatusList', $params);
     }
@@ -714,17 +736,18 @@ class WordpressClient
      * Retrieve blog options.
      *
      * @param array $options
+     * @param integer $blogId       the blog id, see more at wordpress documentation
      *
      * @return array
      *
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Options#wp.getOptions
      */
-    function getOptions(array $options = array())
+    function getOptions(array $options = array(), $blogId = 1)
     {
         if (empty($options)) {
-            $params = array(1, $this->username, $this->password);
+            $params = array($blogId, $this->username, $this->password);
         } else {
-            $params = array(1, $this->username, $this->password, $options);
+            $params = array($blogId, $this->username, $this->password, $options);
         }
 
         return $this->sendRequest('wp.getOptions', $params);
@@ -733,15 +756,16 @@ class WordpressClient
     /**
      * Edit blog options.
      *
-     * @param array $options
+     * @param array   $options
+     * @param integer $blogId       the blog id, see more at wordpress documentation
      *
      * @return array
      *
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Options#wp.setOptions
      */
-    function setOptions(array $options)
+    function setOptions(array $options, $blogId = 1)
     {
-        $params = array(1, $this->username, $this->password, $options);
+        $params = array($blogId, $this->username, $this->password, $options);
 
         return $this->sendRequest('wp.setOptions', $params);
     }
@@ -765,14 +789,15 @@ class WordpressClient
      *
      * @param integer $userId
      * @param array   $fields Optional. List of field or meta-field names to include in response.
+     * @param integer $blogId       the blog id, see more at wordpress documentation
      *
      * @return array
      *
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Users#wp.getUser
      */
-    function getUser($userId, array $fields = array())
+    function getUser($userId, array $fields = array(), $blogId = 1)
     {
-        $params = array(1, $this->username, $this->password, $userId);
+        $params = array($blogId, $this->username, $this->password, $userId);
         if (!empty($fields)) {
             $params[] = $fields;
         }
@@ -783,16 +808,17 @@ class WordpressClient
     /**
      * Retrieve list of users.
      *
-     * @param array $filters
-     * @param array $fields
+     * @param array   $filters
+     * @param array   $fields
+     * @param integer $blogId       the blog id, see more at wordpress documentation
      *
      * @return array
      *
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Users#wp.getUsers
      */
-    function getUsers(array $filters = array(), array $fields = array())
+    function getUsers(array $filters = array(), array $fields = array(), $blogId = 1)
     {
-        $params = array(1, $this->username, $this->password, $filters);
+        $params = array($blogId, $this->username, $this->password, $filters);
         if (!empty($fields)) {
             $params[] = $fields;
         }
@@ -803,15 +829,16 @@ class WordpressClient
     /**
      * Retrieve profile of the requesting user.
      *
-     * @param array $fields
+     * @param array   $fields
+     * @param integer $blogId       the blog id, see more at wordpress documentation
      *
      * @return array
      *
      * @link http://codex.wordpress.org/XML-RPC_WordPress_API/Users#wp.getProfile
      */
-    function getProfile(array $fields = array())
+    function getProfile(array $fields = array(), $blogId = 1)
     {
-        $params = array(1, $this->username, $this->password);
+        $params = array($blogId, $this->username, $this->password);
         if (!empty($fields)) {
             $params[] = $fields;
         }
@@ -822,15 +849,16 @@ class WordpressClient
     /**
      * Edit profile of the requesting user.
      *
-     * @param array $content
+     * @param array   $content
+     * @param integer $blogId       the blog id, see more at wordpress documentation
      *
      * @return boolean
      *
      * http://codex.wordpress.org/XML-RPC_WordPress_API/Users#wp.editProfile
      */
-    function editProfile(array $content)
+    function editProfile(array $content, $blogId = 1)
     {
-        $params = array(1, $this->username, $this->password, $content);
+        $params = array($blogId, $this->username, $this->password, $content);
 
         return $this->sendRequest('wp.editProfile', $params);
     }

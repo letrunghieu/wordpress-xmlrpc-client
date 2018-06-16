@@ -1,31 +1,22 @@
 {
-	"name": "hieu-le/wordpress-xmlrpc-client",
-	"description": "A PHP client for Wordpress websites that closely implement the XML-RPC WordPress API with full test suite built in",
-	"keywords": ["wordpress", "xmlrpc", "client", "remote", "api"],
+	"name": "yipeecaiey/wordpress-xmlrpc-client-multisite",
+	"description": "A fork of Hieu Le's PHP client for Wordpress - extended to handle publishing to multisite networks",
+	"keywords": ["wordpress", "xmlrpc", "client", "remote", "api", "multisite"],
 	"license": "MIT",
-	"authors": [
-		{
-			"name": "Hieu Le",
-			"email": "letrunghieu.cse09@gmail.com",
-			"homepage": "http://www.hieule.info"
-		}
-	],
+	"stable": "1.0",
+    "repositories": [
+      {
+        "type": "vcs",
+        "url": "https://github.com/yipeecaiey/wordpress-xmlrpc-client-multisite"
+      }
+    ],
 	"require": {
 		"php": ">=5.3.0",
-		"ext-xmlrpc": "*"
-	},
-	"require-dev": {
-		"phpunit/phpunit": "*",
-		"symfony/yaml": "2.*",
-		"php-vcr/php-vcr": "^1.0",
-		"php-vcr/phpunit-testlistener-vcr": "*",
-		"illuminate/support": "~4.0",
-		"codeclimate/php-test-reporter": "dev-master"
+		"hieu-le/wordpress-xmlrpc-client": "dev-master"
 	},
 	"autoload": {
 		"psr-4": {
-			"HieuLe\\WordpressXmlrpcClient\\": "src/"
+			"Yipeecaiey\\WordpressXmlrpcClient\\": "src/"
 		}
-	},
-	"minimum-stability": "stable"
+	}
 }
