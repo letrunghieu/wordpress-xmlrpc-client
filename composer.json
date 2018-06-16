@@ -3,6 +3,7 @@
 	"description": "A fork of Hieu Le's PHP client for Wordpress - extended to handle publishing to multisite networks",
 	"keywords": ["wordpress", "xmlrpc", "client", "remote", "api", "multisite"],
 	"license": "MIT",
+	"stable": "1.0",
     "repositories": [
       {
         "type": "vcs",
