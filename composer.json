@@ -1,12 +1,12 @@
 {
-	"name": "yipeecaiey/wordpress-xmlrpc-client",
+	"name": "yipeecaiey/wordpress-xmlrpc-client-multisite",
 	"description": "A fork of Hieu Le's PHP client for Wordpress - extended to handle publishing to multisite networks",
 	"keywords": ["wordpress", "xmlrpc", "client", "remote", "api", "multisite"],
 	"license": "MIT",
     "repositories": [
       {
         "type": "vcs",
-        "url": "https://github.com/yipeecaiey/wordpress-xmlrpc-client"
+        "url": "https://github.com/yipeecaiey/wordpress-xmlrpc-client-multisite"
       }
     ],
 	"require": {
@@ -15,7 +15,7 @@
 	},
 	"autoload": {
 		"psr-4": {
-			"HieuLe\\WordpressXmlrpcClient\\": "src/"
+			"Yipeecaiey\\WordpressXmlrpcClient\\": "src/"
 		}
 	}
 }
