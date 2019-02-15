@@ -919,6 +919,14 @@ class WordpressClient
         }
         $body     = $this->performRequest();
         $response = xmlrpc_decode($body, 'UTF-8');
+
+        // bugfix: Wordpress 5.0 has the possibility of transmitting 0x0C in the XML which xmlrpc_decode() can not support
+        // and returns NULL.
+        if ($response === NULL) {
+            $body = str_replace(["\x0c"], "", $body);
+            $response = xmlrpc_decode($body, 'UTF-8');
+        }
+
         if (is_array($response) && xmlrpc_is_fault($response)) {
             $this->error = ("xmlrpc: {$response['faultString']} ({$response['faultCode']})");
             $this->logError();
