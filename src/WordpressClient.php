@@ -955,6 +955,7 @@ class WordpressClient
         curl_setopt($ch, CURLOPT_POSTFIELDS, $this->request);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
         curl_setopt($ch, CURLOPT_USERAGENT, $this->userAgent);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Expect:')); //Fixes the HTTP/1.1 417 Expectation Failed Bug
         if ($this->proxyConfig != false) {
             if (isset($this->proxyConfig['proxy_ip'])) {
                 curl_setopt($ch, CURLOPT_PROXY, $this->proxyConfig['proxy_ip']);
