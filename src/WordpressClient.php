@@ -290,9 +290,8 @@ class WordpressClient
      */
     function newPost($title, $body, array $content = array(), string $type = null)
     {
-        $postType = $type ?: 'post';
         $default                 = array(
-            'post_type'   => $postType,
+            'post_type'   => $type ?: 'post',
             'post_status' => 'publish',
         );
         $content                 = array_merge($default, $content);
