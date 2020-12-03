@@ -12,7 +12,7 @@ MIT licensed.
 Current version: 2.4.2
 
 
-## Features
+## All Important Features
 
 * Full test suit built in supporting testing using your own Wordpress site.
 * ~~Support error logging to files with Monolog library.~~ Now, erros can be logged in a more felxible way via **error callbacks** (v 2.4.0)
